@@ -1,0 +1,50 @@
+import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const variants = {
+  info: {
+    bg: 'bg-[var(--color-info-subtle)] border-[var(--color-info-border)]',
+    icon: Info,
+    iconColor: 'text-[var(--color-info)]',
+    title: 'text-[var(--color-info)]',
+  },
+  success: {
+    bg: 'bg-[var(--color-success-subtle)] border-[var(--color-success-border)]',
+    icon: CheckCircle2,
+    iconColor: 'text-[var(--color-success)]',
+    title: 'text-[var(--color-success)]',
+  },
+  warning: {
+    bg: 'bg-[var(--color-warning-subtle)] border-[var(--color-warning-border)]',
+    icon: AlertTriangle,
+    iconColor: 'text-[var(--color-warning)]',
+    title: 'text-[var(--color-warning)]',
+  },
+  error: {
+    bg: 'bg-[var(--color-error-subtle)] border-[var(--color-error-border)]',
+    icon: AlertCircle,
+    iconColor: 'text-[var(--color-error)]',
+    title: 'text-[var(--color-error)]',
+  },
+}
+
+export interface AlertProps {
+  variant?: keyof typeof variants
+  title?: string
+  children?: React.ReactNode
+  onDismiss?: () => void
+  className?: string
+}
+
+export function Alert({
+  variant = 'info',
+  title,
+  children,
+  onDismiss,
+  className,
+}: AlertProps) {
+  const v = variants[variant]
+  const Icon = v.icon
+  return (
+    <div

@@ -1,0 +1,40 @@
+
+export function getRiskSeverity(score: number): RiskSeverity {
+  if (score >= 17) return 'critical'
+  if (score >= 10) return 'high'
+  if (score >= 5) return 'moderate'
+  return 'low'
+}
+
+export const riskStatus = [
+  'open',
+  'under_review',
+  'mitigating',
+  'accepted',
+  'closed',
+] as const
+
+export const controlStatus = [
+  'effective',
+  'partially_effective',
+  'ineffective',
+  'not_tested',
+] as const
+
+export const actionStatus = [
+  'not_started',
+  'in_progress',
+  'blocked',
+  'overdue',
+  'completed',
+] as const
+
+export const complianceStatus = [
+  'compliant',
+  'partially_compliant',
+  'non_compliant',
+  'under_review',
+] as const
+
+export const generalStatus = [
+  'active',

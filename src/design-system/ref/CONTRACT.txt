@@ -1,0 +1,2563 @@
+
+# alert.tsx
+fn Alert
+iface AlertProps { variant?: keyof typeof variants title?: string children?: React.ReactNode onDismiss?: () => void className?: string }
+
+# avatar.tsx
+fn Avatar
+fn AvatarGroup
+iface AvatarProps { name: string src?: string size?: keyof typeof sizeMap className?: string }
+
+# badge.tsx
+fn Badge
+
+# breadcrumb.tsx
+fn Breadcrumb
+iface BreadcrumbItem { label: string href?: string }
+Breadcrumb typed: { items: BreadcrumbItem[] className?: string }
+
+# button.tsx
+exp Button
+
+# card.tsx
+fn Card
+fn CardHeader
+fn CardTitle
+fn CardDescription
+fn CardContent
+fn CardFooter
+fn KpiCard
+fn MetricCard
+iface KpiCardProps { title: string value: string | number supporting?: string trend?: { value: string; direction: 'up' | 'down' | 'flat'; positive?: boolean }
+CardHeader typed: { className?: string children: React.ReactNode }
+CardTitle typed: { className?: string children: React.ReactNode }
+CardDescription typed: { className?: string children: React.ReactNode }
+CardContent typed: { className?: string children: React.ReactNode }
+CardFooter typed: { className?: string children: React.ReactNode }
+MetricCard typed: { label: string value: React.ReactNode description?: string className?: string }
+
+# checkbox.tsx
+exp Checkbox
+
+# drawer.tsx
+fn Drawer
+iface DrawerProps { open: boolean onClose: () => void title?: string description?: string size?: keyof typeof widthMap children?: React.ReactNode footer?: React.ReactNode className?: string }
+
+# empty-state.tsx
+fn EmptyState
+fn ErrorState
+fn LoadingState
+EmptyState typed: { icon?: LucideIcon title: string description?: string action?: React.ReactNode className?: string }
+ErrorState typed: { title?: string description?: string action?: React.ReactNode className?: string }
+LoadingState typed: { label?: string className?: string }
+
+# field.tsx
+fn Field
+iface FieldProps { label?: string htmlFor?: string required?: boolean optional?: boolean helperText?: string error?: string className?: string children: React.ReactNode }
+
+# input.tsx
+exp Input
+
+# label.tsx
+exp Label
+
+# modal.tsx
+fn Modal
+fn ConfirmDialog
+iface ModalProps { open: boolean onClose: () => void title?: string description?: string size?: keyof typeof sizeMap children?: React.ReactNode footer?: React.ReactNode className?: string }
+ConfirmDialog typed: { open: boolean onClose: () => void onConfirm: () => void title: string description?: string confirmLabel?: string cancelLabel?: string destructive?: boolean loading?: boolean }
+
+# pagination.tsx
+fn Pagination
+iface PaginationProps { page: number pageSize: number total: number onPageChange: (page: number) => void onPageSizeChange?: (size: number) => void pageSizeOptions?: number[] className?: string }
+
+# progress.tsx
+fn Progress
+fn Spinner
+fn Skeleton
+Progress typed: { value: number max?: number size?: 'sm' | 'md' | 'lg' variant?: 'primary' | 'success' | 'warning' | 'error' showLabel?: boolean className?: string }
+Spinner typed: { size?: 'sm' | 'md' | 'lg' className?: string }
+Skeleton typed: { className?: string }
+
+# radio.tsx
+fn RadioGroup
+exp Radio
+
+# risk-severity.tsx
+fn RiskSeverityBadge
+fn RiskScore
+fn RiskSeveritySwatch
+iface RiskSeverityBadgeProps { severity?: RiskSeverity score?: number showRange?: boolean showIcon?: boolean size?: 'sm' | 'md' className?: string }
+iface RiskScoreProps { score: number maxScore?: number likelihood?: number impact?: number variant?: 'inherent' | 'residual' | 'default' size?: 'sm' | 'md' | 'lg' showSeverity?: boolean className?: string }
+RiskSeveritySwatch typed: { severity: RiskSeverity className?: string }
+
+# search.tsx
+fn GlobalSearch
+iface SearchResult { id: string title: string category: string subtitle?: string }
+GlobalSearch typed: { className?: string placeholder?: string }
+
+# select.tsx
+exp Select
+
+# sidebar-nav.tsx
+fn SidebarNavItem
+fn Sidebar
+iface NavItem { id: string label: string icon: LucideIcon href?: string badge?: number | string children?: { id: string; label: string; href?: string; badge?: number | string }
+SidebarNavItem typed: { item: NavItem active?: boolean collapsed?: boolean expanded?: boolean onToggle?: () => void onSelect?: (id: string) => void }
+Sidebar typed: { collapsed?: boolean onCollapsedChange?: (v: boolean) => void logo?: React.ReactNode children: React.ReactNode footer?: React.ReactNode className?: string }
+
+# status.tsx
+fn getStatusMeta
+fn StatusBadge
+fn StatusDot
+iface StatusBadgeProps { status: string label?: string className?: string size?: 'sm' | 'md' showDot?: boolean }
+iface StatusDotProps { status: string className?: string withLabel?: boolean }
+
+# table.tsx
+fn TableToolbar
+fn Table
+fn TableHeader
+fn TableBody
+fn TableRow
+fn TableHead
+fn TableCell
+fn TableSelectCell
+fn TableActionsCell
+fn TableEmpty
+fn TableLoading
+exp TableDensity
+TableToolbar typed: { searchPlaceholder?: string searchValue?: string onSearchChange?: (v: string) => void children?: React.ReactNode className?: string }
+Table typed: { className?: string density?: TableDensity children: React.ReactNode }
+TableHeader typed: { className?: string children: React.ReactNode }
+TableBody typed: { children: React.ReactNode }
+TableSelectCell typed: { checked?: boolean indeterminate?: boolean onChange?: (checked: boolean) => void ariaLabel: string }
+TableActionsCell typed: { children?: React.ReactNode }
+TableEmpty typed: { title?: string description?: string action?: React.ReactNode }
+TableLoading typed: { rows?: number; cols?: number }
+
+# tabs.tsx
+fn Tabs
+iface TabItem { id: string label: string count?: number disabled?: boolean }
+iface TabsProps { items: TabItem[] value: string onChange: (id: string) => void className?: string size?: 'sm' | 'md' }
+
+# textarea.tsx
+exp Textarea
+
+# toast.tsx
+fn Toast
+iface ToastProps { variant?: 'info' | 'success' | 'error' | 'warning' title: string description?: string onClose?: () => void className?: string }
+
+# toggle.tsx
+exp Toggle
+
+# tooltip.tsx
+fn Tooltip
+Tooltip typed: { content: React.ReactNode children: React.ReactElement side?: 'top' | 'bottom' | 'left' | 'right' className?: string }
+
+# TOKENS FULL
+/**
+ * RiskOS Design Tokens
+ * Single source of truth for the design system.
+ * CSS variables in index.css are the runtime source; these mirror for TS usage.
+ */
+
+export const spacing = {
+  0: '0px',
+  0.5: '2px',
+  1: '4px',
+  1.5: '6px',
+  2: '8px',
+  2.5: '10px',
+  3: '12px',
+  4: '16px',
+  5: '20px',
+  6: '24px',
+  7: '28px',
+  8: '32px',
+  9: '36px',
+  10: '40px',
+  12: '48px',
+  14: '56px',
+  16: '64px',
+  20: '80px',
+  24: '96px',
+} as const
+
+export const radius = {
+  none: '0px',
+  sm: '4px',
+  md: '6px',
+  lg: '8px',
+  xl: '12px',
+  '2xl': '16px',
+  full: '9999px',
+} as const
+
+export const breakpoints = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  '2xl': 1440,
+} as const
+
+export const layout = {
+  sidebarWidth: 256,
+  sidebarCollapsedWidth: 64,
+  headerHeight: 64,
+  contentMaxWidth: 1440,
+  pageMargin: 32,
+  sectionGap: 32,
+  cardGap: 16,
+  formGap: 24,
+  tableCellPaddingComfortable: 16,
+  tableCellPaddingCompact: 8,
+} as const
+
+export const zIndex = {
+  dropdown: 50,
+  sticky: 100,
+  header: 200,
+  sidebar: 250,
+  overlay: 300,
+  modal: 400,
+  popover: 450,
+  toast: 500,
+  tooltip: 600,
+} as const
+
+/** Risk score bands (5×5 matrix default: score = likelihood × impact) */
+export const riskSeverityBands = {
+  low: { min: 1, max: 4, label: 'Low', scoreRange: '1–4' },
+  moderate: { min: 5, max: 9, label: 'Moderate', scoreRange: '5–9' },
+  high: { min: 10, max: 16, label: 'High', scoreRange: '10–16' },
+  critical: { min: 17, max: 25, label: 'Critical', scoreRange: '17–25' },
+} as const
+
+export type RiskSeverity = keyof typeof riskSeverityBands
+
+export function getRiskSeverity(score: number): RiskSeverity {
+  if (score >= 17) return 'critical'
+  if (score >= 10) return 'high'
+  if (score >= 5) return 'moderate'
+  return 'low'
+}
+
+export const riskStatus = [
+  'open',
+  'under_review',
+  'mitigating',
+  'accepted',
+  'closed',
+] as const
+
+export const controlStatus = [
+  'effective',
+  'partially_effective',
+  'ineffective',
+  'not_tested',
+] as const
+
+export const actionStatus = [
+  'not_started',
+  'in_progress',
+  'blocked',
+  'overdue',
+  'completed',
+] as const
+
+export const complianceStatus = [
+  'compliant',
+  'partially_compliant',
+  'non_compliant',
+  'under_review',
+] as const
+
+export const generalStatus = [
+  'active',
+  'inactive',
+  'pending',
+  'approved',
+  'rejected',
+  'archived',
+] as const
+
+export type RiskStatus = (typeof riskStatus)[number]
+export type ControlStatus = (typeof controlStatus)[number]
+export type ActionStatus = (typeof actionStatus)[number]
+export type ComplianceStatus = (typeof complianceStatus)[number]
+export type GeneralStatus = (typeof generalStatus)[number]
+
+export type StatusTone =
+  | 'neutral'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'primary'
+
+export const statusMeta: Record<
+  string,
+  { label: string; tone: StatusTone }
+> = {
+  // Risk
+  open: { label: 'Open', tone: 'info' },
+  under_review: { label: 'Under Review', tone: 'warning' },
+  mitigating: { label: 'Mitigating', tone: 'primary' },
+  accepted: { label: 'Accepted', tone: 'neutral' },
+  closed: { label: 'Closed', tone: 'success' },
+  // Control
+  effective: { label: 'Effective', tone: 'success' },
+  partially_effective: { label: 'Partially Effective', tone: 'warning' },
+  ineffective: { label: 'Ineffective', tone: 'error' },
+  not_tested: { label: 'Not Tested', tone: 'neutral' },
+  // Action
+  not_started: { label: 'Not Started', tone: 'neutral' },
+  in_progress: { label: 'In Progress', tone: 'info' },
+  blocked: { label: 'Blocked', tone: 'error' },
+  overdue: { label: 'Overdue', tone: 'error' },
+  completed: { label: 'Completed', tone: 'success' },
+  // Compliance
+  compliant: { label: 'Compliant', tone: 'success' },
+  partially_compliant: { label: 'Partially Compliant', tone: 'warning' },
+  non_compliant: { label: 'Non-Compliant', tone: 'error' },
+  // General
+  active: { label: 'Active', tone: 'success' },
+  inactive: { label: 'Inactive', tone: 'neutral' },
+  pending: { label: 'Pending', tone: 'warning' },
+  approved: { label: 'Approved', tone: 'success' },
+  rejected: { label: 'Rejected', tone: 'error' },
+  archived: { label: 'Archived', tone: 'neutral' },
+}
+
+export const interactionPrinciples = {
+  hover: 'Subtle background or border shift; no layout jump',
+  focus: 'Visible 2px ring with offset; never remove outline without replacement',
+  active: 'Slightly darker primary / pressed surface',
+  selected: 'Primary subtle background + primary border or indicator',
+  disabled: 'Reduced opacity + no pointer events + muted text',
+  loading: 'Spinner or skeleton; preserve layout dimensions',
+  success: 'Success color + optional check icon + brief confirmation',
+  error: 'Error color + inline message adjacent to field',
+  confirmation: 'Modal for destructive / irreversible actions',
+  destructive: 'Error-styled primary action; require explicit confirm',
+  transition: '100–150ms ease for micro-interactions',
+} as const
+
+
+# FULL button
+import * as React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-button transition-colors duration-150 focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        primary:
+          'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] shadow-[var(--shadow-xs)]',
+        secondary:
+          'bg-[var(--color-surface)] text-[var(--color-text-primary)] border border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)] active:bg-[var(--color-surface-tertiary)] shadow-[var(--shadow-xs)]',
+        tertiary:
+          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] hover:bg-[var(--color-primary-muted)] active:bg-[var(--color-primary-muted)]',
+        destructive:
+          'bg-[var(--color-error)] text-[var(--color-error-foreground)] hover:bg-[var(--color-error-hover)] active:bg-[var(--color-error-hover)] shadow-[var(--shadow-xs)]',
+        ghost:
+          'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-secondary)] hover:text-[var(--color-text-primary)] active:bg-[var(--color-surface-tertiary)]',
+        link: 'bg-transparent text-[var(--color-text-link)] underline-offset-4 hover:underline p-0 h-auto',
+      },
+      size: {
+        sm: 'h-8 px-3 text-[13px] [&_svg]:size-3.5',
+        md: 'h-9 px-3.5 [&_svg]:size-4',
+        lg: 'h-10 px-4 [&_svg]:size-4',
+        icon: 'h-9 w-9 [&_svg]:size-4',
+        'icon-sm': 'h-8 w-8 [&_svg]:size-3.5',
+        'icon-lg': 'h-10 w-10 [&_svg]:size-5',
+      },
+    },
+    defaultVariants: {
+      variant: 'primary',
+      size: 'md',
+    },
+  },
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  loading?: boolean
+}
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, loading, disabled, children, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(buttonVariants({ variant, size }), className)}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {loading && <Loader2 className="animate-spin" aria-hidden />}
+        {children}
+      </button>
+    )
+  },
+)
+Button.displayName = 'Button'
+
+export { buttonVariants }
+
+
+# FULL badge
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+const badgeVariants = cva(
+  'inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-caption font-medium whitespace-nowrap border',
+  {
+    variants: {
+      variant: {
+        neutral:
+          'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border)]',
+        primary:
+          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] border-[var(--color-primary-muted)]',
+        success:
+          'bg-[var(--color-success-subtle)] text-[var(--color-success)] border-[var(--color-success-border)]',
+        warning:
+          'bg-[var(--color-warning-subtle)] text-[var(--color-warning)] border-[var(--color-warning-border)]',
+        error:
+          'bg-[var(--color-error-subtle)] text-[var(--color-error)] border-[var(--color-error-border)]',
+        info: 'bg-[var(--color-info-subtle)] text-[var(--color-info)] border-[var(--color-info-border)]',
+        outline:
+          'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-strong)]',
+      },
+      size: {
+        sm: 'px-1.5 py-0 text-[11px]',
+        md: 'px-2 py-0.5',
+      },
+    },
+    defaultVariants: {
+      variant: 'neutral',
+      size: 'md',
+    },
+  },
+)
+
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof badgeVariants> {}
+
+export function Badge({ className, variant, size, ...props }: BadgeProps) {
+  return <span className={cn(badgeVariants({ variant, size }), className)} {...props} />
+}
+
+export { badgeVariants }
+
+
+# FULL risk-severity
+import { cn } from '@/lib/utils'
+import {
+  getRiskSeverity,
+  riskSeverityBands,
+  type RiskSeverity,
+} from '@/tokens'
+import { AlertTriangle, ShieldAlert, ShieldCheck, Shield } from 'lucide-react'
+
+const severityStyles: Record<
+  RiskSeverity,
+  {
+    bg: string
+    text: string
+    border: string
+    dot: string
+    solid: string
+  }
+> = {
+  low: {
+    bg: 'bg-[var(--color-risk-low-subtle)]',
+    text: 'text-[var(--color-risk-low-foreground)]',
+    border: 'border-[var(--color-risk-low-border)]',
+    dot: 'bg-[var(--color-risk-low)]',
+    solid: 'bg-[var(--color-risk-low)] text-white',
+  },
+  moderate: {
+    bg: 'bg-[var(--color-risk-moderate-subtle)]',
+    text: 'text-[var(--color-risk-moderate-foreground)]',
+    border: 'border-[var(--color-risk-moderate-border)]',
+    dot: 'bg-[var(--color-risk-moderate)]',
+    solid: 'bg-[var(--color-risk-moderate)] text-white',
+  },
+  high: {
+    bg: 'bg-[var(--color-risk-high-subtle)]',
+    text: 'text-[var(--color-risk-high-foreground)]',
+    border: 'border-[var(--color-risk-high-border)]',
+    dot: 'bg-[var(--color-risk-high)]',
+    solid: 'bg-[var(--color-risk-high)] text-white',
+  },
+  critical: {
+    bg: 'bg-[var(--color-risk-critical-subtle)]',
+    text: 'text-[var(--color-risk-critical-foreground)]',
+    border: 'border-[var(--color-risk-critical-border)]',
+    dot: 'bg-[var(--color-risk-critical)]',
+    solid: 'bg-[var(--color-risk-critical)] text-white',
+  },
+}
+
+const severityIcons: Record<RiskSeverity, React.ElementType> = {
+  low: ShieldCheck,
+  moderate: Shield,
+  high: ShieldAlert,
+  critical: AlertTriangle,
+}
+
+export interface RiskSeverityBadgeProps {
+  severity?: RiskSeverity
+  score?: number
+  showRange?: boolean
+  showIcon?: boolean
+  size?: 'sm' | 'md'
+  className?: string
+}
+
+export function RiskSeverityBadge({
+  severity,
+  score,
+  showRange = false,
+  showIcon = false,
+  size = 'md',
+  className,
+}: RiskSeverityBadgeProps) {
+  const resolved = severity ?? (score != null ? getRiskSeverity(score) : 'low')
+  const band = riskSeverityBands[resolved]
+  const styles = severityStyles[resolved]
+  const Icon = severityIcons[resolved]
+
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 rounded-md border font-caption font-medium whitespace-nowrap',
+        size === 'sm' ? 'px-1.5 py-0 text-[11px]' : 'px-2 py-0.5',
+        styles.bg,
+        styles.text,
+        styles.border,
+        className,
+      )}
+      title={`${band.label}${showRange ? ` · ${band.scoreRange}` : ''}`}
+    >
+      {showIcon && <Icon className="size-3 shrink-0" aria-hidden />}
+      <span
+        className={cn('size-1.5 rounded-full shrink-0', styles.dot)}
+        aria-hidden
+      />
+      <span>
+        {band.label}
+        {showRange && (
+          <span className="opacity-70"> · {band.scoreRange}</span>
+        )}
+      </span>
+    </span>
+  )
+}
+
+export interface RiskScoreProps {
+  score: number
+  maxScore?: number
+  likelihood?: number
+  impact?: number
+  variant?: 'inherent' | 'residual' | 'default'
+  size?: 'sm' | 'md' | 'lg'
+  showSeverity?: boolean
+  className?: string
+}
+
+export function RiskScore({
+  score,
+  maxScore = 25,
+  likelihood,
+  impact,
+  variant = 'default',
+  size = 'md',
+  showSeverity = true,
+  className,
+}: RiskScoreProps) {
+  const severity = getRiskSeverity(score)
+  const band = riskSeverityBands[severity]
+  const styles = severityStyles[severity]
+
+  const sizeClasses = {
+    sm: 'text-[12px] gap-1',
+    md: 'text-[13px] gap-1.5',
+    lg: 'text-sm gap-2',
+  }
+
+  const scoreSize = {
+    sm: 'font-semibold tabular-nums',
+    md: 'font-semibold tabular-nums text-sm',
+    lg: 'font-semibold tabular-nums text-base',
+  }
+
+  return (
+    <div
+      className={cn(
+        'inline-flex items-center flex-wrap',
+        sizeClasses[size],
+        className,
+      )}
+      role="group"
+      aria-label={`${variant !== 'default' ? variant + ' ' : ''}risk score ${score} out of ${maxScore}, ${band.label}`}
+    >
+      {variant !== 'default' && (
+        <span className="font-overline text-[var(--color-text-muted)] mr-0.5">
+          {variant === 'inherent' ? 'Inherent' : 'Residual'}
+        </span>
+      )}
+      <span className={cn(scoreSize[size], styles.text)}>
+        {score}
+        <span className="text-[var(--color-text-muted)] font-normal">
+          {' '}
+          / {maxScore}
+        </span>
+      </span>
+      {showSeverity && (
+        <RiskSeverityBadge severity={severity} size={size === 'lg' ? 'md' : 'sm'} />
+      )}
+      {(likelihood != null || impact != null) && (
+        <span className="font-caption text-[var(--color-text-muted)]">
+          {likelihood != null && `L${likelihood}`}
+          {likelihood != null && impact != null && ' · '}
+          {impact != null && `I${impact}`}
+        </span>
+      )}
+    </div>
+  )
+}
+
+export function RiskSeveritySwatch({
+  severity,
+  className,
+}: {
+  severity: RiskSeverity
+  className?: string
+}) {
+  const styles = severityStyles[severity]
+  const band = riskSeverityBands[severity]
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-3 rounded-lg border p-3',
+        styles.bg,
+        styles.border,
+        className,
+      )}
+    >
+      <div className={cn('size-10 rounded-md', styles.solid)} />
+      <div>
+        <div className={cn('font-label', styles.text)}>{band.label}</div>
+        <div className="font-caption text-[var(--color-text-muted)]">
+          Score {band.scoreRange}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export { severityStyles }
+
+
+# FULL status
+import { cn } from '@/lib/utils'
+import { statusMeta, type StatusTone } from '@/tokens'
+import { Badge } from './badge'
+
+const toneToBadge = {
+  neutral: 'neutral',
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  error: 'error',
+  primary: 'primary',
+} as const
+
+const toneDot: Record<StatusTone, string> = {
+  neutral: 'bg-[var(--color-text-muted)]',
+  info: 'bg-[var(--color-info)]',
+  success: 'bg-[var(--color-success)]',
+  warning: 'bg-[var(--color-warning)]',
+  error: 'bg-[var(--color-error)]',
+  primary: 'bg-[var(--color-primary)]',
+}
+
+export function getStatusMeta(status: string) {
+  return statusMeta[status] ?? { label: status, tone: 'neutral' as StatusTone }
+}
+
+export interface StatusBadgeProps {
+  status: string
+  label?: string
+  className?: string
+  size?: 'sm' | 'md'
+  showDot?: boolean
+}
+
+export function StatusBadge({
+  status,
+  label,
+  className,
+  size = 'md',
+  showDot = true,
+}: StatusBadgeProps) {
+  const meta = getStatusMeta(status)
+  const display = label ?? meta.label
+  return (
+    <Badge
+      variant={toneToBadge[meta.tone]}
+      size={size}
+      className={className}
+      title={display}
+    >
+      {showDot && (
+        <span
+          className={cn('size-1.5 rounded-full shrink-0', toneDot[meta.tone])}
+          aria-hidden
+        />
+      )}
+      <span>{display}</span>
+    </Badge>
+  )
+}
+
+export interface StatusDotProps {
+  status: string
+  className?: string
+  withLabel?: boolean
+}
+
+export function StatusDot({ status, className, withLabel = true }: StatusDotProps) {
+  const meta = getStatusMeta(status)
+  return (
+    <span className={cn('inline-flex items-center gap-1.5', className)}>
+      <span
+        className={cn('size-2 rounded-full shrink-0', toneDot[meta.tone])}
+        aria-hidden
+      />
+      {withLabel && (
+        <span className="font-body-sm text-[var(--color-text-secondary)]">{meta.label}</span>
+      )}
+      <span className="sr-only">{meta.label}</span>
+    </span>
+  )
+}
+
+
+# FULL card
+import { cn } from '@/lib/utils'
+import type { LucideIcon } from 'lucide-react'
+import { TrendingDown, TrendingUp, Minus } from 'lucide-react'
+
+export function Card({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        'rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xs)]',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+export function CardHeader({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={cn('flex items-start justify-between gap-3 px-5 pt-5 pb-0', className)}>
+      {children}
+    </div>
+  )
+}
+
+export function CardTitle({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <h3 className={cn('font-h4 text-[var(--color-text-primary)]', className)}>{children}</h3>
+  )
+}
+
+export function CardDescription({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <p className={cn('font-body-sm text-[var(--color-text-muted)] mt-0.5', className)}>
+      {children}
+    </p>
+  )
+}
+
+export function CardContent({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return <div className={cn('px-5 py-4', className)}>{children}</div>
+}
+
+export function CardFooter({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-2 border-t border-[var(--color-border)] px-5 py-3',
+        className,
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
+export interface KpiCardProps {
+  title: string
+  value: string | number
+  supporting?: string
+  trend?: { value: string; direction: 'up' | 'down' | 'flat'; positive?: boolean }
+  icon?: LucideIcon
+  status?: React.ReactNode
+  action?: React.ReactNode
+  className?: string
+}
+
+export function KpiCard({
+  title,
+  value,
+  supporting,
+  trend,
+  icon: Icon,
+  status,
+  action,
+  className,
+}: KpiCardProps) {
+  const TrendIcon =
+    trend?.direction === 'up'
+      ? TrendingUp
+      : trend?.direction === 'down'
+        ? TrendingDown
+        : Minus
+
+  const trendPositive = trend?.positive ?? trend?.direction === 'up'
+  const trendColor =
+    trend?.direction === 'flat'
+      ? 'text-[var(--color-text-muted)]'
+      : trendPositive
+        ? 'text-[var(--color-success)]'
+        : 'text-[var(--color-error)]'
+
+  return (
+    <Card className={cn('p-5', className)}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <div className="font-body-sm font-medium text-[var(--color-text-muted)]">{title}</div>
+          <div className="mt-2 font-h1 tabular-nums text-[var(--color-text-primary)] tracking-tight">
+            {value}
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            {trend && (
+              <span className={cn('inline-flex items-center gap-0.5 font-caption font-medium', trendColor)}>
+                <TrendIcon className="size-3.5" aria-hidden />
+                {trend.value}
+              </span>
+            )}
+            {supporting && (
+              <span className="font-caption text-[var(--color-text-muted)]">{supporting}</span>
+            )}
+            {status}
+          </div>
+        </div>
+        {Icon && (
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-primary-subtle)] text-[var(--color-primary)]">
+            <Icon className="size-5" aria-hidden />
+          </div>
+        )}
+      </div>
+      {action && <div className="mt-4">{action}</div>}
+    </Card>
+  )
+}
+
+export function MetricCard({
+  label,
+  value,
+  description,
+  className,
+}: {
+  label: string
+  value: React.ReactNode
+  description?: string
+  className?: string
+}) {
+  return (
+    <Card className={cn('p-4', className)}>
+      <div className="font-caption font-medium text-[var(--color-text-muted)] uppercase tracking-wide">
+        {label}
+      </div>
+      <div className="mt-1.5 font-h3 text-[var(--color-text-primary)]">{value}</div>
+      {description && (
+        <div className="mt-1 font-caption text-[var(--color-text-muted)]">{description}</div>
+      )}
+    </Card>
+  )
+}
+
+
+# FULL table
+import * as React from 'react'
+import { ArrowDown, ArrowUp, ArrowUpDown, MoreHorizontal, Search } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Checkbox } from './checkbox'
+import { Button } from './button'
+import { Input } from './input'
+import { Skeleton } from './progress'
+
+export type TableDensity = 'comfortable' | 'compact'
+
+export function TableToolbar({
+  searchPlaceholder = 'Search…',
+  searchValue,
+  onSearchChange,
+  children,
+  className,
+}: {
+  searchPlaceholder?: string
+  searchValue?: string
+  onSearchChange?: (v: string) => void
+  children?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn('flex flex-wrap items-center justify-between gap-3 p-3', className)}>
+      <div className="relative w-full max-w-xs">
+        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+        <Input
+          value={searchValue}
+          onChange={(e) => onSearchChange?.(e.target.value)}
+          placeholder={searchPlaceholder}
+          className="pl-9 h-8"
+          aria-label="Search table"
+        />
+      </div>
+      <div className="flex items-center gap-2">{children}</div>
+    </div>
+  )
+}
+
+export function Table({
+  className,
+  density = 'comfortable',
+  children,
+}: {
+  className?: string
+  density?: TableDensity
+  children: React.ReactNode
+}) {
+  return (
+    <div className={cn('w-full overflow-auto scrollbar-thin', className)}>
+      <table
+        data-density={density}
+        className={cn(
+          'w-full border-collapse text-left font-body-md',
+          density === 'compact' ? '[&_th]:h-9 [&_td]:py-1.5' : '[&_th]:h-11 [&_td]:py-3',
+        )}
+      >
+        {children}
+      </table>
+    </div>
+  )
+}
+
+export function TableHeader({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <thead
+      className={cn(
+        'sticky top-0 z-10 bg-[var(--color-surface-secondary)] border-b border-[var(--color-border)]',
+        className,
+      )}
+    >
+      {children}
+    </thead>
+  )
+}
+
+export function TableBody({ children }: { children: React.ReactNode }) {
+  return <tbody className="divide-y divide-[var(--color-border)]">{children}</tbody>
+}
+
+export function TableRow({
+  className,
+  selected,
+  ...props
+}: React.HTMLAttributes<HTMLTableRowElement> & { selected?: boolean }) {
+  return (
+    <tr
+      className={cn(
+        'transition-colors duration-100 hover:bg-[var(--color-surface-secondary)]/80',
+        selected && 'bg-[var(--color-primary-subtle)] hover:bg-[var(--color-primary-subtle)]',
+        className,
+      )}
+      data-selected={selected || undefined}
+      {...props}
+    />
+  )
+}
+
+export function TableHead({
+  className,
+  sortable,
+  sorted,
+  onSort,
+  children,
+  sticky,
+  ...props
+}: React.ThHTMLAttributes<HTMLTableCellElement> & {
+  sortable?: boolean
+  sorted?: 'asc' | 'desc' | false
+  onSort?: () => void
+  sticky?: boolean
+}) {
+  const content = (
+    <>
+      <span>{children}</span>
+      {sortable && (
+        <span className="text-[var(--color-text-muted)]">
+          {sorted === 'asc' ? (
+            <ArrowUp className="size-3.5" />
+          ) : sorted === 'desc' ? (
+            <ArrowDown className="size-3.5" />
+          ) : (
+            <ArrowUpDown className="size-3.5 opacity-50" />
+          )}
+        </span>
+      )}
+    </>
+  )
+
+  return (
+    <th
+      className={cn(
+        'px-3 font-label text-[var(--color-text-secondary)] whitespace-nowrap',
+        sticky && 'sticky left-0 z-20 bg-[var(--color-surface-secondary)]',
+        className,
+      )}
+      aria-sort={
+        sortable
+          ? sorted === 'asc'
+            ? 'ascending'
+            : sorted === 'desc'
+              ? 'descending'
+              : 'none'
+          : undefined
+      }
+      {...props}
+    >
+      {sortable ? (
+        <button
+          type="button"
+          onClick={onSort}
+          className="inline-flex items-center gap-1 hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded"
+        >
+          {content}
+        </button>
+      ) : (
+        <span className="inline-flex items-center gap-1">{content}</span>
+      )}
+    </th>
+  )
+}
+
+export function TableCell({
+  className,
+  sticky,
+  ...props
+}: React.TdHTMLAttributes<HTMLTableCellElement> & { sticky?: boolean }) {
+  return (
+    <td
+      className={cn(
+        'px-3 text-[var(--color-text-primary)] align-middle',
+        sticky && 'sticky left-0 z-[5] bg-[var(--color-surface)]',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+export function TableSelectCell({
+  checked,
+  indeterminate,
+  onChange,
+  ariaLabel,
+}: {
+  checked?: boolean
+  indeterminate?: boolean
+  onChange?: (checked: boolean) => void
+  ariaLabel: string
+}) {
+  return (
+    <TableCell className="w-10 px-3">
+      <Checkbox
+        checked={checked}
+        indeterminate={indeterminate}
+        onChange={(e) => onChange?.(e.target.checked)}
+        aria-label={ariaLabel}
+      />
+    </TableCell>
+  )
+}
+
+export function TableActionsCell({ children }: { children?: React.ReactNode }) {
+  return (
+    <TableCell className="w-12 text-right">
+      {children ?? (
+        <Button variant="ghost" size="icon-sm" aria-label="Row actions">
+          <MoreHorizontal className="size-4" />
+        </Button>
+      )}
+    </TableCell>
+  )
+}
+
+export function TableEmpty({
+  title = 'No results',
+  description = 'Try adjusting filters or search.',
+  action,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+}) {
+  return (
+    <tr>
+      <td colSpan={99} className="px-3 py-16 text-center">
+        <div className="mx-auto max-w-sm">
+          <div className="font-h4 text-[var(--color-text-primary)]">{title}</div>
+          <p className="mt-1 font-body-md text-[var(--color-text-muted)]">{description}</p>
+          {action && <div className="mt-4 flex justify-center">{action}</div>}
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+export function TableLoading({ rows = 5, cols = 6 }: { rows?: number; cols?: number }) {
+  return (
+    <>
+      {Array.from({ length: rows }).map((_, r) => (
+        <TableRow key={r} className="hover:bg-transparent">
+          {Array.from({ length: cols }).map((_, c) => (
+            <TableCell key={c}>
+              <Skeleton className="h-4 w-full max-w-[120px]" />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  )
+}
+
+
+# FULL sidebar-nav
+import * as React from 'react'
+import {
+  ChevronDown,
+  type LucideIcon,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Tooltip } from './tooltip'
+
+export interface NavItem {
+  id: string
+  label: string
+  icon: LucideIcon
+  href?: string
+  badge?: number | string
+  children?: { id: string; label: string; href?: string; badge?: number | string }[]
+}
+
+export function SidebarNavItem({
+  item,
+  active,
+  collapsed,
+  expanded,
+  onToggle,
+  onSelect,
+}: {
+  item: NavItem
+  active?: boolean
+  collapsed?: boolean
+  expanded?: boolean
+  onToggle?: () => void
+  onSelect?: (id: string) => void
+}) {
+  const Icon = item.icon
+  const hasChildren = !!item.children?.length
+
+  const button = (
+    <button
+      type="button"
+      onClick={() => {
+        if (hasChildren && !collapsed) onToggle?.()
+        else onSelect?.(item.id)
+      }}
+      className={cn(
+        'group flex w-full items-center gap-3 rounded-md px-3 py-2 font-body-md font-medium transition-colors duration-150',
+        'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+        collapsed && 'justify-center px-0',
+        active
+          ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-active-fg)]'
+          : 'text-[var(--color-sidebar-fg)] hover:bg-[var(--color-sidebar-hover)] hover:text-white',
+      )}
+      aria-current={active ? 'page' : undefined}
+      aria-expanded={hasChildren ? expanded : undefined}
+    >
+      <Icon className="size-5 shrink-0 opacity-90" aria-hidden />
+      {!collapsed && (
+        <>
+          <span className="flex-1 text-left truncate">{item.label}</span>
+          {item.badge != null && (
+            <span
+              className={cn(
+                'rounded-full px-1.5 py-0 text-[11px] font-semibold tabular-nums min-w-[20px] text-center',
+                active
+                  ? 'bg-white/20 text-white'
+                  : 'bg-[var(--color-sidebar-hover)] text-[var(--color-sidebar-fg)]',
+              )}
+            >
+              {item.badge}
+            </span>
+          )}
+          {hasChildren && (
+            <ChevronDown
+              className={cn(
+                'size-4 shrink-0 opacity-60 transition-transform',
+                expanded && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          )}
+        </>
+      )}
+    </button>
+  )
+
+  return (
+    <div>
+      {collapsed ? (
+        <Tooltip content={item.label} side="right">
+          {button}
+        </Tooltip>
+      ) : (
+        button
+      )}
+      {hasChildren && expanded && !collapsed && (
+        <div className="mt-0.5 ml-4 space-y-0.5 border-l border-[var(--color-sidebar-border)] pl-3">
+          {item.children!.map((child) => (
+            <button
+              key={child.id}
+              type="button"
+              onClick={() => onSelect?.(child.id)}
+              className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white transition-colors"
+            >
+              <span className="flex-1 text-left truncate">{child.label}</span>
+              {child.badge != null && (
+                <span className="text-[11px] tabular-nums opacity-70">{child.badge}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function Sidebar({
+  collapsed,
+  onCollapsedChange,
+  logo,
+  children,
+  footer,
+  className,
+}: {
+  collapsed?: boolean
+  onCollapsedChange?: (v: boolean) => void
+  logo?: React.ReactNode
+  children: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <aside
+      className={cn(
+        'flex h-full flex-col bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-fg)] transition-[width] duration-200',
+        collapsed ? 'w-16' : 'w-64',
+        className,
+      )}
+      data-collapsed={collapsed || undefined}
+    >
+      <div
+        className={cn(
+          'flex h-16 shrink-0 items-center border-b border-[var(--color-sidebar-border)]',
+          collapsed ? 'justify-center px-2' : 'px-4 gap-3',
+        )}
+      >
+        {logo}
+      </div>
+      <nav className="flex-1 overflow-y-auto scrollbar-thin p-2 space-y-0.5">{children}</nav>
+      {footer && (
+        <div className="border-t border-[var(--color-sidebar-border)] p-2">{footer}</div>
+      )}
+      {onCollapsedChange && (
+        <button
+          type="button"
+          className="sr-only"
+          onClick={() => onCollapsedChange(!collapsed)}
+        >
+          Toggle sidebar
+        </button>
+      )}
+    </aside>
+  )
+}
+
+
+# FULL empty-state
+import type { LucideIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  className,
+}: {
+  icon?: LucideIcon
+  title: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center px-6 py-16 text-center',
+        className,
+      )}
+    >
+      {Icon && (
+        <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-[var(--color-surface-secondary)] text-[var(--color-text-muted)]">
+          <Icon className="size-6" aria-hidden />
+        </div>
+      )}
+      <h3 className="font-h3 text-[var(--color-text-primary)]">{title}</h3>
+      {description && (
+        <p className="mt-1.5 max-w-sm font-body-md text-[var(--color-text-muted)]">
+          {description}
+        </p>
+      )}
+      {action && <div className="mt-5">{action}</div>}
+    </div>
+  )
+}
+
+export function ErrorState({
+  title = 'Something went wrong',
+  description = 'We could not load this content. Please try again.',
+  action,
+  className,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center rounded-lg border border-[var(--color-error-border)] bg-[var(--color-error-subtle)] px-6 py-12 text-center',
+        className,
+      )}
+      role="alert"
+    >
+      <h3 className="font-h3 text-[var(--color-error)]">{title}</h3>
+      <p className="mt-1.5 max-w-sm font-body-md text-[var(--color-text-secondary)]">
+        {description}
+      </p>
+      {action && <div className="mt-5">{action}</div>}
+    </div>
+  )
+}
+
+export function LoadingState({
+  label = 'Loading…',
+  className,
+}: {
+  label?: string
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center gap-3 px-6 py-16',
+        className,
+      )}
+      role="status"
+      aria-live="polite"
+    >
+      <svg
+        className="size-8 animate-spin text-[var(--color-primary)]"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+      <span className="font-body-md text-[var(--color-text-muted)]">{label}</span>
+    </div>
+  )
+}
+
+
+# FULL progress
+import { cn } from '@/lib/utils'
+
+export function Progress({
+  value,
+  max = 100,
+  size = 'md',
+  variant = 'primary',
+  showLabel,
+  className,
+}: {
+  value: number
+  max?: number
+  size?: 'sm' | 'md' | 'lg'
+  variant?: 'primary' | 'success' | 'warning' | 'error'
+  showLabel?: boolean
+  className?: string
+}) {
+  const pct = Math.min(100, Math.max(0, (value / max) * 100))
+  const heights = { sm: 'h-1', md: 'h-1.5', lg: 'h-2.5' }
+  const colors = {
+    primary: 'bg-[var(--color-primary)]',
+    success: 'bg-[var(--color-success)]',
+    warning: 'bg-[var(--color-warning)]',
+    error: 'bg-[var(--color-error)]',
+  }
+
+  return (
+    <div className={cn('w-full', className)}>
+      {showLabel && (
+        <div className="mb-1 flex justify-between font-caption text-[var(--color-text-muted)]">
+          <span>Progress</span>
+          <span className="tabular-nums">{Math.round(pct)}%</span>
+        </div>
+      )}
+      <div
+        role="progressbar"
+        aria-valuenow={value}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        className={cn(
+          'w-full overflow-hidden rounded-full bg-[var(--color-surface-tertiary)]',
+          heights[size],
+        )}
+      >
+        <div
+          className={cn('h-full rounded-full transition-all duration-300', colors[variant])}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export function Spinner({
+  size = 'md',
+  className,
+}: {
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}) {
+  const sizes = { sm: 'size-4', md: 'size-5', lg: 'size-8' }
+  return (
+    <svg
+      className={cn('animate-spin text-[var(--color-primary)]', sizes[size], className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+      />
+    </svg>
+  )
+}
+
+export function Skeleton({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'animate-pulse rounded-md bg-[var(--color-surface-tertiary)]',
+        className,
+      )}
+      aria-hidden
+    />
+  )
+}
+
+
+# FULL modal
+import * as React from 'react'
+import { X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const sizeMap = {
+  sm: 'max-w-[400px]',
+  md: 'max-w-[560px]',
+  lg: 'max-w-[720px]',
+  xl: 'max-w-[960px]',
+}
+
+export interface ModalProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof sizeMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: ModalProps) {
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-[var(--color-surface-overlay)]"
+        onClick={onClose}
+        aria-hidden
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? 'modal-title' : undefined}
+        className={cn(
+          'relative z-10 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xl)]',
+          sizeMap[size],
+          className,
+        )}
+      >
+        {(title || description) && (
+          <div className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] px-5 py-4">
+            <div>
+              {title && (
+                <h2 id="modal-title" className="font-h3 text-[var(--color-text-primary)]">
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className="mt-1 font-body-md text-[var(--color-text-muted)]">{description}</p>
+              )}
+            </div>
+            <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+              <X />
+            </Button>
+          </div>
+        )}
+        {children && <div className="px-5 py-4">{children}</div>}
+        {footer && (
+          <div className="flex items-center justify-end gap-2 border-t border-[var(--color-border)] px-5 py-3">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export function ConfirmDialog({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  destructive,
+  loading,
+}: {
+  open: boolean
+  onClose: () => void
+  onConfirm: () => void
+  title: string
+  description?: string
+  confirmLabel?: string
+  cancelLabel?: string
+  destructive?: boolean
+  loading?: boolean
+}) {
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+      description={description}
+      size="sm"
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={loading}>
+            {cancelLabel}
+          </Button>
+          <Button
+            variant={destructive ? 'destructive' : 'primary'}
+            onClick={onConfirm}
+            loading={loading}
+          >
+            {confirmLabel}
+          </Button>
+        </>
+      }
+    />
+  )
+}
+
+
+# FULL toast
+import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const icons = {
+  info: Info,
+  success: CheckCircle2,
+  error: AlertCircle,
+  warning: AlertCircle,
+}
+
+export interface ToastProps {
+  variant?: 'info' | 'success' | 'error' | 'warning'
+  title: string
+  description?: string
+  onClose?: () => void
+  className?: string
+}
+
+export function Toast({
+  variant = 'info',
+  title,
+  description,
+  onClose,
+  className,
+}: ToastProps) {
+  const Icon = icons[variant]
+  const iconColor = {
+    info: 'text-[var(--color-info)]',
+    success: 'text-[var(--color-success)]',
+    error: 'text-[var(--color-error)]',
+    warning: 'text-[var(--color-warning)]',
+  }
+
+  return (
+    <div
+      role="status"
+      className={cn(
+        'flex w-full max-w-sm gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-lg)]',
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', iconColor[variant])} aria-hidden />
+      <div className="flex-1 min-w-0">
+        <div className="font-label text-[var(--color-text-primary)]">{title}</div>
+        {description && (
+          <div className="font-body-sm text-[var(--color-text-secondary)] mt-0.5">
+            {description}
+          </div>
+        )}
+      </div>
+      {onClose && (
+        <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}
+
+
+# FULL alert
+import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const variants = {
+  info: {
+    bg: 'bg-[var(--color-info-subtle)] border-[var(--color-info-border)]',
+    icon: Info,
+    iconColor: 'text-[var(--color-info)]',
+    title: 'text-[var(--color-info)]',
+  },
+  success: {
+    bg: 'bg-[var(--color-success-subtle)] border-[var(--color-success-border)]',
+    icon: CheckCircle2,
+    iconColor: 'text-[var(--color-success)]',
+    title: 'text-[var(--color-success)]',
+  },
+  warning: {
+    bg: 'bg-[var(--color-warning-subtle)] border-[var(--color-warning-border)]',
+    icon: AlertTriangle,
+    iconColor: 'text-[var(--color-warning)]',
+    title: 'text-[var(--color-warning)]',
+  },
+  error: {
+    bg: 'bg-[var(--color-error-subtle)] border-[var(--color-error-border)]',
+    icon: AlertCircle,
+    iconColor: 'text-[var(--color-error)]',
+    title: 'text-[var(--color-error)]',
+  },
+}
+
+export interface AlertProps {
+  variant?: keyof typeof variants
+  title?: string
+  children?: React.ReactNode
+  onDismiss?: () => void
+  className?: string
+}
+
+export function Alert({
+  variant = 'info',
+  title,
+  children,
+  onDismiss,
+  className,
+}: AlertProps) {
+  const v = variants[variant]
+  const Icon = v.icon
+  return (
+    <div
+      role="alert"
+      className={cn(
+        'flex gap-3 rounded-lg border p-4',
+        v.bg,
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', v.iconColor)} aria-hidden />
+      <div className="flex-1 min-w-0">
+        {title && (
+          <div className={cn('font-label mb-0.5', v.title)}>{title}</div>
+        )}
+        {children && (
+          <div className="font-body-md text-[var(--color-text-secondary)]">{children}</div>
+        )}
+      </div>
+      {onDismiss && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="-mt-1 -mr-1"
+        >
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}
+
+
+# FULL drawer
+import * as React from 'react'
+import { X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const widthMap = {
+  sm: 'max-w-[360px]',
+  md: 'max-w-[480px]',
+  lg: 'max-w-[640px]',
+}
+
+export interface DrawerProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof widthMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Drawer({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: DrawerProps) {
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 z-[var(--z-modal)] flex justify-end">
+      <div
+        className="absolute inset-0 bg-[var(--color-surface-overlay)]"
+        onClick={onClose}
+        aria-hidden
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? 'drawer-title' : undefined}
+        className={cn(
+          'relative z-10 flex h-full w-full flex-col border-l border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xl)]',
+          widthMap[size],
+          className,
+        )}
+      >
+        <div className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] px-5 py-4">
+          <div>
+            {title && (
+              <h2 id="drawer-title" className="font-h3 text-[var(--color-text-primary)]">
+                {title}
+              </h2>
+            )}
+            {description && (
+              <p className="mt-1 font-body-md text-[var(--color-text-muted)]">{description}</p>
+            )}
+          </div>
+          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+            <X />
+          </Button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 py-4 scrollbar-thin">{children}</div>
+        {footer && (
+          <div className="flex items-center justify-end gap-2 border-t border-[var(--color-border)] px-5 py-3">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+
+# FULL avatar
+import { cn } from '@/lib/utils'
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
+const sizeMap = {
+  xs: 'size-6 text-[10px]',
+  sm: 'size-7 text-[11px]',
+  md: 'size-8 text-xs',
+  lg: 'size-10 text-sm',
+  xl: 'size-12 text-base',
+}
+
+export interface AvatarProps {
+  name: string
+  src?: string
+  size?: keyof typeof sizeMap
+  className?: string
+}
+
+export function Avatar({ name, src, size = 'md', className }: AvatarProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--color-primary-muted)] text-[var(--color-primary)] font-medium overflow-hidden',
+        sizeMap[size],
+        className,
+      )}
+      title={name}
+      role="img"
+      aria-label={name}
+    >
+      {src ? (
+        <img src={src} alt="" className="size-full object-cover" />
+      ) : (
+        initials(name)
+      )}
+    </span>
+  )
+}
+
+export function AvatarGroup({
+  people,
+  max = 3,
+  size = 'sm',
+}: {
+  people: { name: string; src?: string }[]
+  max?: number
+  size?: keyof typeof sizeMap
+}) {
+  const shown = people.slice(0, max)
+  const rest = people.length - max
+  return (
+    <div className="flex items-center -space-x-2">
+      {shown.map((p) => (
+        <Avatar
+          key={p.name}
+          name={p.name}
+          src={p.src}
+          size={size}
+          className="ring-2 ring-[var(--color-surface)]"
+        />
+      ))}
+      {rest > 0 && (
+        <span
+          className={cn(
+            'inline-flex items-center justify-center rounded-full bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] font-caption font-medium ring-2 ring-[var(--color-surface)]',
+            sizeMap[size],
+          )}
+        >
+          +{rest}
+        </span>
+      )}
+    </div>
+  )
+}
+
+
+# FULL pagination
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+import { Select } from './select'
+
+export interface PaginationProps {
+  page: number
+  pageSize: number
+  total: number
+  onPageChange: (page: number) => void
+  onPageSizeChange?: (size: number) => void
+  pageSizeOptions?: number[]
+  className?: string
+}
+
+export function Pagination({
+  page,
+  pageSize,
+  total,
+  onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [10, 25, 50, 100],
+  className,
+}: PaginationProps) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
+  const to = Math.min(page * pageSize, total)
+
+  return (
+    <div
+      className={cn(
+        'flex flex-wrap items-center justify-between gap-3 px-1 py-2',
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2 font-body-sm text-[var(--color-text-muted)]">
+        <span>
+          {from}–{to} of {total}
+        </span>
+        {onPageSizeChange && (
+          <div className="flex items-center gap-1.5">
+            <span className="hidden sm:inline">Rows</span>
+            <Select
+              value={String(pageSize)}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              className="h-8 w-[72px]"
+              aria-label="Rows per page"
+            >
+              {pageSizeOptions.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(1)}
+          aria-label="First page"
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+          aria-label="Previous page"
+        >
+          <ChevronLeft />
+        </Button>
+        <span className="px-2 font-body-sm tabular-nums text-[var(--color-text-secondary)]">
+          {page} / {totalPages}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+          aria-label="Next page"
+        >
+          <ChevronRight />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(totalPages)}
+          aria-label="Last page"
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+
+# FULL search
+import * as React from 'react'
+import {
+  Search as SearchIcon,
+  Clock,
+  FileWarning,
+  Shield,
+  Users,
+  X,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface SearchResult {
+  id: string
+  title: string
+  category: string
+  subtitle?: string
+}
+
+const categoryIcons: Record<string, React.ElementType> = {
+  Risks: FileWarning,
+  Controls: Shield,
+  Users: Users,
+  default: SearchIcon,
+}
+
+export function GlobalSearch({
+  className,
+  placeholder = 'Search risks, controls, actions…',
+}: {
+  className?: string
+  placeholder?: string
+}) {
+  const [open, setOpen] = React.useState(false)
+  const [query, setQuery] = React.useState('')
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setOpen(true)
+      }
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
+
+  React.useEffect(() => {
+    if (open) {
+      setTimeout(() => inputRef.current?.focus(), 10)
+    } else {
+      setQuery('')
+    }
+  }, [open])
+
+  const recent = ['Vendor concentration risk', 'SOC 2 controls', 'Q3 action plans']
+  const results: SearchResult[] =
+    query.length > 1
+      ? [
+          {
+            id: '1',
+            title: 'Data breach — third party processor',
+            category: 'Risks',
+            subtitle: 'RSK-1042 · High',
+          },
+          {
+            id: '2',
+            title: 'Access control review',
+            category: 'Controls',
+            subtitle: 'CTL-221 · Effective',
+          },
+          {
+            id: '3',
+            title: 'Sarah Chen',
+            category: 'Users',
+            subtitle: 'Risk Owner · Operations',
+          },
+        ].filter(
+          (r) =>
+            r.title.toLowerCase().includes(query.toLowerCase()) ||
+            r.category.toLowerCase().includes(query.toLowerCase()),
+        )
+      : []
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={cn(
+          'inline-flex h-9 w-full max-w-md items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-left shadow-[var(--shadow-xs)] transition-colors',
+          'hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)]',
+          'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+          className,
+        )}
+      >
+        <SearchIcon className="size-4 text-[var(--color-text-muted)]" aria-hidden />
+        <span className="flex-1 truncate font-body-md text-[var(--color-text-muted)]">
+          {placeholder}
+        </span>
+        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-[var(--color-border)] bg-[var(--color-surface-secondary)] px-1.5 py-0.5 font-caption text-[var(--color-text-muted)]">
+          ⌘K
+        </kbd>
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 z-[var(--z-modal)] flex items-start justify-center pt-[12vh] px-4">
+          <div
+            className="absolute inset-0 bg-[var(--color-surface-overlay)]"
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+          <div
+            role="dialog"
+            aria-label="Global search"
+            className="relative z-10 w-full max-w-xl overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xl)]"
+          >
+            <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-4">
+              <SearchIcon className="size-5 text-[var(--color-text-muted)]" aria-hidden />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={placeholder}
+                className="h-12 flex-1 bg-transparent font-body-lg text-[var(--color-text-primary)] placeholder:text-[var(--color-text-disabled)] focus:outline-none"
+                aria-autocomplete="list"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                  aria-label="Clear"
+                >
+                  <X className="size-4" />
+                </button>
+              )}
+              <kbd className="font-caption text-[var(--color-text-muted)]">ESC</kbd>
+            </div>
+
+            <div className="max-h-80 overflow-y-auto p-2 scrollbar-thin">
+              {!query && (
+                <div className="px-2 py-2">
+                  <div className="px-2 pb-1.5 font-overline text-[var(--color-text-muted)]">
+                    Recent
+                  </div>
+                  {recent.map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left hover:bg-[var(--color-surface-secondary)]"
+                      onClick={() => setQuery(r)}
+                    >
+                      <Clock className="size-4 text-[var(--color-text-muted)]" />
+                      <span className="font-body-md text-[var(--color-text-primary)]">{r}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {query && results.length === 0 && (
+                <div className="px-4 py-10 text-center">
+                  <div className="font-label text-[var(--color-text-primary)]">No results</div>
+                  <p className="mt-1 font-body-sm text-[var(--color-text-muted)]">
+                    No matches for “{query}”. Try another term.
+                  </p>
+                </div>
+              )}
+
+              {results.length > 0 && (
+                <div>
+                  {['Risks', 'Controls', 'Users'].map((cat) => {
+                    const items = results.filter((r) => r.category === cat)
+                    if (!items.length) return null
+                    const Icon = categoryIcons[cat] || categoryIcons.default
+                    return (
+                      <div key={cat} className="mb-1">
+                        <div className="px-2 py-1.5 font-overline text-[var(--color-text-muted)]">
+                          {cat}
+                        </div>
+                        {items.map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left hover:bg-[var(--color-surface-secondary)]"
+                            onClick={() => setOpen(false)}
+                          >
+                            <Icon className="size-4 text-[var(--color-text-muted)]" />
+                            <div className="min-w-0 flex-1">
+                              <div className="font-body-md text-[var(--color-text-primary)] truncate">
+                                {item.title}
+                              </div>
+                              {item.subtitle && (
+                                <div className="font-caption text-[var(--color-text-muted)]">
+                                  {item.subtitle}
+                                </div>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 border-t border-[var(--color-border)] px-4 py-2 font-caption text-[var(--color-text-muted)]">
+              <span>↑↓ Navigate</span>
+              <span>↵ Open</span>
+              <span>ESC Close</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+
+# FULL checkbox
+import * as React from 'react'
+import { Check, Minus } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface CheckboxProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  indeterminate?: boolean
+  label?: string
+}
+
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, indeterminate, label, id, checked, disabled, ...props }, ref) => {
+    const inputRef = React.useRef<HTMLInputElement>(null)
+    React.useImperativeHandle(ref, () => inputRef.current!)
+
+    React.useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.indeterminate = !!indeterminate
+      }
+    }, [indeterminate])
+
+    const inputId = id || React.useId()
+
+    return (
+      <label
+        htmlFor={inputId}
+        className={cn(
+          'inline-flex items-center gap-2 cursor-pointer select-none',
+          disabled && 'cursor-not-allowed opacity-50',
+          className,
+        )}
+      >
+        <span className="relative inline-flex size-4 shrink-0">
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="checkbox"
+            checked={checked}
+            disabled={disabled}
+            className="peer absolute inset-0 size-4 cursor-pointer appearance-none rounded-[3px] border border-[var(--color-border-strong)] bg-[var(--color-surface)] transition-colors checked:border-[var(--color-primary)] checked:bg-[var(--color-primary)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed"
+            {...props}
+          />
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-100">
+            {indeterminate ? (
+              <Minus className="size-3" strokeWidth={3} />
+            ) : (
+              <Check className="size-3" strokeWidth={3} />
+            )}
+          </span>
+        </span>
+        {label && (
+          <span className="font-body-md text-[var(--color-text-primary)]">{label}</span>
+        )}
+      </label>
+    )
+  },
+)
+Checkbox.displayName = 'Checkbox'
+
+
+# FULL toggle
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface ToggleProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  label?: string
+  size?: 'sm' | 'md'
+}
+
+export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
+  (
+    {
+      className,
+      checked = false,
+      onCheckedChange,
+      disabled,
+      label,
+      size = 'md',
+      id,
+      ...props
+    },
+    ref,
+  ) => {
+    const toggleId = id || React.useId()
+    return (
+      <div className={cn('inline-flex items-center gap-2', className)}>
+        <button
+          ref={ref}
+          id={toggleId}
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          disabled={disabled}
+          onClick={() => onCheckedChange?.(!checked)}
+          className={cn(
+            'relative inline-flex shrink-0 cursor-pointer rounded-full transition-colors duration-150 focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed disabled:opacity-50',
+            size === 'sm' ? 'h-5 w-9' : 'h-6 w-11',
+            checked ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-surface-tertiary)]',
+          )}
+          {...props}
+        >
+          <span
+            className={cn(
+              'pointer-events-none absolute top-0.5 left-0.5 rounded-full bg-white shadow-[var(--shadow-sm)] transition-transform duration-150',
+              size === 'sm' ? 'size-4' : 'size-5',
+              checked && (size === 'sm' ? 'translate-x-4' : 'translate-x-5'),
+            )}
+          />
+        </button>
+        {label && (
+          <label
+            htmlFor={toggleId}
+            className={cn(
+              'font-body-md text-[var(--color-text-primary)] cursor-pointer',
+              disabled && 'cursor-not-allowed opacity-50',
+            )}
+          >
+            {label}
+          </label>
+        )}
+      </div>
+    )
+  },
+)
+Toggle.displayName = 'Toggle'
+
+
+# FULL tabs
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface TabItem {
+  id: string
+  label: string
+  count?: number
+  disabled?: boolean
+}
+
+export interface TabsProps {
+  items: TabItem[]
+  value: string
+  onChange: (id: string) => void
+  className?: string
+  size?: 'sm' | 'md'
+}
+
+export function Tabs({ items, value, onChange, className, size = 'md' }: TabsProps) {
+  return (
+    <div
+      role="tablist"
+      className={cn(
+        'flex items-center gap-0 border-b border-[var(--color-border)]',
+        className,
+      )}
+    >
+      {items.map((item) => {
+        const active = item.id === value
+        return (
+          <button
+            key={item.id}
+            role="tab"
+            type="button"
+            aria-selected={active}
+            disabled={item.disabled}
+            onClick={() => onChange(item.id)}
+            className={cn(
+              'relative inline-flex items-center gap-1.5 font-button transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded-t-md',
+              'disabled:opacity-50 disabled:pointer-events-none',
+              size === 'sm' ? 'px-3 py-2 text-[13px]' : 'px-4 py-2.5',
+              active
+                ? 'text-[var(--color-primary)]'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]',
+            )}
+          >
+            {item.label}
+            {item.count != null && (
+              <span
+                className={cn(
+                  'rounded-full px-1.5 py-0 text-[11px] font-medium tabular-nums',
+                  active
+                    ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)]'
+                    : 'bg-[var(--color-surface-secondary)] text-[var(--color-text-muted)]',
+                )}
+              >
+                {item.count}
+              </span>
+            )}
+            {active && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--color-primary)] rounded-t-full" />
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
+}

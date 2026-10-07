@@ -1,0 +1,50 @@
+import * as React from 'react'
+import { X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const widthMap = {
+  sm: 'max-w-[360px]',
+  md: 'max-w-[480px]',
+  lg: 'max-w-[640px]',
+}
+
+export interface DrawerProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof widthMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Drawer({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: DrawerProps) {
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 z-[var(--z-modal)] flex justify-end">
+      <div

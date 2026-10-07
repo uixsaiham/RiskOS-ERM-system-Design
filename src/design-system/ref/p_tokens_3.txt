@@ -1,0 +1,38 @@
+  closed: { label: 'Closed', tone: 'success' },
+  // Control
+  effective: { label: 'Effective', tone: 'success' },
+  partially_effective: { label: 'Partially Effective', tone: 'warning' },
+  ineffective: { label: 'Ineffective', tone: 'error' },
+  not_tested: { label: 'Not Tested', tone: 'neutral' },
+  // Action
+  not_started: { label: 'Not Started', tone: 'neutral' },
+  in_progress: { label: 'In Progress', tone: 'info' },
+  blocked: { label: 'Blocked', tone: 'error' },
+  overdue: { label: 'Overdue', tone: 'error' },
+  completed: { label: 'Completed', tone: 'success' },
+  // Compliance
+  compliant: { label: 'Compliant', tone: 'success' },
+  partially_compliant: { label: 'Partially Compliant', tone: 'warning' },
+  non_compliant: { label: 'Non-Compliant', tone: 'error' },
+  // General
+  active: { label: 'Active', tone: 'success' },
+  inactive: { label: 'Inactive', tone: 'neutral' },
+  pending: { label: 'Pending', tone: 'warning' },
+  approved: { label: 'Approved', tone: 'success' },
+  rejected: { label: 'Rejected', tone: 'error' },
+  archived: { label: 'Archived', tone: 'neutral' },
+}
+
+export const interactionPrinciples = {
+  hover: 'Subtle background or border shift; no layout jump',
+  focus: 'Visible 2px ring with offset; never remove outline without replacement',
+  active: 'Slightly darker primary / pressed surface',
+  selected: 'Primary subtle background + primary border or indicator',
+  disabled: 'Reduced opacity + no pointer events + muted text',
+  loading: 'Spinner or skeleton; preserve layout dimensions',
+  success: 'Success color + optional check icon + brief confirmation',
+  error: 'Error color + inline message adjacent to field',
+  confirmation: 'Modal for destructive / irreversible actions',
+  destructive: 'Error-styled primary action; require explicit confirm',
+  transition: '100–150ms ease for micro-interactions',
+} as const

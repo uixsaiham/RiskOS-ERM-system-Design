@@ -1,0 +1,16 @@
+export interface SearchResult {
+  id: string
+  title: string
+  category: string
+  subtitle?: string
+}
+
+export function GlobalSearch({
+  className,
+  placeholder = 'Search risks, controls, actions…',
+}: {
+  className?: string
+  placeholder?: string
+}) {
+  /* body */
+}

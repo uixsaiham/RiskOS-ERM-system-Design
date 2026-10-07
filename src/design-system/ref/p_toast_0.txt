@@ -1,0 +1,50 @@
+import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const icons = {
+  info: Info,
+  success: CheckCircle2,
+  error: AlertCircle,
+  warning: AlertCircle,
+}
+
+export interface ToastProps {
+  variant?: 'info' | 'success' | 'error' | 'warning'
+  title: string
+  description?: string
+  onClose?: () => void
+  className?: string
+}
+
+export function Toast({
+  variant = 'info',
+  title,
+  description,
+  onClose,
+  className,
+}: ToastProps) {
+  const Icon = icons[variant]
+  const iconColor = {
+    info: 'text-[var(--color-info)]',
+    success: 'text-[var(--color-success)]',
+    error: 'text-[var(--color-error)]',
+    warning: 'text-[var(--color-warning)]',
+  }
+
+  return (
+    <div
+      role="status"
+      className={cn(
+        'flex w-full max-w-sm gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-lg)]',
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', iconColor[variant])} aria-hidden />
+      <div className="flex-1 min-w-0">
+        <div className="font-label text-[var(--color-text-primary)]">{title}</div>
+        {description && (
+          <div className="font-body-sm text-[var(--color-text-secondary)] mt-0.5">
+            {description}
+          </div>
+        )}

@@ -1,0 +1,40 @@
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  '2xl': 1440,
+} as const
+
+export const layout = {
+  sidebarWidth: 256,
+  sidebarCollapsedWidth: 64,
+  headerHeight: 64,
+  contentMaxWidth: 1440,
+  pageMargin: 32,
+  sectionGap: 32,
+  cardGap: 16,
+  formGap: 24,
+  tableCellPaddingComfortable: 16,
+  tableCellPaddingCompact: 8,
+} as const
+
+export const zIndex = {
+  dropdown: 50,
+  sticky: 100,
+  header: 200,
+  sidebar: 250,
+  overlay: 300,
+  modal: 400,
+  popover: 450,
+  toast: 500,
+  tooltip: 600,
+} as const
+
+/** Risk score bands (5×5 matrix default: score = likelihood × impact) */
+export const riskSeverityBands = {
+  low: { min: 1, max: 4, label: 'Low', scoreRange: '1–4' },
+  moderate: { min: 5, max: 9, label: 'Moderate', scoreRange: '5–9' },
+  high: { min: 10, max: 16, label: 'High', scoreRange: '10–16' },
+  critical: { min: 17, max: 25, label: 'Critical', scoreRange: '17–25' },
+} as const
+
+export type RiskSeverity = keyof typeof riskSeverityBands

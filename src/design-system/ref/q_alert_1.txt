@@ -1,0 +1,30 @@
+      role="alert"
+      className={cn(
+        'flex gap-3 rounded-lg border p-4',
+        v.bg,
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', v.iconColor)} aria-hidden />
+      <div className="flex-1 min-w-0">
+        {title && (
+          <div className={cn('font-label mb-0.5', v.title)}>{title}</div>
+        )}
+        {children && (
+          <div className="font-body-md text-[var(--color-text-secondary)]">{children}</div>
+        )}
+      </div>
+      {onDismiss && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="-mt-1 -mr-1"
+        >
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}

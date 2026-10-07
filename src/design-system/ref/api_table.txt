@@ -1,0 +1,131 @@
+export type TableDensity = 'comfortable' | 'compact'
+
+export function TableToolbar({
+  searchPlaceholder = 'Search…',
+  searchValue,
+  onSearchChange,
+  children,
+  className,
+}: {
+  searchPlaceholder?: string
+  searchValue?: string
+  onSearchChange?: (v: string) => void
+  children?: React.ReactNode
+  className?: string
+}) {
+  /* body */
+}
+
+export function Table({
+  className,
+  density = 'comfortable',
+  children,
+}: {
+  className?: string
+  density?: TableDensity
+  children: React.ReactNode
+}) {
+  /* body */
+}
+
+export function TableHeader({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  /* body */
+}
+
+export function TableBody({ children }: { children: React.ReactNode }) {
+  return <tbody className="divide-y divide-[var(--color-border)]">{children}</tbody>
+  /* body */
+}
+
+export function TableRow({
+  className,
+  selected,
+  ...props
+}: React.HTMLAttributes<HTMLTableRowElement> & { selected?: boolean }) {
+  /* body */
+}
+
+export function TableHead({
+  className,
+  sortable,
+  sorted,
+  onSort,
+  children,
+  sticky,
+  ...props
+}: React.ThHTMLAttributes<HTMLTableCellElement> & {
+  sortable?: boolean
+  sorted?: 'asc' | 'desc' | false
+  onSort?: () => void
+  sticky?: boolean
+}) {
+  /* body */
+}
+
+export function TableCell({
+  className,
+  sticky,
+  ...props
+}: React.TdHTMLAttributes<HTMLTableCellElement> & { sticky?: boolean }) {
+  /* body */
+}
+
+export function TableSelectCell({
+  checked,
+  indeterminate,
+  onChange,
+  ariaLabel,
+}: {
+  checked?: boolean
+  indeterminate?: boolean
+  onChange?: (checked: boolean) => void
+  ariaLabel: string
+}) {
+  /* body */
+}
+
+export function TableActionsCell({ children }: { children?: React.ReactNode }) {
+  return (
+    <TableCell className="w-12 text-right">
+      {children ?? (
+        <Button variant="ghost" size="icon-sm" aria-label="Row actions">
+          <MoreHorizontal className="size-4" />
+        </Button>
+      )}
+    </TableCell>
+  )
+}
+
+export function TableEmpty({
+  title = 'No results',
+  description = 'Try adjusting filters or search.',
+  action,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+}) {
+  /* body */
+}
+
+export function TableLoading({ rows = 5, cols = 6 }: { rows?: number; cols?: number }) {
+  return (
+    <>
+      {Array.from({ length: rows }).map((_, r) => (
+        <TableRow key={r} className="hover:bg-transparent">
+          {Array.from({ length: cols }).map((_, c) => (
+            <TableCell key={c}>
+              <Skeleton className="h-4 w-full max-w-[120px]" />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  )
+}

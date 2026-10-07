@@ -1,0 +1,50 @@
+import * as React from 'react'
+import { ArrowDown, ArrowUp, ArrowUpDown, MoreHorizontal, Search } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Checkbox } from './checkbox'
+import { Button } from './button'
+import { Input } from './input'
+import { Skeleton } from './progress'
+
+export type TableDensity = 'comfortable' | 'compact'
+
+export function TableToolbar({
+  searchPlaceholder = 'Search…',
+  searchValue,
+  onSearchChange,
+  children,
+  className,
+}: {
+  searchPlaceholder?: string
+  searchValue?: string
+  onSearchChange?: (v: string) => void
+  children?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn('flex flex-wrap items-center justify-between gap-3 p-3', className)}>
+      <div className="relative w-full max-w-xs">
+        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+        <Input
+          value={searchValue}
+          onChange={(e) => onSearchChange?.(e.target.value)}
+          placeholder={searchPlaceholder}
+          className="pl-9 h-8"
+          aria-label="Search table"
+        />
+      </div>
+      <div className="flex items-center gap-2">{children}</div>
+    </div>
+  )
+}
+
+export function Table({
+  className,
+  density = 'comfortable',
+  children,
+}: {
+  className?: string
+  density?: TableDensity
+  children: React.ReactNode
+}) {
+  return (

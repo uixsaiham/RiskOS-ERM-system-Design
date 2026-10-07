@@ -1,0 +1,101 @@
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+import { Select } from './select'
+
+export interface PaginationProps {
+  page: number
+  pageSize: number
+  total: number
+  onPageChange: (page: number) => void
+  onPageSizeChange?: (size: number) => void
+  pageSizeOptions?: number[]
+  className?: string
+}
+
+export function Pagination({
+  page,
+  pageSize,
+  total,
+  onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [10, 25, 50, 100],
+  className,
+}: PaginationProps) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
+  const to = Math.min(page * pageSize, total)
+
+  return (
+    <div
+      className={cn(
+        'flex flex-wrap items-center justify-between gap-3 px-1 py-2',
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2 font-body-sm text-[var(--color-text-muted)]">
+        <span>
+          {from}–{to} of {total}
+        </span>
+        {onPageSizeChange && (
+          <div className="flex items-center gap-1.5">
+            <span className="hidden sm:inline">Rows</span>
+            <Select
+              value={String(pageSize)}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              className="h-8 w-[72px]"
+              aria-label="Rows per page"
+            >
+              {pageSizeOptions.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(1)}
+          aria-label="First page"
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+          aria-label="Previous page"
+        >
+          <ChevronLeft />
+        </Button>
+        <span className="px-2 font-body-sm tabular-nums text-[var(--color-text-secondary)]">
+          {page} / {totalPages}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+          aria-label="Next page"
+        >
+          <ChevronRight />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(totalPages)}
+          aria-label="Last page"
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,39 @@
+export function Progress({
+  value,
+  max = 100,
+  size = 'md',
+  variant = 'primary',
+  showLabel,
+  className,
+}: {
+  value: number
+  max?: number
+  size?: 'sm' | 'md' | 'lg'
+  variant?: 'primary' | 'success' | 'warning' | 'error'
+  showLabel?: boolean
+  className?: string
+}) {
+  /* body */
+}
+
+export function Spinner({
+  size = 'md',
+  className,
+}: {
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}) {
+  /* body */
+}
+
+export function Skeleton({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'animate-pulse rounded-md bg-[var(--color-surface-tertiary)]',
+        className,
+      )}
+      aria-hidden
+    />
+  )
+}

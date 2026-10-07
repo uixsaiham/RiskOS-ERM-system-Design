@@ -1,0 +1,17 @@
+export interface ToastProps {
+  variant?: 'info' | 'success' | 'error' | 'warning'
+  title: string
+  description?: string
+  onClose?: () => void
+  className?: string
+}
+
+export function Toast({
+  variant = 'info',
+  title,
+  description,
+  onClose,
+  className,
+}: ToastProps) {
+  /* body */
+}

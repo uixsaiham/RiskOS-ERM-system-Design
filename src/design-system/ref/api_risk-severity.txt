@@ -1,0 +1,55 @@
+export interface RiskSeverityBadgeProps {
+  severity?: RiskSeverity
+  score?: number
+  showRange?: boolean
+  showIcon?: boolean
+  size?: 'sm' | 'md'
+  className?: string
+}
+
+export function RiskSeverityBadge({
+  severity,
+  score,
+  showRange = false,
+  showIcon = false,
+  size = 'md',
+  className,
+}: RiskSeverityBadgeProps) {
+  /* body */
+}
+
+export interface RiskScoreProps {
+  score: number
+  maxScore?: number
+  likelihood?: number
+  impact?: number
+  variant?: 'inherent' | 'residual' | 'default'
+  size?: 'sm' | 'md' | 'lg'
+  showSeverity?: boolean
+  className?: string
+}
+
+export function RiskScore({
+  score,
+  maxScore = 25,
+  likelihood,
+  impact,
+  variant = 'default',
+  size = 'md',
+  showSeverity = true,
+  className,
+}: RiskScoreProps) {
+  /* body */
+}
+
+export function RiskSeveritySwatch({
+  severity,
+  className,
+}: {
+  severity: RiskSeverity
+  className?: string
+}) {
+  /* body */
+}
+
+export { severityStyles }

@@ -1,0 +1,32 @@
+            <Icon className="size-5" aria-hidden />
+          </div>
+        )}
+      </div>
+      {action && <div className="mt-4">{action}</div>}
+    </Card>
+  )
+}
+
+export function MetricCard({
+  label,
+  value,
+  description,
+  className,
+}: {
+  label: string
+  value: React.ReactNode
+  description?: string
+  className?: string
+}) {
+  return (
+    <Card className={cn('p-4', className)}>
+      <div className="font-caption font-medium text-[var(--color-text-muted)] uppercase tracking-wide">
+        {label}
+      </div>
+      <div className="mt-1.5 font-h3 text-[var(--color-text-primary)]">{value}</div>
+      {description && (
+        <div className="mt-1 font-caption text-[var(--color-text-muted)]">{description}</div>
+      )}
+    </Card>
+  )
+}

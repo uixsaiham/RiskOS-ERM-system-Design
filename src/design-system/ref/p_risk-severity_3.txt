@@ -1,0 +1,50 @@
+    >
+      {variant !== 'default' && (
+        <span className="font-overline text-[var(--color-text-muted)] mr-0.5">
+          {variant === 'inherent' ? 'Inherent' : 'Residual'}
+        </span>
+      )}
+      <span className={cn(scoreSize[size], styles.text)}>
+        {score}
+        <span className="text-[var(--color-text-muted)] font-normal">
+          {' '}
+          / {maxScore}
+        </span>
+      </span>
+      {showSeverity && (
+        <RiskSeverityBadge severity={severity} size={size === 'lg' ? 'md' : 'sm'} />
+      )}
+      {(likelihood != null || impact != null) && (
+        <span className="font-caption text-[var(--color-text-muted)]">
+          {likelihood != null && `L${likelihood}`}
+          {likelihood != null && impact != null && ' · '}
+          {impact != null && `I${impact}`}
+        </span>
+      )}
+    </div>
+  )
+}
+
+export function RiskSeveritySwatch({
+  severity,
+  className,
+}: {
+  severity: RiskSeverity
+  className?: string
+}) {
+  const styles = severityStyles[severity]
+  const band = riskSeverityBands[severity]
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-3 rounded-lg border p-3',
+        styles.bg,
+        styles.border,
+        className,
+      )}
+    >
+      <div className={cn('size-10 rounded-md', styles.solid)} />
+      <div>
+        <div className={cn('font-label', styles.text)}>{band.label}</div>
+        <div className="font-caption text-[var(--color-text-muted)]">
+          Score {band.scoreRange}

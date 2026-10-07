@@ -1,0 +1,50 @@
+    </span>
+  )
+}
+
+export interface RiskScoreProps {
+  score: number
+  maxScore?: number
+  likelihood?: number
+  impact?: number
+  variant?: 'inherent' | 'residual' | 'default'
+  size?: 'sm' | 'md' | 'lg'
+  showSeverity?: boolean
+  className?: string
+}
+
+export function RiskScore({
+  score,
+  maxScore = 25,
+  likelihood,
+  impact,
+  variant = 'default',
+  size = 'md',
+  showSeverity = true,
+  className,
+}: RiskScoreProps) {
+  const severity = getRiskSeverity(score)
+  const band = riskSeverityBands[severity]
+  const styles = severityStyles[severity]
+
+  const sizeClasses = {
+    sm: 'text-[12px] gap-1',
+    md: 'text-[13px] gap-1.5',
+    lg: 'text-sm gap-2',
+  }
+
+  const scoreSize = {
+    sm: 'font-semibold tabular-nums',
+    md: 'font-semibold tabular-nums text-sm',
+    lg: 'font-semibold tabular-nums text-base',
+  }
+
+  return (
+    <div
+      className={cn(
+        'inline-flex items-center flex-wrap',
+        sizeClasses[size],
+        className,
+      )}
+      role="group"
+      aria-label={`${variant !== 'default' ? variant + ' ' : ''}risk score ${score} out of ${maxScore}, ${band.label}`}

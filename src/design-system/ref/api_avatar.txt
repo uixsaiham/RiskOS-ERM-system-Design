@@ -1,0 +1,39 @@
+export interface AvatarProps {
+  name: string
+  src?: string
+  size?: keyof typeof sizeMap
+  className?: string
+}
+
+export function Avatar({ name, src, size = 'md', className }: AvatarProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--color-primary-muted)] text-[var(--color-primary)] font-medium overflow-hidden',
+        sizeMap[size],
+        className,
+      )}
+      title={name}
+      role="img"
+      aria-label={name}
+    >
+      {src ? (
+        <img src={src} alt="" className="size-full object-cover" />
+      ) : (
+        initials(name)
+      )}
+    </span>
+  )
+}
+
+export function AvatarGroup({
+  people,
+  max = 3,
+  size = 'sm',
+}: {
+  people: { name: string; src?: string }[]
+  max?: number
+  size?: keyof typeof sizeMap
+}) {
+  /* body */
+}

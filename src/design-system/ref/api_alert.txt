@@ -1,0 +1,17 @@
+export interface AlertProps {
+  variant?: keyof typeof variants
+  title?: string
+  children?: React.ReactNode
+  onDismiss?: () => void
+  className?: string
+}
+
+export function Alert({
+  variant = 'info',
+  title,
+  children,
+  onDismiss,
+  className,
+}: AlertProps) {
+  /* body */
+}

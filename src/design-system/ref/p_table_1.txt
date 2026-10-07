@@ -1,0 +1,50 @@
+    <div className={cn('w-full overflow-auto scrollbar-thin', className)}>
+      <table
+        data-density={density}
+        className={cn(
+          'w-full border-collapse text-left font-body-md',
+          density === 'compact' ? '[&_th]:h-9 [&_td]:py-1.5' : '[&_th]:h-11 [&_td]:py-3',
+        )}
+      >
+        {children}
+      </table>
+    </div>
+  )
+}
+
+export function TableHeader({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <thead
+      className={cn(
+        'sticky top-0 z-10 bg-[var(--color-surface-secondary)] border-b border-[var(--color-border)]',
+        className,
+      )}
+    >
+      {children}
+    </thead>
+  )
+}
+
+export function TableBody({ children }: { children: React.ReactNode }) {
+  return <tbody className="divide-y divide-[var(--color-border)]">{children}</tbody>
+}
+
+export function TableRow({
+  className,
+  selected,
+  ...props
+}: React.HTMLAttributes<HTMLTableRowElement> & { selected?: boolean }) {
+  return (
+    <tr
+      className={cn(
+        'transition-colors duration-100 hover:bg-[var(--color-surface-secondary)]/80',
+        selected && 'bg-[var(--color-primary-subtle)] hover:bg-[var(--color-primary-subtle)]',
+        className,
+      )}
+      data-selected={selected || undefined}

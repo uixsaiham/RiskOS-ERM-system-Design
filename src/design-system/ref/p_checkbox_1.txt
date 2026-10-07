@@ -1,0 +1,8 @@
+        {label && (
+          <span className="font-body-md text-[var(--color-text-primary)]">{label}</span>
+        )}
+      </label>
+    )
+  },
+)
+Checkbox.displayName = 'Checkbox'

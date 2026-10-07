@@ -1,0 +1,19 @@
+                        ))}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 border-t border-[var(--color-border)] px-4 py-2 font-caption text-[var(--color-text-muted)]">
+              <span>↑↓ Navigate</span>
+              <span>↵ Open</span>
+              <span>ESC Close</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}

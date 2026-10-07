@@ -1,0 +1,50 @@
+  'not_tested',
+] as const
+
+export const actionStatus = [
+  'not_started',
+  'in_progress',
+  'blocked',
+  'overdue',
+  'completed',
+] as const
+
+export const complianceStatus = [
+  'compliant',
+  'partially_compliant',
+  'non_compliant',
+  'under_review',
+] as const
+
+export const generalStatus = [
+  'active',
+  'inactive',
+  'pending',
+  'approved',
+  'rejected',
+  'archived',
+] as const
+
+export type RiskStatus = (typeof riskStatus)[number]
+export type ControlStatus = (typeof controlStatus)[number]
+export type ActionStatus = (typeof actionStatus)[number]
+export type ComplianceStatus = (typeof complianceStatus)[number]
+export type GeneralStatus = (typeof generalStatus)[number]
+
+export type StatusTone =
+  | 'neutral'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'primary'
+
+export const statusMeta: Record<
+  string,
+  { label: string; tone: StatusTone }
+> = {
+  // Risk
+  open: { label: 'Open', tone: 'info' },
+  under_review: { label: 'Under Review', tone: 'warning' },
+  mitigating: { label: 'Mitigating', tone: 'primary' },
+  accepted: { label: 'Accepted', tone: 'neutral' },

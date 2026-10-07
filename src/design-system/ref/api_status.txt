@@ -1,0 +1,44 @@
+export function getStatusMeta(status: string) {
+  return statusMeta[status] ?? { label: status, tone: 'neutral' as StatusTone }
+  /* body */
+}
+
+export interface StatusBadgeProps {
+  status: string
+  label?: string
+  className?: string
+  size?: 'sm' | 'md'
+  showDot?: boolean
+}
+
+export function StatusBadge({
+  status,
+  label,
+  className,
+  size = 'md',
+  showDot = true,
+}: StatusBadgeProps) {
+  /* body */
+}
+
+export interface StatusDotProps {
+  status: string
+  className?: string
+  withLabel?: boolean
+}
+
+export function StatusDot({ status, className, withLabel = true }: StatusDotProps) {
+  const meta = getStatusMeta(status)
+  return (
+    <span className={cn('inline-flex items-center gap-1.5', className)}>
+      <span
+        className={cn('size-2 rounded-full shrink-0', toneDot[meta.tone])}
+        aria-hidden
+      />
+      {withLabel && (
+        <span className="font-body-sm text-[var(--color-text-secondary)]">{meta.label}</span>
+      )}
+      <span className="sr-only">{meta.label}</span>
+    </span>
+  )
+}

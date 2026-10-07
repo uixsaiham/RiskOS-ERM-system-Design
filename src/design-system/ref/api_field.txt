@@ -1,0 +1,23 @@
+export interface FieldProps {
+  label?: string
+  htmlFor?: string
+  required?: boolean
+  optional?: boolean
+  helperText?: string
+  error?: string
+  className?: string
+  children: React.ReactNode
+}
+
+export function Field({
+  label,
+  htmlFor,
+  required,
+  optional,
+  helperText,
+  error,
+  className,
+  children,
+}: FieldProps) {
+  /* body */
+}

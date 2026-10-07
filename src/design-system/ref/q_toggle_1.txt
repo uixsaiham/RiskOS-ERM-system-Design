@@ -1,0 +1,17 @@
+        </button>
+        {label && (
+          <label
+            htmlFor={toggleId}
+            className={cn(
+              'font-body-md text-[var(--color-text-primary)] cursor-pointer',
+              disabled && 'cursor-not-allowed opacity-50',
+            )}
+          >
+            {label}
+          </label>
+        )}
+      </div>
+    )
+  },
+)
+Toggle.displayName = 'Toggle'

@@ -1,0 +1,1620 @@
+
+##### src/components/ui/alert.tsx #####
+32:export interface AlertProps {
+40:export function Alert({
+---FULL---
+import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const variants = {
+  info: {
+    bg: 'bg-[var(--color-info-subtle)] border-[var(--color-info-border)]',
+    icon: Info,
+    iconColor: 'text-[var(--color-info)]',
+    title: 'text-[var(--color-info)]',
+  },
+  success: {
+    bg: 'bg-[var(--color-success-subtle)] border-[var(--color-success-border)]',
+    icon: CheckCircle2,
+    iconColor: 'text-[var(--color-success)]',
+    title: 'text-[var(--color-success)]',
+  },
+  warning: {
+    bg: 'bg-[var(--color-warning-subtle)] border-[var(--color-warning-border)]',
+    icon: AlertTriangle,
+    iconColor: 'text-[var(--color-warning)]',
+    title: 'text-[var(--color-warning)]',
+  },
+  error: {
+    bg: 'bg-[var(--color-error-subtle)] border-[var(--color-error-border)]',
+    icon: AlertCircle,
+    iconColor: 'text-[var(--color-error)]',
+    title: 'text-[var(--color-error)]',
+  },
+}
+
+export interface AlertProps {
+  variant?: keyof typeof variants
+  title?: string
+  children?: React.ReactNode
+  onDismiss?: () => void
+  className?: string
+}
+
+export function Alert({
+  variant = 'info',
+  title,
+  children,
+  onDismiss,
+  className,
+}: AlertProps) {
+  const v = variants[variant]
+  const Icon = v.icon
+  return (
+    <div
+      role="alert"
+      className={cn(
+        'flex gap-3 rounded-lg border p-4',
+        v.bg,
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', v.iconColor)} aria-hidden />
+      <div className="flex-1 min-w-0">
+        {title && (
+          <div className={cn('font-label mb-0.5', v.title)}>{title}</div>
+        )}
+        {children && (
+          <div className="font-body-md text-[var(--color-text-secondary)]">{children}</div>
+        )}
+      </div>
+      {onDismiss && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="-mt-1 -mr-1"
+        >
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}
+
+
+##### src/components/ui/avatar.tsx #####
+3:function initials(name: string) {
+20:export interface AvatarProps {
+23:  size?: keyof typeof sizeMap
+27:export function Avatar({ name, src, size = 'md', className }: AvatarProps) {
+48:export function AvatarGroup({
+51:  size = 'sm',
+55:  size?: keyof typeof sizeMap
+---FULL---
+import { cn } from '@/lib/utils'
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
+const sizeMap = {
+  xs: 'size-6 text-[10px]',
+  sm: 'size-7 text-[11px]',
+  md: 'size-8 text-xs',
+  lg: 'size-10 text-sm',
+  xl: 'size-12 text-base',
+}
+
+export interface AvatarProps {
+  name: string
+  src?: string
+  size?: keyof typeof sizeMap
+  className?: string
+}
+
+export function Avatar({ name, src, size = 'md', className }: AvatarProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--color-primary-muted)] text-[var(--color-primary)] font-medium overflow-hidden',
+        sizeMap[size],
+        className,
+      )}
+      title={name}
+      role="img"
+      aria-label={name}
+    >
+      {src ? (
+        <img src={src} alt="" className="size-full object-cover" />
+      ) : (
+        initials(name)
+      )}
+    </span>
+  )
+}
+
+export function AvatarGroup({
+  people,
+  max = 3,
+  size = 'sm',
+}: {
+  people: { name: string; src?: string }[]
+  max?: number
+  size?: keyof typeof sizeMap
+}) {
+  const shown = people.slice(0, max)
+  const rest = people.length - max
+  return (
+    <div className="flex items-center -space-x-2">
+      {shown.map((p) => (
+        <Avatar
+          key={p.name}
+          name={p.name}
+          src={p.src}
+          size={size}
+          className="ring-2 ring-[var(--color-surface)]"
+        />
+      ))}
+      {rest > 0 && (
+        <span
+          className={cn(
+            'inline-flex items-center justify-center rounded-full bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] font-caption font-medium ring-2 ring-[var(--color-surface)]',
+            sizeMap[size],
+          )}
+        >
+          +{rest}
+        </span>
+      )}
+    </div>
+  )
+}
+
+
+##### src/components/ui/badge.tsx #####
+35:export interface BadgeProps
+39:export function Badge({ className, variant, size, ...props }: BadgeProps) {
+43:export { badgeVariants }
+---FULL---
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+const badgeVariants = cva(
+  'inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-caption font-medium whitespace-nowrap border',
+  {
+    variants: {
+      variant: {
+        neutral:
+          'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border)]',
+        primary:
+          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] border-[var(--color-primary-muted)]',
+        success:
+          'bg-[var(--color-success-subtle)] text-[var(--color-success)] border-[var(--color-success-border)]',
+        warning:
+          'bg-[var(--color-warning-subtle)] text-[var(--color-warning)] border-[var(--color-warning-border)]',
+        error:
+          'bg-[var(--color-error-subtle)] text-[var(--color-error)] border-[var(--color-error-border)]',
+        info: 'bg-[var(--color-info-subtle)] text-[var(--color-info)] border-[var(--color-info-border)]',
+        outline:
+          'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-strong)]',
+      },
+      size: {
+        sm: 'px-1.5 py-0 text-[11px]',
+        md: 'px-2 py-0.5',
+      },
+    },
+    defaultVariants: {
+      variant: 'neutral',
+      size: 'md',
+    },
+  },
+)
+
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof badgeVariants> {}
+
+export function Badge({ className, variant, size, ...props }: BadgeProps) {
+  return <span className={cn(badgeVariants({ variant, size }), className)} {...props} />
+}
+
+export { badgeVariants }
+
+
+##### src/components/ui/breadcrumb.tsx #####
+4:export interface BreadcrumbItem {
+5:  label: string
+9:export function Breadcrumb({
+10:  items,
+13:  items: BreadcrumbItem[]
+---FULL---
+import { ChevronRight, Home } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface BreadcrumbItem {
+  label: string
+  href?: string
+}
+
+export function Breadcrumb({
+  items,
+  className,
+}: {
+  items: BreadcrumbItem[]
+  className?: string
+}) {
+  return (
+    <nav aria-label="Breadcrumb" className={cn('flex items-center gap-1', className)}>
+      <ol className="flex items-center gap-1 flex-wrap">
+        <li>
+          <a
+            href="#"
+            className="inline-flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+            aria-label="Home"
+          >
+            <Home className="size-3.5" />
+          </a>
+        </li>
+        {items.map((item, i) => {
+          const last = i === items.length - 1
+          return (
+            <li key={item.label} className="inline-flex items-center gap-1">
+              <ChevronRight className="size-3.5 text-[var(--color-text-disabled)]" aria-hidden />
+              {last || !item.href ? (
+                <span
+                  className={cn(
+                    'font-body-sm',
+                    last
+                      ? 'text-[var(--color-text-primary)] font-medium'
+                      : 'text-[var(--color-text-muted)]',
+                  )}
+                  aria-current={last ? 'page' : undefined}
+                >
+                  {item.label}
+                </span>
+              ) : (
+                <a
+                  href={item.href}
+                  className="font-body-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+                >
+                  {item.label}
+                </a>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
+}
+
+
+##### src/components/ui/button.tsx #####
+39:export interface ButtonProps
+45:export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+63:export { buttonVariants }
+---FULL---
+import * as React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-button transition-colors duration-150 focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        primary:
+          'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] shadow-[var(--shadow-xs)]',
+        secondary:
+          'bg-[var(--color-surface)] text-[var(--color-text-primary)] border border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)] active:bg-[var(--color-surface-tertiary)] shadow-[var(--shadow-xs)]',
+        tertiary:
+          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] hover:bg-[var(--color-primary-muted)] active:bg-[var(--color-primary-muted)]',
+        destructive:
+          'bg-[var(--color-error)] text-[var(--color-error-foreground)] hover:bg-[var(--color-error-hover)] active:bg-[var(--color-error-hover)] shadow-[var(--shadow-xs)]',
+        ghost:
+          'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-secondary)] hover:text-[var(--color-text-primary)] active:bg-[var(--color-surface-tertiary)]',
+        link: 'bg-transparent text-[var(--color-text-link)] underline-offset-4 hover:underline p-0 h-auto',
+      },
+      size: {
+        sm: 'h-8 px-3 text-[13px] [&_svg]:size-3.5',
+        md: 'h-9 px-3.5 [&_svg]:size-4',
+        lg: 'h-10 px-4 [&_svg]:size-4',
+        icon: 'h-9 w-9 [&_svg]:size-4',
+        'icon-sm': 'h-8 w-8 [&_svg]:size-3.5',
+        'icon-lg': 'h-10 w-10 [&_svg]:size-5',
+      },
+    },
+    defaultVariants: {
+      variant: 'primary',
+      size: 'md',
+    },
+  },
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  loading?: boolean
+}
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, loading, disabled, children, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(buttonVariants({ variant, size }), className)}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {loading && <Loader2 className="animate-spin" aria-hidden />}
+        {children}
+      </button>
+    )
+  },
+)
+Button.displayName = 'Button'
+
+export { buttonVariants }
+
+
+##### src/components/ui/card.tsx #####
+5:export function Card({
+23:export function CardHeader({
+37:export function CardTitle({
+49:export function CardDescription({
+63:export function CardContent({
+73:export function CardFooter({
+92:export interface KpiCardProps {
+94:  value: string | number
+98:  status?: React.ReactNode
+103:export function KpiCard({
+105:  value,
+109:  status,
+160:export function MetricCard({
+161:  label,
+162:  value,
+166:  label: string
+167:  value: React.ReactNode
+
+##### src/components/ui/checkbox.tsx #####
+5:export interface CheckboxProps
+8:  label?: string
+11:export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+---FULL---
+import * as React from 'react'
+import { Check, Minus } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface CheckboxProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  indeterminate?: boolean
+  label?: string
+}
+
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, indeterminate, label, id, checked, disabled, ...props }, ref) => {
+    const inputRef = React.useRef<HTMLInputElement>(null)
+    React.useImperativeHandle(ref, () => inputRef.current!)
+
+    React.useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.indeterminate = !!indeterminate
+      }
+    }, [indeterminate])
+
+    const inputId = id || React.useId()
+
+    return (
+      <label
+        htmlFor={inputId}
+        className={cn(
+          'inline-flex items-center gap-2 cursor-pointer select-none',
+          disabled && 'cursor-not-allowed opacity-50',
+          className,
+        )}
+      >
+        <span className="relative inline-flex size-4 shrink-0">
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="checkbox"
+            checked={checked}
+            disabled={disabled}
+            className="peer absolute inset-0 size-4 cursor-pointer appearance-none rounded-[3px] border border-[var(--color-border-strong)] bg-[var(--color-surface)] transition-colors checked:border-[var(--color-primary)] checked:bg-[var(--color-primary)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed"
+            {...props}
+          />
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-100">
+            {indeterminate ? (
+              <Minus className="size-3" strokeWidth={3} />
+            ) : (
+              <Check className="size-3" strokeWidth={3} />
+            )}
+          </span>
+        </span>
+        {label && (
+          <span className="font-body-md text-[var(--color-text-primary)]">{label}</span>
+        )}
+      </label>
+    )
+  },
+)
+Checkbox.displayName = 'Checkbox'
+
+
+##### src/components/ui/drawer.tsx #####
+12:export interface DrawerProps {
+13:  open: boolean
+17:  size?: keyof typeof widthMap
+23:export function Drawer({
+24:  open,
+28:  size = 'md',
+---FULL---
+import * as React from 'react'
+import { X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const widthMap = {
+  sm: 'max-w-[360px]',
+  md: 'max-w-[480px]',
+  lg: 'max-w-[640px]',
+}
+
+export interface DrawerProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof widthMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Drawer({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: DrawerProps) {
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 z-[var(--z-modal)] flex justify-end">
+      <div
+        className="absolute inset-0 bg-[var(--color-surface-overlay)]"
+        onClick={onClose}
+        aria-hidden
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? 'drawer-title' : undefined}
+        className={cn(
+          'relative z-10 flex h-full w-full flex-col border-l border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xl)]',
+          widthMap[size],
+          className,
+        )}
+      >
+        <div className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] px-5 py-4">
+          <div>
+            {title && (
+              <h2 id="drawer-title" className="font-h3 text-[var(--color-text-primary)]">
+                {title}
+              </h2>
+            )}
+            {description && (
+              <p className="mt-1 font-body-md text-[var(--color-text-muted)]">{description}</p>
+            )}
+          </div>
+          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+            <X />
+          </Button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 py-4 scrollbar-thin">{children}</div>
+        {footer && (
+          <div className="flex items-center justify-end gap-2 border-t border-[var(--color-border)] px-5 py-3">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+
+##### src/components/ui/empty-state.tsx #####
+4:export function EmptyState({
+40:export function ErrorState({
+68:export function LoadingState({
+69:  label = 'Loading…',
+72:  label?: string
+---FULL---
+import type { LucideIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  className,
+}: {
+  icon?: LucideIcon
+  title: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center px-6 py-16 text-center',
+        className,
+      )}
+    >
+      {Icon && (
+        <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-[var(--color-surface-secondary)] text-[var(--color-text-muted)]">
+          <Icon className="size-6" aria-hidden />
+        </div>
+      )}
+      <h3 className="font-h3 text-[var(--color-text-primary)]">{title}</h3>
+      {description && (
+        <p className="mt-1.5 max-w-sm font-body-md text-[var(--color-text-muted)]">
+          {description}
+        </p>
+      )}
+      {action && <div className="mt-5">{action}</div>}
+    </div>
+  )
+}
+
+export function ErrorState({
+  title = 'Something went wrong',
+  description = 'We could not load this content. Please try again.',
+  action,
+  className,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center rounded-lg border border-[var(--color-error-border)] bg-[var(--color-error-subtle)] px-6 py-12 text-center',
+        className,
+      )}
+      role="alert"
+    >
+      <h3 className="font-h3 text-[var(--color-error)]">{title}</h3>
+      <p className="mt-1.5 max-w-sm font-body-md text-[var(--color-text-secondary)]">
+        {description}
+      </p>
+      {action && <div className="mt-5">{action}</div>}
+    </div>
+  )
+}
+
+export function LoadingState({
+  label = 'Loading…',
+  className,
+}: {
+  label?: string
+  className?: string
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center gap-3 px-6 py-16',
+        className,
+      )}
+      role="status"
+      aria-live="polite"
+    >
+      <svg
+        className="size-8 animate-spin text-[var(--color-primary)]"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+      <span className="font-body-md text-[var(--color-text-muted)]">{label}</span>
+    </div>
+  )
+}
+
+
+##### src/components/ui/field.tsx #####
+5:export interface FieldProps {
+6:  label?: string
+16:export function Field({
+17:  label,
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { Label } from './label'
+
+export interface FieldProps {
+  label?: string
+  htmlFor?: string
+  required?: boolean
+  optional?: boolean
+  helperText?: string
+  error?: string
+  className?: string
+  children: React.ReactNode
+}
+
+export function Field({
+  label,
+  htmlFor,
+  required,
+  optional,
+  helperText,
+  error,
+  className,
+  children,
+}: FieldProps) {
+  const helperId = htmlFor ? `${htmlFor}-helper` : undefined
+  const errorId = htmlFor ? `${htmlFor}-error` : undefined
+
+  return (
+    <div className={cn('flex flex-col gap-1.5', className)}>
+      {label && (
+        <Label htmlFor={htmlFor} required={required} optional={optional}>
+          {label}
+        </Label>
+      )}
+      {children}
+      {error ? (
+        <p id={errorId} className="font-caption text-[var(--color-error)]" role="alert">
+          {error}
+        </p>
+      ) : helperText ? (
+        <p id={helperId} className="font-caption text-[var(--color-text-muted)]">
+          {helperText}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+
+##### src/components/ui/input.tsx #####
+4:export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+8:export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean
+}
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type = 'text', error, disabled, readOnly, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        type={type}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-invalid={error || undefined}
+        className={cn(
+          'flex h-9 w-full rounded-md border bg-[var(--color-surface)] px-3 py-2 font-body-md text-[var(--color-text-primary)] shadow-[var(--shadow-xs)] transition-colors duration-150',
+          'placeholder:text-[var(--color-text-disabled)]',
+          'hover:border-[var(--color-border-strong)]',
+          'focus-visible:outline-none focus-visible:border-[var(--color-primary)] focus-visible:shadow-[var(--shadow-focus)]',
+          'disabled:cursor-not-allowed disabled:bg-[var(--color-surface-secondary)] disabled:text-[var(--color-text-disabled)] disabled:opacity-70',
+          'read-only:bg-[var(--color-surface-secondary)] read-only:focus-visible:shadow-none read-only:focus-visible:border-[var(--color-border)]',
+          error
+            ? 'border-[var(--color-error)] focus-visible:border-[var(--color-error)] focus-visible:shadow-[var(--shadow-focus-error)]'
+            : 'border-[var(--color-border)]',
+          className,
+        )}
+        {...props}
+      />
+    )
+  },
+)
+Input.displayName = 'Input'
+
+
+##### src/components/ui/label.tsx #####
+4:export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+9:export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  required?: boolean
+  optional?: boolean
+}
+
+export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+  ({ className, required, optional, children, ...props }, ref) => {
+    return (
+      <label
+        ref={ref}
+        className={cn(
+          'inline-flex items-center gap-1 font-label text-[var(--color-text-primary)]',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        {required && (
+          <span className="text-[var(--color-error)]" aria-hidden>
+            *
+          </span>
+        )}
+        {optional && !required && (
+          <span className="font-caption text-[var(--color-text-muted)] font-normal">
+            (optional)
+          </span>
+        )}
+      </label>
+    )
+  },
+)
+Label.displayName = 'Label'
+
+
+##### src/components/ui/modal.tsx #####
+13:export interface ModalProps {
+14:  open: boolean
+18:  size?: keyof typeof sizeMap
+24:export function Modal({
+25:  open,
+29:  size = 'md',
+94:export function ConfirmDialog({
+95:  open,
+105:  open: boolean
+
+##### src/components/ui/pagination.tsx #####
+6:export interface PaginationProps {
+16:export function Pagination({
+---FULL---
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+import { Select } from './select'
+
+export interface PaginationProps {
+  page: number
+  pageSize: number
+  total: number
+  onPageChange: (page: number) => void
+  onPageSizeChange?: (size: number) => void
+  pageSizeOptions?: number[]
+  className?: string
+}
+
+export function Pagination({
+  page,
+  pageSize,
+  total,
+  onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [10, 25, 50, 100],
+  className,
+}: PaginationProps) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
+  const to = Math.min(page * pageSize, total)
+
+  return (
+    <div
+      className={cn(
+        'flex flex-wrap items-center justify-between gap-3 px-1 py-2',
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2 font-body-sm text-[var(--color-text-muted)]">
+        <span>
+          {from}–{to} of {total}
+        </span>
+        {onPageSizeChange && (
+          <div className="flex items-center gap-1.5">
+            <span className="hidden sm:inline">Rows</span>
+            <Select
+              value={String(pageSize)}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              className="h-8 w-[72px]"
+              aria-label="Rows per page"
+            >
+              {pageSizeOptions.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(1)}
+          aria-label="First page"
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+          aria-label="Previous page"
+        >
+          <ChevronLeft />
+        </Button>
+        <span className="px-2 font-body-sm tabular-nums text-[var(--color-text-secondary)]">
+          {page} / {totalPages}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+          aria-label="Next page"
+        >
+          <ChevronRight />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(totalPages)}
+          aria-label="Last page"
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+
+##### src/components/ui/progress.tsx #####
+3:export function Progress({
+4:  value,
+6:  size = 'md',
+11:  value: number
+13:  size?: 'sm' | 'md' | 'lg'
+54:export function Spinner({
+55:  size = 'md',
+58:  size?: 'sm' | 'md' | 'lg'
+86:export function Skeleton({ className }: { className?: string }) {
+---FULL---
+import { cn } from '@/lib/utils'
+
+export function Progress({
+  value,
+  max = 100,
+  size = 'md',
+  variant = 'primary',
+  showLabel,
+  className,
+}: {
+  value: number
+  max?: number
+  size?: 'sm' | 'md' | 'lg'
+  variant?: 'primary' | 'success' | 'warning' | 'error'
+  showLabel?: boolean
+  className?: string
+}) {
+  const pct = Math.min(100, Math.max(0, (value / max) * 100))
+  const heights = { sm: 'h-1', md: 'h-1.5', lg: 'h-2.5' }
+  const colors = {
+    primary: 'bg-[var(--color-primary)]',
+    success: 'bg-[var(--color-success)]',
+    warning: 'bg-[var(--color-warning)]',
+    error: 'bg-[var(--color-error)]',
+  }
+
+  return (
+    <div className={cn('w-full', className)}>
+      {showLabel && (
+        <div className="mb-1 flex justify-between font-caption text-[var(--color-text-muted)]">
+          <span>Progress</span>
+          <span className="tabular-nums">{Math.round(pct)}%</span>
+        </div>
+      )}
+      <div
+        role="progressbar"
+        aria-valuenow={value}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        className={cn(
+          'w-full overflow-hidden rounded-full bg-[var(--color-surface-tertiary)]',
+          heights[size],
+        )}
+      >
+        <div
+          className={cn('h-full rounded-full transition-all duration-300', colors[variant])}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export function Spinner({
+  size = 'md',
+  className,
+}: {
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}) {
+  const sizes = { sm: 'size-4', md: 'size-5', lg: 'size-8' }
+  return (
+    <svg
+      className={cn('animate-spin text-[var(--color-primary)]', sizes[size], className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+      />
+    </svg>
+  )
+}
+
+export function Skeleton({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'animate-pulse rounded-md bg-[var(--color-surface-tertiary)]',
+        className,
+      )}
+      aria-hidden
+    />
+  )
+}
+
+
+##### src/components/ui/radio.tsx #####
+4:export interface RadioProps
+6:  label?: string
+9:export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
+41:export function RadioGroup({
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface RadioProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  label?: string
+}
+
+export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
+  ({ className, label, id, disabled, ...props }, ref) => {
+    const inputId = id || React.useId()
+    return (
+      <label
+        htmlFor={inputId}
+        className={cn(
+          'inline-flex items-center gap-2 cursor-pointer select-none',
+          disabled && 'cursor-not-allowed opacity-50',
+          className,
+        )}
+      >
+        <span className="relative inline-flex size-4 shrink-0">
+          <input
+            ref={ref}
+            id={inputId}
+            type="radio"
+            disabled={disabled}
+            className="peer absolute inset-0 size-4 cursor-pointer appearance-none rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] transition-colors checked:border-[var(--color-primary)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed"
+            {...props}
+          />
+          <span className="pointer-events-none absolute inset-[4px] rounded-full bg-[var(--color-primary)] opacity-0 peer-checked:opacity-100" />
+        </span>
+        {label && (
+          <span className="font-body-md text-[var(--color-text-primary)]">{label}</span>
+        )}
+      </label>
+    )
+  },
+)
+Radio.displayName = 'Radio'
+
+export function RadioGroup({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & { 'aria-label'?: string }) {
+  return (
+    <div role="radiogroup" className={cn('flex flex-col gap-2', className)} {...props}>
+      {children}
+    </div>
+  )
+}
+
+
+##### src/components/ui/risk-severity.tsx #####
+56:export interface RiskSeverityBadgeProps {
+57:  severity?: RiskSeverity
+58:  score?: number
+61:  size?: 'sm' | 'md'
+65:export function RiskSeverityBadge({
+66:  severity,
+67:  score,
+70:  size = 'md',
+105:export interface RiskScoreProps {
+106:  score: number
+111:  size?: 'sm' | 'md' | 'lg'
+116:export function RiskScore({
+117:  score,
+122:  size = 'md',
+178:export function RiskSeveritySwatch({
+179:  severity,
+182:  severity: RiskSeverity
+207:export { severityStyles }
+
+##### src/components/ui/search.tsx #####
+12:export interface SearchResult {
+26:export function GlobalSearch({
+
+##### src/components/ui/select.tsx #####
+5:export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+10:export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+---FULL---
+import * as React from 'react'
+import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  error?: boolean
+  placeholder?: string
+}
+
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+  ({ className, error, placeholder, children, disabled, ...props }, ref) => {
+    return (
+      <div className="relative w-full">
+        <select
+          ref={ref}
+          disabled={disabled}
+          aria-invalid={error || undefined}
+          className={cn(
+            'flex h-9 w-full appearance-none rounded-md border bg-[var(--color-surface)] px-3 py-2 pr-9 font-body-md text-[var(--color-text-primary)] shadow-[var(--shadow-xs)] transition-colors duration-150',
+            'hover:border-[var(--color-border-strong)]',
+            'focus-visible:outline-none focus-visible:border-[var(--color-primary)] focus-visible:shadow-[var(--shadow-focus)]',
+            'disabled:cursor-not-allowed disabled:bg-[var(--color-surface-secondary)] disabled:text-[var(--color-text-disabled)]',
+            error
+              ? 'border-[var(--color-error)] focus-visible:shadow-[var(--shadow-focus-error)]'
+              : 'border-[var(--color-border)]',
+            className,
+          )}
+          {...props}
+        >
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          {children}
+        </select>
+        <ChevronDown
+          className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-[var(--color-text-muted)]"
+          aria-hidden
+        />
+      </div>
+    )
+  },
+)
+Select.displayName = 'Select'
+
+
+##### src/components/ui/sidebar-nav.tsx #####
+9:export interface NavItem {
+11:  label: string
+18:export function SidebarNavItem({
+21:  collapsed,
+28:  collapsed?: boolean
+114:export function Sidebar({
+115:  collapsed,
+122:  collapsed?: boolean
+
+##### src/components/ui/status.tsx #####
+23:export function getStatusMeta(status: string) {
+27:export interface StatusBadgeProps {
+28:  status: string
+29:  label?: string
+31:  size?: 'sm' | 'md'
+35:export function StatusBadge({
+36:  status,
+37:  label,
+39:  size = 'md',
+62:export interface StatusDotProps {
+63:  status: string
+68:export function StatusDot({ status, className, withLabel = true }: StatusDotProps) {
+---FULL---
+import { cn } from '@/lib/utils'
+import { statusMeta, type StatusTone } from '@/tokens'
+import { Badge } from './badge'
+
+const toneToBadge = {
+  neutral: 'neutral',
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  error: 'error',
+  primary: 'primary',
+} as const
+
+const toneDot: Record<StatusTone, string> = {
+  neutral: 'bg-[var(--color-text-muted)]',
+  info: 'bg-[var(--color-info)]',
+  success: 'bg-[var(--color-success)]',
+  warning: 'bg-[var(--color-warning)]',
+  error: 'bg-[var(--color-error)]',
+  primary: 'bg-[var(--color-primary)]',
+}
+
+export function getStatusMeta(status: string) {
+  return statusMeta[status] ?? { label: status, tone: 'neutral' as StatusTone }
+}
+
+export interface StatusBadgeProps {
+  status: string
+  label?: string
+  className?: string
+  size?: 'sm' | 'md'
+  showDot?: boolean
+}
+
+export function StatusBadge({
+  status,
+  label,
+  className,
+  size = 'md',
+  showDot = true,
+}: StatusBadgeProps) {
+  const meta = getStatusMeta(status)
+  const display = label ?? meta.label
+  return (
+    <Badge
+      variant={toneToBadge[meta.tone]}
+      size={size}
+      className={className}
+      title={display}
+    >
+      {showDot && (
+        <span
+          className={cn('size-1.5 rounded-full shrink-0', toneDot[meta.tone])}
+          aria-hidden
+        />
+      )}
+      <span>{display}</span>
+    </Badge>
+  )
+}
+
+export interface StatusDotProps {
+  status: string
+  className?: string
+  withLabel?: boolean
+}
+
+export function StatusDot({ status, className, withLabel = true }: StatusDotProps) {
+  const meta = getStatusMeta(status)
+  return (
+    <span className={cn('inline-flex items-center gap-1.5', className)}>
+      <span
+        className={cn('size-2 rounded-full shrink-0', toneDot[meta.tone])}
+        aria-hidden
+      />
+      {withLabel && (
+        <span className="font-body-sm text-[var(--color-text-secondary)]">{meta.label}</span>
+      )}
+      <span className="sr-only">{meta.label}</span>
+    </span>
+  )
+}
+
+
+##### src/components/ui/table.tsx #####
+9:export type TableDensity = 'comfortable' | 'compact'
+11:export function TableToolbar({
+41:export function Table({
+65:export function TableHeader({
+84:export function TableBody({ children }: { children: React.ReactNode }) {
+88:export function TableRow({
+106:export function TableHead({
+170:export function TableCell({
+187:export function TableSelectCell({
+210:export function TableActionsCell({ children }: { children?: React.ReactNode }) {
+222:export function TableEmpty({
+244:export function TableLoading({ rows = 5, cols = 6 }: { rows?: number; cols?: number }) {
+
+##### src/components/ui/tabs.tsx #####
+4:export interface TabItem {
+6:  label: string
+11:export interface TabsProps {
+12:  items: TabItem[]
+13:  value: string
+16:  size?: 'sm' | 'md'
+19:export function Tabs({ items, value, onChange, className, size = 'md' }: TabsProps) {
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface TabItem {
+  id: string
+  label: string
+  count?: number
+  disabled?: boolean
+}
+
+export interface TabsProps {
+  items: TabItem[]
+  value: string
+  onChange: (id: string) => void
+  className?: string
+  size?: 'sm' | 'md'
+}
+
+export function Tabs({ items, value, onChange, className, size = 'md' }: TabsProps) {
+  return (
+    <div
+      role="tablist"
+      className={cn(
+        'flex items-center gap-0 border-b border-[var(--color-border)]',
+        className,
+      )}
+    >
+      {items.map((item) => {
+        const active = item.id === value
+        return (
+          <button
+            key={item.id}
+            role="tab"
+            type="button"
+            aria-selected={active}
+            disabled={item.disabled}
+            onClick={() => onChange(item.id)}
+            className={cn(
+              'relative inline-flex items-center gap-1.5 font-button transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded-t-md',
+              'disabled:opacity-50 disabled:pointer-events-none',
+              size === 'sm' ? 'px-3 py-2 text-[13px]' : 'px-4 py-2.5',
+              active
+                ? 'text-[var(--color-primary)]'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]',
+            )}
+          >
+            {item.label}
+            {item.count != null && (
+              <span
+                className={cn(
+                  'rounded-full px-1.5 py-0 text-[11px] font-medium tabular-nums',
+                  active
+                    ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)]'
+                    : 'bg-[var(--color-surface-secondary)] text-[var(--color-text-muted)]',
+                )}
+              >
+                {item.count}
+              </span>
+            )}
+            {active && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--color-primary)] rounded-t-full" />
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+
+##### src/components/ui/textarea.tsx #####
+4:export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+8:export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: boolean
+}
+
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, error, disabled, readOnly, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-invalid={error || undefined}
+        className={cn(
+          'flex min-h-[80px] w-full rounded-md border bg-[var(--color-surface)] px-3 py-2 font-body-md text-[var(--color-text-primary)] shadow-[var(--shadow-xs)] transition-colors duration-150 resize-y',
+          'placeholder:text-[var(--color-text-disabled)]',
+          'hover:border-[var(--color-border-strong)]',
+          'focus-visible:outline-none focus-visible:border-[var(--color-primary)] focus-visible:shadow-[var(--shadow-focus)]',
+          'disabled:cursor-not-allowed disabled:bg-[var(--color-surface-secondary)] disabled:text-[var(--color-text-disabled)]',
+          'read-only:bg-[var(--color-surface-secondary)]',
+          error
+            ? 'border-[var(--color-error)] focus-visible:shadow-[var(--shadow-focus-error)]'
+            : 'border-[var(--color-border)]',
+          className,
+        )}
+        {...props}
+      />
+    )
+  },
+)
+Textarea.displayName = 'Textarea'
+
+
+##### src/components/ui/toast.tsx #####
+12:export interface ToastProps {
+20:export function Toast({
+---FULL---
+import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
+
+const icons = {
+  info: Info,
+  success: CheckCircle2,
+  error: AlertCircle,
+  warning: AlertCircle,
+}
+
+export interface ToastProps {
+  variant?: 'info' | 'success' | 'error' | 'warning'
+  title: string
+  description?: string
+  onClose?: () => void
+  className?: string
+}
+
+export function Toast({
+  variant = 'info',
+  title,
+  description,
+  onClose,
+  className,
+}: ToastProps) {
+  const Icon = icons[variant]
+  const iconColor = {
+    info: 'text-[var(--color-info)]',
+    success: 'text-[var(--color-success)]',
+    error: 'text-[var(--color-error)]',
+    warning: 'text-[var(--color-warning)]',
+  }
+
+  return (
+    <div
+      role="status"
+      className={cn(
+        'flex w-full max-w-sm gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-lg)]',
+        className,
+      )}
+    >
+      <Icon className={cn('size-5 shrink-0 mt-0.5', iconColor[variant])} aria-hidden />
+      <div className="flex-1 min-w-0">
+        <div className="font-label text-[var(--color-text-primary)]">{title}</div>
+        {description && (
+          <div className="font-body-sm text-[var(--color-text-secondary)] mt-0.5">
+            {description}
+          </div>
+        )}
+      </div>
+      {onClose && (
+        <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}
+
+
+##### src/components/ui/toggle.tsx #####
+4:export interface ToggleProps
+8:  label?: string
+9:  size?: 'sm' | 'md'
+12:export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface ToggleProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  label?: string
+  size?: 'sm' | 'md'
+}
+
+export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
+  (
+    {
+      className,
+      checked = false,
+      onCheckedChange,
+      disabled,
+      label,
+      size = 'md',
+      id,
+      ...props
+    },
+    ref,
+  ) => {
+    const toggleId = id || React.useId()
+    return (
+      <div className={cn('inline-flex items-center gap-2', className)}>
+        <button
+          ref={ref}
+          id={toggleId}
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          disabled={disabled}
+          onClick={() => onCheckedChange?.(!checked)}
+          className={cn(
+            'relative inline-flex shrink-0 cursor-pointer rounded-full transition-colors duration-150 focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed disabled:opacity-50',
+            size === 'sm' ? 'h-5 w-9' : 'h-6 w-11',
+            checked ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-surface-tertiary)]',
+          )}
+          {...props}
+        >
+          <span
+            className={cn(
+              'pointer-events-none absolute top-0.5 left-0.5 rounded-full bg-white shadow-[var(--shadow-sm)] transition-transform duration-150',
+              size === 'sm' ? 'size-4' : 'size-5',
+              checked && (size === 'sm' ? 'translate-x-4' : 'translate-x-5'),
+            )}
+          />
+        </button>
+        {label && (
+          <label
+            htmlFor={toggleId}
+            className={cn(
+              'font-body-md text-[var(--color-text-primary)] cursor-pointer',
+              disabled && 'cursor-not-allowed opacity-50',
+            )}
+          >
+            {label}
+          </label>
+        )}
+      </div>
+    )
+  },
+)
+Toggle.displayName = 'Toggle'
+
+
+##### src/components/ui/tooltip.tsx #####
+4:export function Tooltip({
+---FULL---
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export function Tooltip({
+  content,
+  children,
+  side = 'top',
+  className,
+}: {
+  content: React.ReactNode
+  children: React.ReactElement
+  side?: 'top' | 'bottom' | 'left' | 'right'
+  className?: string
+}) {
+  const [open, setOpen] = React.useState(false)
+  const sideClass = {
+    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+  }
+
+  return (
+    <span
+      className="relative inline-flex"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onFocus={() => setOpen(true)}
+      onBlur={() => setOpen(false)}
+    >
+      {children}
+      {open && (
+        <span
+          role="tooltip"
+          className={cn(
+            'absolute z-[var(--z-tooltip)] whitespace-nowrap rounded-md bg-[var(--color-text-primary)] px-2 py-1 font-caption text-white shadow-[var(--shadow-md)] pointer-events-none',
+            sideClass[side],
+            className,
+          )}
+        >
+          {content}
+        </span>
+      )}
+    </span>
+  )
+}
+
+
+##### src/tokens/index.ts #####
+7:export const spacing = {
+29:export const radius = {
+39:export const breakpoints = {
+47:export const layout = {
+60:export const zIndex = {
+73:export const riskSeverityBands = {
+80:export type RiskSeverity = keyof typeof riskSeverityBands
+82:export function getRiskSeverity(score: number): RiskSeverity {
+89:export const riskStatus = [
+97:export const controlStatus = [
+104:export const actionStatus = [
+112:export const complianceStatus = [
+119:export const generalStatus = [
+128:export type RiskStatus = (typeof riskStatus)[number]
+129:export type ControlStatus = (typeof controlStatus)[number]
+130:export type ActionStatus = (typeof actionStatus)[number]
+131:export type ComplianceStatus = (typeof complianceStatus)[number]
+132:export type GeneralStatus = (typeof generalStatus)[number]
+134:export type StatusTone =
+142:export const statusMeta: Record<
+147:  open: { label: 'Open', tone: 'info' },
+176:export const interactionPrinciples = {

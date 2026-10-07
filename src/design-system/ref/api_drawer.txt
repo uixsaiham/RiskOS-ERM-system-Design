@@ -1,0 +1,23 @@
+export interface DrawerProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof widthMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Drawer({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: DrawerProps) {
+  /* body */
+}

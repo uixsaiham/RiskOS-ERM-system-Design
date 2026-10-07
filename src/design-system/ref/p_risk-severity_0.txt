@@ -1,0 +1,50 @@
+import { cn } from '@/lib/utils'
+import {
+  getRiskSeverity,
+  riskSeverityBands,
+  type RiskSeverity,
+} from '@/tokens'
+import { AlertTriangle, ShieldAlert, ShieldCheck, Shield } from 'lucide-react'
+
+const severityStyles: Record<
+  RiskSeverity,
+  {
+    bg: string
+    text: string
+    border: string
+    dot: string
+    solid: string
+  }
+> = {
+  low: {
+    bg: 'bg-[var(--color-risk-low-subtle)]',
+    text: 'text-[var(--color-risk-low-foreground)]',
+    border: 'border-[var(--color-risk-low-border)]',
+    dot: 'bg-[var(--color-risk-low)]',
+    solid: 'bg-[var(--color-risk-low)] text-white',
+  },
+  moderate: {
+    bg: 'bg-[var(--color-risk-moderate-subtle)]',
+    text: 'text-[var(--color-risk-moderate-foreground)]',
+    border: 'border-[var(--color-risk-moderate-border)]',
+    dot: 'bg-[var(--color-risk-moderate)]',
+    solid: 'bg-[var(--color-risk-moderate)] text-white',
+  },
+  high: {
+    bg: 'bg-[var(--color-risk-high-subtle)]',
+    text: 'text-[var(--color-risk-high-foreground)]',
+    border: 'border-[var(--color-risk-high-border)]',
+    dot: 'bg-[var(--color-risk-high)]',
+    solid: 'bg-[var(--color-risk-high)] text-white',
+  },
+  critical: {
+    bg: 'bg-[var(--color-risk-critical-subtle)]',
+    text: 'text-[var(--color-risk-critical-foreground)]',
+    border: 'border-[var(--color-risk-critical-border)]',
+    dot: 'bg-[var(--color-risk-critical)]',
+    solid: 'bg-[var(--color-risk-critical)] text-white',
+  },
+}
+
+const severityIcons: Record<RiskSeverity, React.ElementType> = {
+  low: ShieldCheck,

@@ -1,0 +1,11 @@
+        <button
+          type="button"
+          className="sr-only"
+          onClick={() => onCollapsedChange(!collapsed)}
+        >
+          Toggle sidebar
+        </button>
+      )}
+    </aside>
+  )
+}

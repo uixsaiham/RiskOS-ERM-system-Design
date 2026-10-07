@@ -1,0 +1,35 @@
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+
+export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  required?: boolean
+  optional?: boolean
+}
+
+export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+  ({ className, required, optional, children, ...props }, ref) => {
+    return (
+      <label
+        ref={ref}
+        className={cn(
+          'inline-flex items-center gap-1 font-label text-[var(--color-text-primary)]',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        {required && (
+          <span className="text-[var(--color-error)]" aria-hidden>
+            *
+          </span>
+        )}
+        {optional && !required && (
+          <span className="font-caption text-[var(--color-text-muted)] font-normal">
+            (optional)
+          </span>
+        )}
+      </label>
+    )
+  },
+)
+Label.displayName = 'Label'

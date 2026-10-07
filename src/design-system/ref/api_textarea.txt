@@ -1,0 +1,30 @@
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: boolean
+}
+
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, error, disabled, readOnly, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-invalid={error || undefined}
+        className={cn(
+          'flex min-h-[80px] w-full rounded-md border bg-[var(--color-surface)] px-3 py-2 font-body-md text-[var(--color-text-primary)] shadow-[var(--shadow-xs)] transition-colors duration-150 resize-y',
+          'placeholder:text-[var(--color-text-disabled)]',
+          'hover:border-[var(--color-border-strong)]',
+          'focus-visible:outline-none focus-visible:border-[var(--color-primary)] focus-visible:shadow-[var(--shadow-focus)]',
+          'disabled:cursor-not-allowed disabled:bg-[var(--color-surface-secondary)] disabled:text-[var(--color-text-disabled)]',
+          'read-only:bg-[var(--color-surface-secondary)]',
+          error
+            ? 'border-[var(--color-error)] focus-visible:shadow-[var(--shadow-focus-error)]'
+            : 'border-[var(--color-border)]',
+          className,
+        )}
+        {...props}
+      />
+    )
+  },
+)
+Textarea.displayName = 'Textarea'

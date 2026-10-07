@@ -1,0 +1,32 @@
+  size = 'sm',
+}: {
+  people: { name: string; src?: string }[]
+  max?: number
+  size?: keyof typeof sizeMap
+}) {
+  const shown = people.slice(0, max)
+  const rest = people.length - max
+  return (
+    <div className="flex items-center -space-x-2">
+      {shown.map((p) => (
+        <Avatar
+          key={p.name}
+          name={p.name}
+          src={p.src}
+          size={size}
+          className="ring-2 ring-[var(--color-surface)]"
+        />
+      ))}
+      {rest > 0 && (
+        <span
+          className={cn(
+            'inline-flex items-center justify-center rounded-full bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] font-caption font-medium ring-2 ring-[var(--color-surface)]',
+            sizeMap[size],
+          )}
+        >
+          +{rest}
+        </span>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,47 @@
+export interface ModalProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  size?: keyof typeof sizeMap
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  size = 'md',
+  children,
+  footer,
+  className,
+}: ModalProps) {
+  /* body */
+}
+
+export function ConfirmDialog({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  destructive,
+  loading,
+}: {
+  open: boolean
+  onClose: () => void
+  onConfirm: () => void
+  title: string
+  description?: string
+  confirmLabel?: string
+  cancelLabel?: string
+  destructive?: boolean
+  loading?: boolean
+}) {
+  /* body */
+}

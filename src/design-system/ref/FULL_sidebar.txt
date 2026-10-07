@@ -1,0 +1,161 @@
+import * as React from 'react'
+import {
+  ChevronDown,
+  type LucideIcon,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Tooltip } from './tooltip'
+
+export interface NavItem {
+  id: string
+  label: string
+  icon: LucideIcon
+  href?: string
+  badge?: number | string
+  children?: { id: string; label: string; href?: string; badge?: number | string }[]
+}
+
+export function SidebarNavItem({
+  item,
+  active,
+  collapsed,
+  expanded,
+  onToggle,
+  onSelect,
+}: {
+  item: NavItem
+  active?: boolean
+  collapsed?: boolean
+  expanded?: boolean
+  onToggle?: () => void
+  onSelect?: (id: string) => void
+}) {
+  const Icon = item.icon
+  const hasChildren = !!item.children?.length
+
+  const button = (
+    <button
+      type="button"
+      onClick={() => {
+        if (hasChildren && !collapsed) onToggle?.()
+        else onSelect?.(item.id)
+      }}
+      className={cn(
+        'group flex w-full items-center gap-3 rounded-md px-3 py-2 font-body-md font-medium transition-colors duration-150',
+        'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+        collapsed && 'justify-center px-0',
+        active
+          ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-active-fg)]'
+          : 'text-[var(--color-sidebar-fg)] hover:bg-[var(--color-sidebar-hover)] hover:text-white',
+      )}
+      aria-current={active ? 'page' : undefined}
+      aria-expanded={hasChildren ? expanded : undefined}
+    >
+      <Icon className="size-5 shrink-0 opacity-90" aria-hidden />
+      {!collapsed && (
+        <>
+          <span className="flex-1 text-left truncate">{item.label}</span>
+          {item.badge != null && (
+            <span
+              className={cn(
+                'rounded-full px-1.5 py-0 text-[11px] font-semibold tabular-nums min-w-[20px] text-center',
+                active
+                  ? 'bg-white/20 text-white'
+                  : 'bg-[var(--color-sidebar-hover)] text-[var(--color-sidebar-fg)]',
+              )}
+            >
+              {item.badge}
+            </span>
+          )}
+          {hasChildren && (
+            <ChevronDown
+              className={cn(
+                'size-4 shrink-0 opacity-60 transition-transform',
+                expanded && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          )}
+        </>
+      )}
+    </button>
+  )
+
+  return (
+    <div>
+      {collapsed ? (
+        <Tooltip content={item.label} side="right">
+          {button}
+        </Tooltip>
+      ) : (
+        button
+      )}
+      {hasChildren && expanded && !collapsed && (
+        <div className="mt-0.5 ml-4 space-y-0.5 border-l border-[var(--color-sidebar-border)] pl-3">
+          {item.children!.map((child) => (
+            <button
+              key={child.id}
+              type="button"
+              onClick={() => onSelect?.(child.id)}
+              className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white transition-colors"
+            >
+              <span className="flex-1 text-left truncate">{child.label}</span>
+              {child.badge != null && (
+                <span className="text-[11px] tabular-nums opacity-70">{child.badge}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function Sidebar({
+  collapsed,
+  onCollapsedChange,
+  logo,
+  children,
+  footer,
+  className,
+}: {
+  collapsed?: boolean
+  onCollapsedChange?: (v: boolean) => void
+  logo?: React.ReactNode
+  children: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <aside
+      className={cn(
+        'flex h-full flex-col bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-fg)] transition-[width] duration-200',
+        collapsed ? 'w-16' : 'w-64',
+        className,
+      )}
+      data-collapsed={collapsed || undefined}
+    >
+      <div
+        className={cn(
+          'flex h-16 shrink-0 items-center border-b border-[var(--color-sidebar-border)]',
+          collapsed ? 'justify-center px-2' : 'px-4 gap-3',
+        )}
+      >
+        {logo}
+      </div>
+      <nav className="flex-1 overflow-y-auto scrollbar-thin p-2 space-y-0.5">{children}</nav>
+      {footer && (
+        <div className="border-t border-[var(--color-sidebar-border)] p-2">{footer}</div>
+      )}
+      {onCollapsedChange && (
+        <button
+          type="button"
+          className="sr-only"
+          onClick={() => onCollapsedChange(!collapsed)}
+        >
+          Toggle sidebar
+        </button>
+      )}
+    </aside>
+  )
+}

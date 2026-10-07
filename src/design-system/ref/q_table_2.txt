@@ -1,0 +1,50 @@
+      {...props}
+    />
+  )
+}
+
+export function TableHead({
+  className,
+  sortable,
+  sorted,
+  onSort,
+  children,
+  sticky,
+  ...props
+}: React.ThHTMLAttributes<HTMLTableCellElement> & {
+  sortable?: boolean
+  sorted?: 'asc' | 'desc' | false
+  onSort?: () => void
+  sticky?: boolean
+}) {
+  const content = (
+    <>
+      <span>{children}</span>
+      {sortable && (
+        <span className="text-[var(--color-text-muted)]">
+          {sorted === 'asc' ? (
+            <ArrowUp className="size-3.5" />
+          ) : sorted === 'desc' ? (
+            <ArrowDown className="size-3.5" />
+          ) : (
+            <ArrowUpDown className="size-3.5 opacity-50" />
+          )}
+        </span>
+      )}
+    </>
+  )
+
+  return (
+    <th
+      className={cn(
+        'px-3 font-label text-[var(--color-text-secondary)] whitespace-nowrap',
+        sticky && 'sticky left-0 z-20 bg-[var(--color-surface-secondary)]',
+        className,
+      )}
+      aria-sort={
+        sortable
+          ? sorted === 'asc'
+            ? 'ascending'
+            : sorted === 'desc'
+              ? 'descending'
+              : 'none'

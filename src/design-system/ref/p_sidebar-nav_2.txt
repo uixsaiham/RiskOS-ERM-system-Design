@@ -1,0 +1,50 @@
+            >
+              <span className="flex-1 text-left truncate">{child.label}</span>
+              {child.badge != null && (
+                <span className="text-[11px] tabular-nums opacity-70">{child.badge}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function Sidebar({
+  collapsed,
+  onCollapsedChange,
+  logo,
+  children,
+  footer,
+  className,
+}: {
+  collapsed?: boolean
+  onCollapsedChange?: (v: boolean) => void
+  logo?: React.ReactNode
+  children: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <aside
+      className={cn(
+        'flex h-full flex-col bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-fg)] transition-[width] duration-200',
+        collapsed ? 'w-16' : 'w-64',
+        className,
+      )}
+      data-collapsed={collapsed || undefined}
+    >
+      <div
+        className={cn(
+          'flex h-16 shrink-0 items-center border-b border-[var(--color-sidebar-border)]',
+          collapsed ? 'justify-center px-2' : 'px-4 gap-3',
+        )}
+      >
+        {logo}
+      </div>
+      <nav className="flex-1 overflow-y-auto scrollbar-thin p-2 space-y-0.5">{children}</nav>
+      {footer && (
+        <div className="border-t border-[var(--color-sidebar-border)] p-2">{footer}</div>
+      )}
+      {onCollapsedChange && (

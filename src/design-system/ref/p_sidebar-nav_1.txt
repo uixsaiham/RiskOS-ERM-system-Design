@@ -1,0 +1,50 @@
+      aria-current={active ? 'page' : undefined}
+      aria-expanded={hasChildren ? expanded : undefined}
+    >
+      <Icon className="size-5 shrink-0 opacity-90" aria-hidden />
+      {!collapsed && (
+        <>
+          <span className="flex-1 text-left truncate">{item.label}</span>
+          {item.badge != null && (
+            <span
+              className={cn(
+                'rounded-full px-1.5 py-0 text-[11px] font-semibold tabular-nums min-w-[20px] text-center',
+                active
+                  ? 'bg-white/20 text-white'
+                  : 'bg-[var(--color-sidebar-hover)] text-[var(--color-sidebar-fg)]',
+              )}
+            >
+              {item.badge}
+            </span>
+          )}
+          {hasChildren && (
+            <ChevronDown
+              className={cn(
+                'size-4 shrink-0 opacity-60 transition-transform',
+                expanded && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          )}
+        </>
+      )}
+    </button>
+  )
+
+  return (
+    <div>
+      {collapsed ? (
+        <Tooltip content={item.label} side="right">
+          {button}
+        </Tooltip>
+      ) : (
+        button
+      )}
+      {hasChildren && expanded && !collapsed && (
+        <div className="mt-0.5 ml-4 space-y-0.5 border-l border-[var(--color-sidebar-border)] pl-3">
+          {item.children!.map((child) => (
+            <button
+              key={child.id}
+              type="button"
+              onClick={() => onSelect?.(child.id)}
+              className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white transition-colors"

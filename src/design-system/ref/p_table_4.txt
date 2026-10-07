@@ -1,0 +1,50 @@
+        checked={checked}
+        indeterminate={indeterminate}
+        onChange={(e) => onChange?.(e.target.checked)}
+        aria-label={ariaLabel}
+      />
+    </TableCell>
+  )
+}
+
+export function TableActionsCell({ children }: { children?: React.ReactNode }) {
+  return (
+    <TableCell className="w-12 text-right">
+      {children ?? (
+        <Button variant="ghost" size="icon-sm" aria-label="Row actions">
+          <MoreHorizontal className="size-4" />
+        </Button>
+      )}
+    </TableCell>
+  )
+}
+
+export function TableEmpty({
+  title = 'No results',
+  description = 'Try adjusting filters or search.',
+  action,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+}) {
+  return (
+    <tr>
+      <td colSpan={99} className="px-3 py-16 text-center">
+        <div className="mx-auto max-w-sm">
+          <div className="font-h4 text-[var(--color-text-primary)]">{title}</div>
+          <p className="mt-1 font-body-md text-[var(--color-text-muted)]">{description}</p>
+          {action && <div className="mt-4 flex justify-center">{action}</div>}
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+export function TableLoading({ rows = 5, cols = 6 }: { rows?: number; cols?: number }) {
+  return (
+    <>
+      {Array.from({ length: rows }).map((_, r) => (
+        <TableRow key={r} className="hover:bg-transparent">
+          {Array.from({ length: cols }).map((_, c) => (
+            <TableCell key={c}>

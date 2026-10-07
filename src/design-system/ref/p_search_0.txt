@@ -1,0 +1,50 @@
+import * as React from 'react'
+import {
+  Search as SearchIcon,
+  Clock,
+  FileWarning,
+  Shield,
+  Users,
+  X,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface SearchResult {
+  id: string
+  title: string
+  category: string
+  subtitle?: string
+}
+
+const categoryIcons: Record<string, React.ElementType> = {
+  Risks: FileWarning,
+  Controls: Shield,
+  Users: Users,
+  default: SearchIcon,
+}
+
+export function GlobalSearch({
+  className,
+  placeholder = 'Search risks, controls, actions…',
+}: {
+  className?: string
+  placeholder?: string
+}) {
+  const [open, setOpen] = React.useState(false)
+  const [query, setQuery] = React.useState('')
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setOpen(true)
+      }
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
+
+  React.useEffect(() => {
+    if (open) {

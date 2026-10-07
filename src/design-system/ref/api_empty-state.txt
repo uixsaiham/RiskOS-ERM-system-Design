@@ -1,0 +1,39 @@
+export function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  className,
+}: {
+  icon?: LucideIcon
+  title: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  /* body */
+}
+
+export function ErrorState({
+  title = 'Something went wrong',
+  description = 'We could not load this content. Please try again.',
+  action,
+  className,
+}: {
+  title?: string
+  description?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  /* body */
+}
+
+export function LoadingState({
+  label = 'Loading…',
+  className,
+}: {
+  label?: string
+  className?: string
+}) {
+  /* body */
+}

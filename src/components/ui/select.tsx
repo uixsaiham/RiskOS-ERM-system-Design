@@ -1,0 +1,45 @@
+import * as React from 'react'
+import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  error?: boolean
+  placeholder?: string
+}
+
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+  ({ className, error, placeholder, children, disabled, ...props }, ref) => {
+    return (
+      <div className="relative w-full">
+        <select
+          ref={ref}
+          disabled={disabled}
+          aria-invalid={error || undefined}
+          className={cn(
+            'flex h-9 w-full appearance-none rounded-md border bg-[var(--color-surface)] px-3 py-2 pr-9 font-body-md text-[var(--color-text-primary)] shadow-[var(--shadow-xs)] transition-colors duration-150',
+            'hover:border-[var(--color-border-strong)]',
+            'focus-visible:outline-none focus-visible:border-[var(--color-primary)] focus-visible:shadow-[var(--shadow-focus)]',
+            'disabled:cursor-not-allowed disabled:bg-[var(--color-surface-secondary)] disabled:text-[var(--color-text-disabled)]',
+            error
+              ? 'border-[var(--color-error)] focus-visible:shadow-[var(--shadow-focus-error)]'
+              : 'border-[var(--color-border)]',
+            className,
+          )}
+          {...props}
+        >
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          {children}
+        </select>
+        <ChevronDown
+          className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-[var(--color-text-muted)]"
+          aria-hidden
+        />
+      </div>
+    )
+  },
+)
+Select.displayName = 'Select'

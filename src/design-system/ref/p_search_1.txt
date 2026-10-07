@@ -1,0 +1,50 @@
+      setTimeout(() => inputRef.current?.focus(), 10)
+    } else {
+      setQuery('')
+    }
+  }, [open])
+
+  const recent = ['Vendor concentration risk', 'SOC 2 controls', 'Q3 action plans']
+  const results: SearchResult[] =
+    query.length > 1
+      ? [
+          {
+            id: '1',
+            title: 'Data breach — third party processor',
+            category: 'Risks',
+            subtitle: 'RSK-1042 · High',
+          },
+          {
+            id: '2',
+            title: 'Access control review',
+            category: 'Controls',
+            subtitle: 'CTL-221 · Effective',
+          },
+          {
+            id: '3',
+            title: 'Sarah Chen',
+            category: 'Users',
+            subtitle: 'Risk Owner · Operations',
+          },
+        ].filter(
+          (r) =>
+            r.title.toLowerCase().includes(query.toLowerCase()) ||
+            r.category.toLowerCase().includes(query.toLowerCase()),
+        )
+      : []
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={cn(
+          'inline-flex h-9 w-full max-w-md items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-left shadow-[var(--shadow-xs)] transition-colors',
+          'hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)]',
+          'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+          className,
+        )}
+      >
+        <SearchIcon className="size-4 text-[var(--color-text-muted)]" aria-hidden />
+        <span className="flex-1 truncate font-body-md text-[var(--color-text-muted)]">
+          {placeholder}

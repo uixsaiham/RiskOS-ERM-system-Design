@@ -1,0 +1,50 @@
+          : undefined
+      }
+      {...props}
+    >
+      {sortable ? (
+        <button
+          type="button"
+          onClick={onSort}
+          className="inline-flex items-center gap-1 hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded"
+        >
+          {content}
+        </button>
+      ) : (
+        <span className="inline-flex items-center gap-1">{content}</span>
+      )}
+    </th>
+  )
+}
+
+export function TableCell({
+  className,
+  sticky,
+  ...props
+}: React.TdHTMLAttributes<HTMLTableCellElement> & { sticky?: boolean }) {
+  return (
+    <td
+      className={cn(
+        'px-3 text-[var(--color-text-primary)] align-middle',
+        sticky && 'sticky left-0 z-[5] bg-[var(--color-surface)]',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+export function TableSelectCell({
+  checked,
+  indeterminate,
+  onChange,
+  ariaLabel,
+}: {
+  checked?: boolean
+  indeterminate?: boolean
+  onChange?: (checked: boolean) => void
+  ariaLabel: string
+}) {
+  return (
+    <TableCell className="w-10 px-3">
+      <Checkbox

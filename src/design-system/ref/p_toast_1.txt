@@ -1,0 +1,9 @@
+      </div>
+      {onClose && (
+        <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
+  )
+}

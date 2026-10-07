@@ -1,0 +1,13 @@
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {loading && <Loader2 className="animate-spin" aria-hidden />}
+        {children}
+      </button>
+    )
+  },
+)
+Button.displayName = 'Button'
+
+export { buttonVariants }
