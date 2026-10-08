@@ -4,33 +4,47 @@ import { cn } from '@/lib/utils'
 export interface BreadcrumbItem {
   label: string
   href?: string
+  onClick?: () => void
 }
 
 export function Breadcrumb({
   items,
+  onHomeClick,
   className,
 }: {
   items: BreadcrumbItem[]
+  onHomeClick?: () => void
   className?: string
 }) {
   return (
     <nav aria-label="Breadcrumb" className={cn('flex items-center gap-1', className)}>
       <ol className="flex items-center gap-1 flex-wrap">
         <li>
-          <a
-            href="#"
-            className="inline-flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
-            aria-label="Home"
-          >
-            <Home className="size-3.5" />
-          </a>
+          {onHomeClick ? (
+            <button
+              type="button"
+              onClick={onHomeClick}
+              className="inline-flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded"
+              aria-label="Home"
+            >
+              <Home className="size-3.5" />
+            </button>
+          ) : (
+            <a
+              href="#"
+              className="inline-flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+              aria-label="Home"
+            >
+              <Home className="size-3.5" />
+            </a>
+          )}
         </li>
         {items.map((item, i) => {
           const last = i === items.length - 1
           return (
             <li key={item.label} className="inline-flex items-center gap-1">
               <ChevronRight className="size-3.5 text-[var(--color-text-disabled)]" aria-hidden />
-              {last || !item.href ? (
+              {last || (!item.href && !item.onClick) ? (
                 <span
                   className={cn(
                     'font-body-sm',
@@ -42,6 +56,14 @@ export function Breadcrumb({
                 >
                   {item.label}
                 </span>
+              ) : item.onClick ? (
+                <button
+                  type="button"
+                  onClick={item.onClick}
+                  className="font-body-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] rounded"
+                >
+                  {item.label}
+                </button>
               ) : (
                 <a
                   href={item.href}

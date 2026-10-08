@@ -184,14 +184,14 @@
   --color-risk-critical-border: #fca5a5;
   --color-risk-critical-foreground: #7f1d1d;
 
-  /* Sidebar */
-  --color-sidebar-bg: #0f172a;
-  --color-sidebar-fg: #cbd5e1;
+  /* Sidebar (Light Modern) */
+  --color-sidebar-bg: #ffffff;
+  --color-sidebar-fg: #475569;
   --color-sidebar-fg-muted: #94a3b8;
-  --color-sidebar-hover: #1e293b;
-  --color-sidebar-active: #1e3a8a;
-  --color-sidebar-active-fg: #ffffff;
-  --color-sidebar-border: #1e293b;
+  --color-sidebar-hover: #f1f5f9;
+  --color-sidebar-active: #eff6ff;
+  --color-sidebar-active-fg: #1d4ed8;
+  --color-sidebar-border: #e2e8f0;
 
   /* Header */
   --color-header-bg: #ffffff;

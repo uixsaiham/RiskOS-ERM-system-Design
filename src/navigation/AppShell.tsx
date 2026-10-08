@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {
   Bell,
-  ChevronDown,
+  ChevronsUpDown,
   LogOut,
   Menu,
   PanelLeftClose,
@@ -22,6 +22,8 @@ import {
   Sidebar,
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
+import { ExecutiveDashboard } from '@/dashboard'
+import { RiskRegisterWorkspace } from '@/risk-register'
 import {
   currentUser,
   getBreadcrumbs,
@@ -34,14 +36,25 @@ import {
 
 function RiskOsLogo({ collapsed }: { collapsed?: boolean }) {
   return (
-    <div className={cn('flex items-center gap-2.5', collapsed && 'justify-center')}>
-      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[var(--color-primary)] text-[var(--color-primary-foreground)] shadow-[var(--shadow-xs)]">
-        <ShieldCheck className="size-4" aria-hidden />
+    <div className={cn('flex items-center gap-3 w-full', collapsed && 'justify-center')}>
+      <div className="relative flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 text-white shadow-xs ring-1 ring-blue-700/20">
+        <ShieldCheck className="size-5" aria-hidden />
+        <span className="absolute -top-0.5 -right-0.5 flex size-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-60" />
+          <span className="relative inline-flex size-2 rounded-full bg-blue-500" />
+        </span>
       </div>
       {!collapsed && (
-        <div className="min-w-0 leading-tight">
-          <p className="font-label truncate text-white">{headerMeta.productName}</p>
-          <p className="truncate font-caption text-[var(--color-sidebar-fg-muted)]">
+        <div className="min-w-0 flex-1 leading-tight">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-slate-900 tracking-tight text-[15px]">
+              {headerMeta.productName}
+            </span>
+            <span className="rounded bg-blue-50 px-1 py-0.2 text-[9px] font-mono font-semibold text-blue-700 border border-blue-200">
+              ERM
+            </span>
+          </div>
+          <p className="truncate text-[11px] font-medium text-slate-500 mt-0.5">
             {currentUser.org}
           </p>
         </div>
@@ -50,7 +63,13 @@ function RiskOsLogo({ collapsed }: { collapsed?: boolean }) {
   )
 }
 
-function UserMenu({ collapsed }: { collapsed?: boolean }) {
+function UserMenu({
+  collapsed,
+  onCollapseToggle,
+}: {
+  collapsed?: boolean
+  onCollapseToggle?: () => void
+}) {
   const [open, setOpen] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
 
@@ -71,32 +90,32 @@ function UserMenu({ collapsed }: { collapsed?: boolean }) {
   }, [open])
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative w-full space-y-1">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'flex w-full items-center gap-2.5 rounded-md p-2 text-left transition-colors',
-          'hover:bg-[var(--color-sidebar-hover)] focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
-          collapsed && 'justify-center',
+          'group flex w-full items-center gap-2.5 rounded-lg p-1.5 text-left transition-all duration-150 select-none',
+          'hover:bg-slate-100/80 border border-transparent hover:border-slate-200/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40',
+          collapsed && 'justify-center p-1',
         )}
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <Avatar name={currentUser.name} size="sm" />
+        <div className="relative shrink-0">
+          <Avatar name={currentUser.name} size="sm" />
+          <span className="absolute -bottom-0.5 -right-0.5 size-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+        </div>
         {!collapsed && (
           <>
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-label text-white">{currentUser.name}</p>
-              <p className="truncate font-caption text-[var(--color-sidebar-fg-muted)]">
+            <div className="min-w-0 flex-1 leading-tight">
+              <p className="truncate text-[13px] font-semibold text-slate-900">{currentUser.name}</p>
+              <p className="truncate text-[11px] text-slate-500">
                 {currentUser.role}
               </p>
             </div>
-            <ChevronDown
-              className={cn(
-                'size-4 shrink-0 text-[var(--color-sidebar-fg-muted)] transition-transform',
-                open && 'rotate-180',
-              )}
+            <ChevronsUpDown
+              className="size-3.5 shrink-0 text-slate-400 group-hover:text-slate-600 transition-colors"
               aria-hidden
             />
           </>
@@ -107,33 +126,56 @@ function UserMenu({ collapsed }: { collapsed?: boolean }) {
         <div
           role="menu"
           className={cn(
-            'absolute z-[var(--z-dropdown,300)] min-w-[220px] overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-[var(--shadow-lg)]',
+            'absolute z-[var(--z-dropdown,300)] min-w-[240px] overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-900/10',
             collapsed ? 'bottom-0 left-full ml-2' : 'bottom-full left-0 right-0 mb-2',
           )}
         >
-          <div className="border-b border-[var(--color-border)] px-3 py-2">
-            <p className="font-label text-[var(--color-text-primary)]">{currentUser.name}</p>
-            <p className="font-caption text-[var(--color-text-muted)]">{currentUser.email}</p>
+          <div className="border-b border-slate-100 px-2.5 py-2">
+            <p className="text-[13px] font-semibold text-slate-900">{currentUser.name}</p>
+            <p className="text-[11px] text-slate-500">{currentUser.email}</p>
+            <div className="mt-1.5 inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 border border-blue-200/80">
+              <span>Role:</span>
+              <span className="font-semibold">{currentUser.role}</span>
+            </div>
           </div>
-          {(
-            [
-              { id: 'profile', label: 'Profile', icon: User },
-              { id: 'settings', label: 'Settings', icon: Settings },
-              { id: 'sign-out', label: 'Sign out', icon: LogOut },
-            ] as const
-          ).map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="menuitem"
-              className="flex w-full items-center gap-2 px-3 py-2 font-body-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-secondary)] hover:text-[var(--color-text-primary)]"
-              onClick={() => setOpen(false)}
-            >
-              <item.icon className="size-4 opacity-70" aria-hidden />
-              {item.label}
-            </button>
-          ))}
+          <div className="py-1">
+            {(
+              [
+                { id: 'profile', label: 'My Profile', icon: User },
+                { id: 'settings', label: 'Settings & Preferences', icon: Settings },
+                { id: 'sign-out', label: 'Sign out', icon: LogOut },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="menuitem"
+                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-[12px] text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                onClick={() => setOpen(false)}
+              >
+                <item.icon className="size-3.5 opacity-70" aria-hidden />
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
+      )}
+
+      {/* Collapse toggle at bottom of sidebar when expanded */}
+      {!collapsed && onCollapseToggle && (
+        <button
+          type="button"
+          onClick={onCollapseToggle}
+          className="flex w-full items-center justify-between rounded-lg px-2 py-1 text-[11px] text-slate-500 hover:text-slate-900 hover:bg-slate-100/70 transition-colors"
+        >
+          <span className="flex items-center gap-1.5">
+            <PanelLeftClose className="size-3.5 text-slate-400" />
+            <span>Collapse menu</span>
+          </span>
+          <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-1 py-0.2 rounded border border-slate-200/80">
+            ⌘[
+          </span>
+        </button>
       )}
     </div>
   )
@@ -210,6 +252,7 @@ export function AppShell({
   const [expanded, setExpanded] = React.useState<Record<string, boolean>>(() => {
     const parent = getExpandedParentId(initialRoute)
     const seed: Record<string, boolean> = {
+      dashboard: true,
       risks: true,
       'my-work': true,
     }
@@ -240,16 +283,16 @@ export function AppShell({
   const crumbs = React.useMemo(() => {
     return getBreadcrumbs(activeId).map((c) => ({
       label: c.label,
-      href: c.id === activeId ? undefined : '#',
+      onClick: c.id !== activeId ? () => navigate(c.id) : undefined,
     }))
-  }, [activeId])
+  }, [activeId, navigate])
 
   const renderSidebar = (isCollapsed: boolean) => (
     <Sidebar
       collapsed={isCollapsed}
       onCollapsedChange={setCollapsed}
       logo={<RiskOsLogo collapsed={isCollapsed} />}
-      footer={<UserMenu collapsed={isCollapsed} />}
+      footer={<UserMenu collapsed={isCollapsed} onCollapseToggle={() => setCollapsed(!isCollapsed)} />}
       className="h-full"
     >
       {navSections.map((section) => (
@@ -328,7 +371,7 @@ export function AppShell({
           </Button>
 
           <div className="hidden min-w-0 sm:block">
-            <Breadcrumb items={crumbs} />
+            <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
           </div>
 
           <div className="mx-auto hidden w-full max-w-md flex-1 lg:block">
@@ -360,9 +403,24 @@ export function AppShell({
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="mb-4 sm:hidden">
-            <Breadcrumb items={crumbs} />
+            <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
           </div>
-          <PagePlaceholder activeId={activeId} />
+          {activeId === 'dashboard' || activeId === 'dashboard-executive' ? (
+            <ExecutiveDashboard onNavigate={navigate} />
+          ) : activeId.startsWith('risk') ? (
+            <RiskRegisterWorkspace
+              key={activeId}
+              onNavigate={navigate}
+              routeId={activeId}
+              initialFilter={
+                activeId.startsWith('risk-')
+                  ? { search: activeId.replace('risk-', '') }
+                  : undefined
+              }
+            />
+          ) : (
+            <PagePlaceholder activeId={activeId} />
+          )}
         </main>
       </div>
     </div>

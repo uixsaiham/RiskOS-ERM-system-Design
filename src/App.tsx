@@ -1,11 +1,11 @@
-import * as React from 'react'
+import { useState } from 'react'
 import { DesignSystemShowcase } from '@/design-system/Showcase'
 import { AppShell } from '@/navigation'
 
 type AppView = 'shell' | 'showcase'
 
 function App() {
-  const [view, setView] = React.useState<AppView>('shell')
+  const [view, setView] = useState<AppView>('shell')
 
   if (view === 'showcase') {
     return (

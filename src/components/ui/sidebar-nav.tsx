@@ -40,52 +40,79 @@ export function SidebarNavItem({
   const Icon = item.icon
   const hasChildren = !!item.children?.length
   const childActive = !!activeChildId && item.children?.some((c) => c.id === activeChildId)
-  const parentActive = !!active && !childActive
+  const isExactParentActive = !!active && !childActive
 
   const button = (
     <button
       type="button"
       onClick={() => {
-        if (hasChildren && !collapsed) {
-          onToggle?.()
-          return
-        }
         onSelect?.(item.id)
+        if (hasChildren && !collapsed) {
+          if (!expanded) {
+            onToggle?.()
+          } else if (isExactParentActive) {
+            onToggle?.()
+          }
+        }
       }}
       className={cn(
-        'group flex w-full items-center gap-3 rounded-md px-3 py-2 font-body-md font-medium transition-colors duration-150',
-        'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
-        collapsed && 'justify-center px-0',
-        parentActive || (collapsed && (active || childActive))
-          ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-active-fg)]'
+        'group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 font-body-sm font-medium transition-all duration-150 select-none',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40',
+        collapsed ? 'h-10 w-10 justify-center p-0 mx-auto' : 'h-9 py-1.5',
+        isExactParentActive
+          ? 'bg-blue-50 text-blue-700 font-semibold shadow-2xs border border-blue-200/80'
           : childActive
-            ? 'text-white'
-            : 'text-[var(--color-sidebar-fg)] hover:bg-[var(--color-sidebar-hover)] hover:text-white',
+            ? 'text-slate-900 bg-slate-50 border border-slate-200/60 font-medium'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent',
       )}
-      aria-current={parentActive ? 'page' : undefined}
+      aria-current={isExactParentActive ? 'page' : undefined}
       aria-expanded={hasChildren ? expanded : undefined}
     >
-      <Icon className="size-5 shrink-0 opacity-90" aria-hidden />
+      {/* Active Left Indicator Bar for exact parent active */}
+      {!collapsed && isExactParentActive && (
+        <span
+          className="absolute -left-1 top-2 bottom-2 w-1 rounded-r-full bg-blue-600 shadow-[0_0_6px_rgba(37,99,235,0.4)]"
+          aria-hidden
+        />
+      )}
+
+      {/* Primary Icon */}
+      <Icon
+        className={cn(
+          'size-[18px] shrink-0 transition-colors duration-150',
+          isExactParentActive
+            ? 'text-blue-600'
+            : childActive
+              ? 'text-blue-600'
+              : 'text-slate-500 group-hover:text-slate-700',
+        )}
+        aria-hidden
+      />
+
       {!collapsed && (
         <>
-          <span className="flex-1 truncate text-left">{item.label}</span>
+          <span className="flex-1 truncate text-left text-[13px] tracking-tight">
+            {item.label}
+          </span>
+
           {item.badge != null && (
             <span
               className={cn(
-                'min-w-[20px] rounded-full px-1.5 py-0 text-center text-[11px] font-semibold tabular-nums',
-                parentActive || childActive
-                  ? 'bg-white/20 text-white'
-                  : 'bg-[var(--color-sidebar-hover)] text-[var(--color-sidebar-fg)]',
+                'min-w-[20px] rounded-full px-1.5 py-0.5 text-center text-[10px] font-semibold font-mono tabular-nums leading-none border transition-colors',
+                isExactParentActive
+                  ? 'bg-blue-100 text-blue-700 border-blue-200'
+                  : 'bg-slate-100 text-slate-600 group-hover:text-slate-900 border-slate-200/80',
               )}
             >
               {item.badge}
             </span>
           )}
+
           {hasChildren && (
             <ChevronDown
               className={cn(
-                'size-4 shrink-0 opacity-70 transition-transform duration-150',
-                expanded && 'rotate-180',
+                'size-3.5 shrink-0 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                expanded && 'rotate-180 text-slate-600',
               )}
               aria-hidden
             />
@@ -96,7 +123,7 @@ export function SidebarNavItem({
   )
 
   return (
-    <div>
+    <div className={cn(collapsed && 'flex justify-center')}>
       {collapsed ? (
         <Tooltip content={item.label} side="right">
           {button}
@@ -104,8 +131,10 @@ export function SidebarNavItem({
       ) : (
         button
       )}
+
+      {/* Nested Submenu Items */}
       {hasChildren && expanded && !collapsed && (
-        <div className="mt-0.5 ml-4 space-y-0.5 border-l border-[var(--color-sidebar-border)] pl-3">
+        <div className="mt-1 ml-4 pl-3.5 space-y-0.5 border-l border-slate-200 relative">
           {item.children!.map((child) => {
             const isChildActive = activeChildId === child.id
             return (
@@ -114,17 +143,38 @@ export function SidebarNavItem({
                 type="button"
                 onClick={() => onSelect?.(child.id)}
                 className={cn(
-                  'flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm transition-colors',
-                  'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+                  'group/child flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-[12.5px] transition-all duration-150 text-left select-none',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500/40',
                   isChildActive
-                    ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-active-fg)]'
-                    : 'text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white',
+                    ? 'bg-blue-50 text-blue-700 font-medium border border-blue-200/70 shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent',
                 )}
                 aria-current={isChildActive ? 'page' : undefined}
               >
-                <span className="flex-1 truncate text-left">{child.label}</span>
+                {/* Micro bullet dot */}
+                <span
+                  className={cn(
+                    'size-1.5 rounded-full shrink-0 transition-all duration-150',
+                    isChildActive
+                      ? 'bg-blue-600 shadow-[0_0_6px_rgba(37,99,235,0.5)] scale-110'
+                      : 'bg-slate-300 group-hover/child:bg-slate-400',
+                  )}
+                  aria-hidden
+                />
+
+                <span className="flex-1 truncate">{child.label}</span>
+
                 {child.badge != null && (
-                  <span className="text-[11px] tabular-nums opacity-70">{child.badge}</span>
+                  <span
+                    className={cn(
+                      'text-[10px] font-mono px-1.5 py-0.2 rounded tabular-nums border',
+                      isChildActive
+                        ? 'bg-blue-100 text-blue-700 border-blue-200'
+                        : 'bg-slate-100 text-slate-500 group-hover/child:text-slate-700 border-slate-200/60',
+                    )}
+                  >
+                    {child.badge}
+                  </span>
                 )}
               </button>
             )
@@ -152,13 +202,15 @@ export function NavSection({
   return (
     <div className={cn('space-y-1', className)}>
       {label && !collapsed && (
-        <p className="px-3 pb-1 pt-3 font-caption font-semibold uppercase tracking-wide text-[var(--color-sidebar-fg-muted)]">
-          {label}
-        </p>
+        <div className="px-2.5 pt-3 pb-1">
+          <p className="font-mono text-[10px] font-semibold tracking-wider uppercase text-slate-400">
+            {label}
+          </p>
+        </div>
       )}
       {collapsed && label && (
         <div
-          className="mx-auto my-2 h-px w-6 bg-[var(--color-sidebar-border)]"
+          className="mx-auto my-2.5 h-px w-5 bg-slate-200"
           aria-hidden
         />
       )}
@@ -185,30 +237,36 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        'flex h-full flex-col bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-fg)] transition-[width] duration-200',
-        collapsed ? 'w-16' : 'w-64',
+        'relative flex h-full flex-col bg-white text-slate-700 border-r border-slate-200 transition-[width] duration-200 ease-in-out select-none shadow-xs',
+        collapsed ? 'w-[68px]' : 'w-64',
         className,
       )}
       data-collapsed={collapsed || undefined}
     >
+      {/* Sidebar Header / Brand */}
       <div
         className={cn(
-          'flex h-16 shrink-0 items-center border-b border-[var(--color-sidebar-border)]',
-          collapsed ? 'justify-center px-2' : 'gap-3 px-4',
+          'flex h-16 shrink-0 items-center border-b border-slate-200',
+          collapsed ? 'justify-center px-2' : 'px-3.5',
         )}
       >
         {logo}
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-3" aria-label="Primary">
+      {/* Navigation Body */}
+      <nav
+        className="flex-1 overflow-y-auto px-2.5 py-3 space-y-3.5 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300"
+        aria-label="Primary"
+      >
         {children}
       </nav>
 
+      {/* Sidebar Footer */}
       {footer && (
         <div
           className={cn(
-            'shrink-0 border-t border-[var(--color-sidebar-border)] p-2',
-            collapsed && 'flex justify-center',
+            'shrink-0 border-t border-slate-200 p-2.5 bg-white',
+            collapsed && 'flex justify-center p-2',
           )}
         >
           {footer}

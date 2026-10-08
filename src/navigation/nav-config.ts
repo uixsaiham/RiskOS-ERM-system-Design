@@ -56,9 +56,13 @@ export const navSections: NavSectionConfig[] = [
     items: [
       {
         id: 'dashboard',
-        label: 'Executive dashboard',
+        label: 'Dashboard',
         icon: LayoutDashboard,
         description: 'Portfolio heat, KRIs, and open escalations',
+        children: [
+          { id: 'dashboard-executive', label: 'Executive Overview' },
+          { id: 'dashboard-operations', label: 'Operational Risk' },
+        ],
       },
       {
         id: 'my-work',
@@ -83,7 +87,7 @@ export const navSections: NavSectionConfig[] = [
         label: 'Risk register',
         icon: FileWarning,
         description: 'Enterprise risk inventory and residual scores',
-        badge: 128,
+        badge: 248,
         children: [
           { id: 'risks-all', label: 'All risks' },
           { id: 'risks-by-category', label: 'By category' },
@@ -308,15 +312,40 @@ export function getNavNode(id: string): NavNodeMeta | undefined {
 }
 
 export function getBreadcrumbs(id: string): { id: string; label: string }[] {
+  if (id === 'dashboard') {
+    return [
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'dashboard-executive', label: 'Executive Overview' },
+    ]
+  }
+
+  if (id === 'risks' || id === 'risks-all') {
+    return [
+      { id: 'risk', label: 'Risk Management' },
+      { id: 'risks', label: 'Risk Register' },
+    ]
+  }
+
   const node = nodeIndex[id]
-  if (!node) return [{ id: 'dashboard', label: 'Executive dashboard' }]
+  if (!node) {
+    if (id.startsWith('risks')) {
+      return [
+        { id: 'risk', label: 'Risk Management' },
+        { id: 'risks', label: 'Risk Register' },
+      ]
+    }
+    return [
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'dashboard-executive', label: 'Executive Overview' },
+    ]
+  }
 
   const crumbs: { id: string; label: string }[] = []
   if (node.parentId) {
     const parent = nodeIndex[node.parentId]
     if (parent) crumbs.push({ id: parent.id, label: parent.label })
   } else if (node.sectionLabel && node.id !== 'dashboard') {
-    // section is not navigable; skip
+    crumbs.push({ id: node.sectionId ?? 'section', label: node.sectionLabel })
   }
   crumbs.push({ id: node.id, label: node.label })
   return crumbs

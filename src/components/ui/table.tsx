@@ -81,8 +81,14 @@ export function TableHeader({
   )
 }
 
-export function TableBody({ children }: { children: React.ReactNode }) {
-  return <tbody className="divide-y divide-[var(--color-border)]">{children}</tbody>
+export function TableBody({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return <tbody className={cn('divide-y divide-[var(--color-border)]', className)}>{children}</tbody>
 }
 
 export function TableRow({

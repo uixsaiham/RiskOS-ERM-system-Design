@@ -80,3 +80,14 @@ export function StatusDot({ status, className, withLabel = true }: StatusDotProp
     </span>
   )
 }
+
+export function ControlEffectiveness({
+  value,
+  className,
+}: {
+  value: string
+  className?: string
+}) {
+  const normalized = value === 'highly_effective' ? 'effective' : value
+  return <StatusBadge status={normalized} className={className} />
+}

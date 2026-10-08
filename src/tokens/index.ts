@@ -4,6 +4,52 @@
  * CSS variables in index.css are the runtime source; these mirror for TS usage.
  */
 
+export const colors = {
+  primary: {
+    DEFAULT: '#1d4ed8',
+    hover: '#1e40af',
+    active: '#1e3a8a',
+    subtle: '#eff6ff',
+    muted: '#dbeafe',
+  },
+  surface: '#ffffff',
+  surfaceSecondary: '#f1f5f9',
+  border: '#e2e8f0',
+  text: {
+    primary: '#0f172a',
+    secondary: '#475569',
+    muted: '#64748b',
+  },
+  success: '#15803d',
+  warning: '#b45309',
+  error: '#b91c1c',
+  info: '#1d4ed8',
+} as const
+
+export const shadows = {
+  xs: 'var(--shadow-xs)',
+  sm: 'var(--shadow-sm)',
+  md: 'var(--shadow-md)',
+  lg: 'var(--shadow-lg)',
+  xl: 'var(--shadow-xl)',
+} as const
+
+export const typography = {
+  displayLg: 'var(--text-display-lg)',
+  displayMd: 'var(--text-display-md)',
+  h1: 'var(--text-h1)',
+  h2: 'var(--text-h2)',
+  h3: 'var(--text-h3)',
+  h4: 'var(--text-h4)',
+  bodyLg: 'var(--text-body-lg)',
+  bodyMd: 'var(--text-body-md)',
+  bodySm: 'var(--text-body-sm)',
+  caption: 'var(--text-caption)',
+  label: 'var(--text-label)',
+  button: 'var(--text-button)',
+  overline: 'var(--text-overline)',
+} as const
+
 export const spacing = {
   0: '0px',
   0.5: '2px',

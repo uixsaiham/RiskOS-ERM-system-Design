@@ -23,7 +23,8 @@ export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
     },
     ref,
   ) => {
-    const toggleId = id || React.useId()
+    const generatedId = React.useId()
+    const toggleId = id || generatedId
     return (
       <div className={cn('inline-flex items-center gap-2', className)}>
         <button

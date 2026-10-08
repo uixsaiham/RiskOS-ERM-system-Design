@@ -41,7 +41,6 @@ import {
   Field,
   Input,
   KpiCard,
-  Label,
   Modal,
   NavItemButton,
   NavSection,
@@ -370,7 +369,7 @@ export function DesignSystemShowcase() {
         </nav>
         <div className="border-t border-[var(--color-border)] p-3">
           <p className="font-caption text-[var(--color-text-muted)]">
-            Done: Step 02 shell · Next: Step 03 dashboard
+            Done: Step 03 dashboard · Next: Step 04 register
           </p>
         </div>
       </aside>
@@ -422,15 +421,15 @@ export function DesignSystemShowcase() {
                     [
                       ['critical', riskSeverityBands.critical],
                       ['high', riskSeverityBands.high],
-                      ['medium', riskSeverityBands.medium],
+                      ['moderate', riskSeverityBands.moderate],
                       ['low', riskSeverityBands.low],
-                      ['minimal', riskSeverityBands.minimal],
                     ] as const
                   ).map(([key, band]) => (
                     <Swatch
                       key={key}
                       name={`${band.label} (${band.min}–${band.max})`}
-                      value={band.color}
+                      value={`var(--color-risk-${key})`}
+                      className={`bg-[var(--color-risk-${key})]`}
                     />
                   ))}
                 </DemoRow>
@@ -560,7 +559,7 @@ export function DesignSystemShowcase() {
                   <div
                     key={key}
                     className="flex h-20 w-36 flex-col items-center justify-center rounded-lg bg-[var(--color-surface)]"
-                    style={{ boxShadow: value }}
+                    style={{ boxShadow: String(value) }}
                   >
                     <span className="font-label">{key}</span>
                   </div>
@@ -645,7 +644,7 @@ export function DesignSystemShowcase() {
                 <Field
                   label="Treatment notes"
                   htmlFor="notes"
-                  hint="Visible to control owners and auditors."
+                  helperText="Visible to control owners and auditors."
                 >
                   <Textarea
                     id="notes"
@@ -725,12 +724,12 @@ export function DesignSystemShowcase() {
               <div className="space-y-3 max-w-md">
                 <Toggle
                   checked={notifyEmail}
-                  onChange={setNotifyEmail}
+                  onCheckedChange={setNotifyEmail}
                   label="Email digest for overdue actions"
                 />
                 <Toggle
                   checked={notifySlack}
-                  onChange={setNotifySlack}
+                  onCheckedChange={setNotifySlack}
                   label="Slack alerts for critical residual ≥ 17"
                 />
                 <Toggle checked disabled label="Auto-close on control pass (policy locked)" />
@@ -811,13 +810,14 @@ export function DesignSystemShowcase() {
                 {kpiSamples.map((k) => (
                   <KpiCard
                     key={k.label}
-                    label={k.label}
-                    value={k.value}
-                    unit={k.unit || undefined}
-                    delta={k.delta}
-                    deltaLabel={k.deltaLabel}
-                    trend={k.trend}
-                    description={k.helper}
+                    title={k.label}
+                    value={k.value + (k.unit ? ` ${k.unit}` : '')}
+                    supporting={k.helper}
+                    trend={{
+                      value: `${k.delta > 0 ? '+' : ''}${k.delta} ${k.deltaLabel}`,
+                      direction: k.trend,
+                      positive: k.tone === 'success',
+                    }}
                   />
                 ))}
               </div>
@@ -1086,14 +1086,14 @@ export function DesignSystemShowcase() {
               <div className="flex flex-wrap items-end gap-6">
                 <div className="space-y-2">
                   <p className="font-overline text-[var(--color-text-muted)]">Residual</p>
-                  <RiskScore score={critical.residual} max={25} size="lg" showLabel />
+                  <RiskScore score={critical.residual} size="lg" />
                   <p className="font-body-sm text-[var(--color-text-secondary)]">
                     {critical.residual} / 25 — Critical
                   </p>
                 </div>
                 <div className="space-y-2">
                   <p className="font-overline text-[var(--color-text-muted)]">Inherent</p>
-                  <RiskScore score={critical.inherent} max={25} size="md" showLabel />
+                  <RiskScore score={critical.inherent} size="md" />
                 </div>
                 <div className="space-y-2">
                   <p className="font-overline text-[var(--color-text-muted)]">Sizes</p>
@@ -1118,7 +1118,7 @@ export function DesignSystemShowcase() {
 
             <SubSection id="risk-severity" title="Risk severity">
               <DemoRow label="Badges">
-                {(['critical', 'high', 'medium', 'low', 'minimal'] as const).map((s) => (
+                {(['critical', 'high', 'moderate', 'low'] as const).map((s) => (
                   <RiskSeverityBadge key={s} severity={s} />
                 ))}
               </DemoRow>
@@ -1283,31 +1283,18 @@ export function DesignSystemShowcase() {
 
             <SubSection id="alerts" title="Alerts">
               <div className="space-y-3">
-                <Alert
-                  variant="warning"
-                  title="Residual above appetite"
-                  description={`${critical.id} exceeds enterprise appetite (threshold 15). Escalation to Risk Committee is required within 5 business days.`}
-                />
-                <Alert
-                  variant="info"
-                  title="Assessment cycle"
-                  description="Q1 cycle closes 31 Mar. 34 risks still unassessed in Operational."
-                />
-                <Alert
-                  variant="error"
-                  title="Control test failed"
-                  description="A.17.1.2 disaster recovery — evidence rejected. Linked residual scores will not auto-reduce."
-                  action={
-                    <Button size="sm" variant="secondary">
-                      View test
-                    </Button>
-                  }
-                />
-                <Alert
-                  variant="success"
-                  title="Treatment verified"
-                  description="ACT-1988 dual-approval workflow marked complete by Internal Audit."
-                />
+                <Alert variant="warning" title="Residual above appetite">
+                  {critical.id} exceeds enterprise appetite (threshold 15). Escalation to Risk Committee is required within 5 business days.
+                </Alert>
+                <Alert variant="info" title="Assessment cycle">
+                  Q1 cycle closes 31 Mar. 34 risks still unassessed in Operational.
+                </Alert>
+                <Alert variant="error" title="Control test failed">
+                  A.17.1.2 disaster recovery — evidence rejected. Linked residual scores will not auto-reduce.
+                </Alert>
+                <Alert variant="success" title="Treatment verified">
+                  ACT-1988 dual-approval workflow marked complete by Internal Audit.
+                </Alert>
               </div>
             </SubSection>
 
@@ -1315,7 +1302,7 @@ export function DesignSystemShowcase() {
               <Button onClick={() => setModalOpen(true)}>Open risk summary modal</Button>
               <Modal
                 open={modalOpen}
-                onOpenChange={setModalOpen}
+                onClose={() => setModalOpen(false)}
                 title={`${critical.id} · Risk summary`}
                 description="Quick view before opening the full risk detail page."
                 footer={
@@ -1330,7 +1317,7 @@ export function DesignSystemShowcase() {
                 <div className="space-y-4">
                   <p className="font-body-md">{critical.title}</p>
                   <div className="flex flex-wrap gap-3">
-                    <RiskScore score={critical.residual} showLabel />
+                    <RiskScore score={critical.residual} />
                     <ControlEffectiveness value={critical.controlEffectiveness} />
                     <StatusBadge
                       status="overdue"
@@ -1347,7 +1334,7 @@ export function DesignSystemShowcase() {
               </Button>
               <Drawer
                 open={drawerOpen}
-                onOpenChange={setDrawerOpen}
+                onClose={() => setDrawerOpen(false)}
                 title="Add treatment action"
                 description={`Linked risk ${critical.id}`}
                 footer={
@@ -1405,7 +1392,7 @@ export function DesignSystemShowcase() {
               </Button>
               <ConfirmDialog
                 open={confirmOpen}
-                onOpenChange={setConfirmOpen}
+                onClose={() => setConfirmOpen(false)}
                 title="Close risk without residual treatment?"
                 description={`${critical.id} still has overdue actions and partially effective controls. This will mark the risk closed for reporting.`}
                 confirmLabel="Close risk"
@@ -1512,11 +1499,11 @@ export function DesignSystemShowcase() {
                   onCollapsedChange={setSidebarCollapsed}
                   logo={
                     sidebarCollapsed ? (
-                      <Shield className="size-5 text-white" />
+                      <Shield className="size-5 text-[var(--color-primary)]" />
                     ) : (
-                      <div className="flex items-center gap-2 text-white">
-                        <Shield className="size-5" />
-                        <span className="font-label">RiskOS</span>
+                      <div className="flex items-center gap-2 text-[var(--color-text-primary)]">
+                        <Shield className="size-5 text-[var(--color-primary)]" />
+                        <span className="font-label font-bold">RiskOS</span>
                       </div>
                     )
                   }
@@ -1593,7 +1580,7 @@ export function DesignSystemShowcase() {
                   <button
                     key={child.id}
                     type="button"
-                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white"
+                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 font-body-sm text-[var(--color-sidebar-fg-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-[var(--color-text-primary)]"
                   >
                     <ChevronRight className="size-3.5 opacity-50" />
                     <span className="flex-1 text-left">{child.label}</span>
@@ -1683,14 +1670,16 @@ export function DesignSystemShowcase() {
               <li className="font-medium text-[var(--color-text-primary)]">
                 Step 02 — Navigation architecture + app shell ✅
               </li>
-              <li>Step 03 — Executive risk dashboard</li>
+              <li className="font-medium text-[var(--color-text-primary)]">
+                Step 03 — Executive risk dashboard ✅
+              </li>
               <li>Step 04 — Risk register</li>
               <li>Step 05 — Risk details</li>
               <li>Step 06 — Risk assessment</li>
               <li>Step 07 — Risk matrix / heatmap</li>
             </ol>
             <p className="mt-3 font-caption text-[var(--color-text-muted)]">
-              Navigation shell is live. Next prompt: Step 03 — Executive risk dashboard.
+              Executive risk dashboard is live in shell. Next prompt: Step 04 — Risk register.
             </p>
           </footer>
         </main>

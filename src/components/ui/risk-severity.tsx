@@ -204,4 +204,23 @@ export function RiskSeveritySwatch({
   )
 }
 
+export function RiskSeverityDot({
+  score,
+  severity,
+  className,
+}: {
+  score?: number
+  severity?: RiskSeverity
+  className?: string
+}) {
+  const resolved = severity ?? (score != null ? getRiskSeverity(score) : 'low')
+  const styles = severityStyles[resolved]
+  return (
+    <span
+      className={cn('inline-block size-2 rounded-full shrink-0', styles.dot, className)}
+      aria-hidden
+    />
+  )
+}
+
 export { severityStyles }
