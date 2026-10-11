@@ -43,6 +43,7 @@ interface RiskRegisterTableProps {
   sortDirection: 'asc' | 'desc'
   onSort: (field: keyof RiskRegisterItem) => void
   onInspectRisk: (risk: RiskRegisterItem) => void
+  onOpenFullRisk?: (risk: RiskRegisterItem) => void
   density: 'comfortable' | 'compact'
   visibility: ColumnVisibilityState
   userRole: UserRolePermission
@@ -60,6 +61,7 @@ export function RiskRegisterTable({
   sortDirection,
   onSort,
   onInspectRisk,
+  onOpenFullRisk,
   density,
   visibility,
   userRole,
@@ -296,9 +298,21 @@ export function RiskRegisterTable({
                   {/* Risk ID */}
                   {visibility.id && (
                     <TableCell className={cellPadding}>
-                      <span className="font-mono text-xs font-bold text-[var(--color-primary)] hover:underline">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (onOpenFullRisk) {
+                            onOpenFullRisk(risk)
+                          } else {
+                            onInspectRisk(risk)
+                          }
+                        }}
+                        className="font-mono text-xs font-bold text-[var(--color-primary)] hover:underline focus:outline-none text-left"
+                        title={`Open dedicated workspace for ${risk.id}`}
+                      >
                         {risk.id}
-                      </span>
+                      </button>
                     </TableCell>
                   )}
 
@@ -449,6 +463,21 @@ export function RiskRegisterTable({
                         role="menu"
                         className="absolute right-3 top-8 z-[var(--z-dropdown,300)] w-48 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg animate-in fade-in zoom-in-95 text-left text-xs"
                       >
+                        {onOpenFullRisk && (
+                          <button
+                            type="button"
+                            role="menuitem"
+                            onClick={() => {
+                              setActiveMenuId(null)
+                              onOpenFullRisk(risk)
+                            }}
+                            className="flex w-full items-center gap-2 px-3 py-1.5 font-semibold text-[var(--color-primary)] hover:bg-[var(--color-surface-secondary)]"
+                          >
+                            <ExternalLink className="size-3.5" />
+                            <span>Open Full Workspace</span>
+                          </button>
+                        )}
+
                         <button
                           type="button"
                           role="menuitem"
@@ -459,7 +488,7 @@ export function RiskRegisterTable({
                           className="flex w-full items-center gap-2 px-3 py-1.5 text-[var(--color-text-primary)] hover:bg-[var(--color-surface-secondary)]"
                         >
                           <ExternalLink className="size-3.5 opacity-70" />
-                          <span>View Risk Details</span>
+                          <span>Quick Preview Drawer</span>
                         </button>
 
                         {userRole !== 'executive' && (

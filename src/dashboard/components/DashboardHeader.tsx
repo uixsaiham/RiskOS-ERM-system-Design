@@ -23,16 +23,22 @@ export function DashboardHeader({
   onExport,
 }: DashboardHeaderProps) {
   return (
-    <div className="flex flex-col justify-between gap-4 border-b border-[var(--color-border)] pb-6 lg:flex-row lg:items-center">
-      <div>
-        <p className="font-overline font-semibold uppercase tracking-wider text-[var(--color-primary)]">
-          RISK OVERVIEW
-        </p>
-        <h1 className="mt-1 font-h1 text-[var(--color-text-primary)] tracking-tight">
+    <div className="flex flex-col justify-between gap-4 border-b border-slate-200/80 pb-5 lg:flex-row lg:items-center">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          <span>Overview</span>
+          <span className="text-slate-300">/</span>
+          <span className="text-slate-900 font-medium">Executive Dashboard</span>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+            <span className="size-1.5 rounded-full bg-emerald-500" />
+            Live portfolio
+          </span>
+        </div>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
           Executive Risk Dashboard
         </h1>
-        <p className="mt-1 max-w-3xl font-body-md text-[var(--color-text-secondary)]">
-          Monitor enterprise-wide risk exposure, emerging threats, control effectiveness, and mitigation progress.
+        <p className="text-xs sm:text-sm text-slate-500 max-w-3xl">
+          Enterprise-wide risk exposure, emerging threats, control effectiveness, and mitigation progress.
         </p>
       </div>
 
@@ -85,7 +91,7 @@ export function DashboardHeader({
           variant="primary"
           size="sm"
           onClick={onExport}
-          className="gap-2 shrink-0 shadow-xs"
+          className="gap-2 shrink-0 shadow-xs bg-slate-900 hover:bg-slate-800 text-white rounded-lg"
         >
           <Download className="size-4" />
           <span>Export Report</span>

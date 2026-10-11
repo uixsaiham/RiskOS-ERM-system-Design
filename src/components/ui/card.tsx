@@ -10,7 +10,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-xs)]',
+        'rounded-xl border border-slate-200/80 bg-white shadow-xs',
         className,
       )}
       {...props}
@@ -42,7 +42,7 @@ export function CardTitle({
   children: React.ReactNode
 }) {
   return (
-    <h3 className={cn('font-h4 text-[var(--color-text-primary)]', className)}>{children}</h3>
+    <h3 className={cn('text-sm font-semibold text-slate-900', className)}>{children}</h3>
   )
 }
 
@@ -54,7 +54,7 @@ export function CardDescription({
   children: React.ReactNode
 }) {
   return (
-    <p className={cn('font-body-sm text-[var(--color-text-muted)] mt-0.5', className)}>
+    <p className={cn('text-xs text-slate-500 mt-0.5', className)}>
       {children}
     </p>
   )
@@ -80,7 +80,7 @@ export function CardFooter({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 border-t border-[var(--color-border)] px-5 py-3',
+        'flex items-center gap-2 border-t border-slate-100 px-5 py-3',
         className,
       )}
     >
@@ -120,39 +120,39 @@ export function KpiCard({
   const trendPositive = trend?.positive ?? trend?.direction === 'up'
   const trendColor =
     trend?.direction === 'flat'
-      ? 'text-[var(--color-text-muted)]'
+      ? 'text-slate-400'
       : trendPositive
-        ? 'text-[var(--color-success)]'
-        : 'text-[var(--color-error)]'
+        ? 'text-emerald-600'
+        : 'text-rose-600'
 
   return (
-    <Card className={cn('p-5', className)}>
+    <Card className={cn('p-4.5 hover:border-slate-300 transition-all', className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <div className="font-body-sm font-medium text-[var(--color-text-muted)]">{title}</div>
-          <div className="mt-2 font-h1 tabular-nums text-[var(--color-text-primary)] tracking-tight">
+          <div className="text-xs font-medium text-slate-500">{title}</div>
+          <div className="mt-2 font-mono text-2xl font-bold tracking-tight text-slate-900 tabular-nums">
             {value}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             {trend && (
-              <span className={cn('inline-flex items-center gap-0.5 font-caption font-medium', trendColor)}>
+              <span className={cn('inline-flex items-center gap-0.5 text-xs font-medium', trendColor)}>
                 <TrendIcon className="size-3.5" aria-hidden />
                 {trend.value}
               </span>
             )}
             {supporting && (
-              <span className="font-caption text-[var(--color-text-muted)]">{supporting}</span>
+              <span className="text-xs text-slate-400">{supporting}</span>
             )}
             {status}
           </div>
         </div>
         {Icon && (
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-primary-subtle)] text-[var(--color-primary)]">
-            <Icon className="size-5" aria-hidden />
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+            <Icon className="size-4.5" aria-hidden />
           </div>
         )}
       </div>
-      {action && <div className="mt-4">{action}</div>}
+      {action && <div className="mt-3.5">{action}</div>}
     </Card>
   )
 }
@@ -169,13 +169,13 @@ export function MetricCard({
   className?: string
 }) {
   return (
-    <Card className={cn('p-4', className)}>
-      <div className="font-caption font-medium text-[var(--color-text-muted)] uppercase tracking-wide">
+    <Card className={cn('p-4.5 hover:border-slate-300 transition-all', className)}>
+      <div className="text-xs font-medium text-slate-500">
         {label}
       </div>
-      <div className="mt-1.5 font-h3 text-[var(--color-text-primary)]">{value}</div>
+      <div className="mt-1.5 font-mono text-2xl font-bold tracking-tight text-slate-900">{value}</div>
       {description && (
-        <div className="mt-1 font-caption text-[var(--color-text-muted)]">{description}</div>
+        <div className="mt-1 text-xs text-slate-400">{description}</div>
       )}
     </Card>
   )

@@ -1,0 +1,12 @@
+export * from './risk-matrix-data'
+export { RiskMatrixWorkspace } from './RiskMatrixWorkspace'
+export { RiskMatrixHeader } from './components/RiskMatrixHeader'
+export { MatrixSummaryMetrics } from './components/MatrixSummaryMetrics'
+export { MatrixFilterToolbar } from './components/MatrixFilterToolbar'
+export { HeatmapGrid5x5 } from './components/HeatmapGrid5x5'
+export { CellDetailsDrawer } from './components/CellDetailsDrawer'
+export { SeverityDistributionBar } from './components/SeverityDistributionBar'
+export { RiskMovementSummary } from './components/RiskMovementSummary'
+export { TopRisksTable } from './components/TopRisksTable'
+export default './RiskMatrixWorkspace'
+

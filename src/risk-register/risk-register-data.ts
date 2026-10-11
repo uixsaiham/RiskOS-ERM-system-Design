@@ -227,36 +227,36 @@ export const DEFAULT_SAVED_VIEWS: SavedViewConfig[] = [
 const CORE_HANDCRAFTED_RISKS: RiskRegisterItem[] = [
   {
     id: 'RSK-1042',
-    title: 'Cybersecurity Breach — Core Payment Ingress',
-    description: 'High-velocity automated credential stuffing and DDoS telemetry observed targeting primary API gateways.',
+    title: 'Cybersecurity Breach',
+    description:
+      'Unauthorized access to sensitive organizational systems could result in data exposure, operational disruption, financial loss, and reputational damage. Potential causes include phishing attacks, compromised credentials, insufficient access controls, and vulnerabilities in third-party systems.',
     category: 'Cybersecurity',
     department: 'IT',
     owner: 'James Wilson',
-    ownerRole: 'Head of IT & Infrastructure',
+    ownerRole: 'Head of IT',
     ownerEmail: 'j.wilson@riskos.example',
-    inherentScore: 25,
+    inherentScore: 22,
     inherentSeverity: 'critical',
     inherentLikelihood: 5,
     inherentImpact: 5,
-    residualScore: 22,
-    residualSeverity: 'critical',
+    residualScore: 16,
+    residualSeverity: 'high',
     residualLikelihood: 4,
-    residualImpact: 5,
+    residualImpact: 4,
     trend: 'increasing',
-    trendDeltaText: 'Risk score escalated from 18 → 22 over past 30 days due to gateway attack surge.',
+    trendDeltaText: 'Exposure has increased over the last 30 days.',
     appetiteStatus: 'breached',
-    appetiteThreshold: 'Tolerance Cap: $1.2M (Score ≤ 15)',
+    appetiteThreshold: 'Approved Threshold: 12/25 (+4 variance)',
     status: 'mitigating',
-    nextReviewDate: 'Oct 02, 2026',
-    isReviewOverdue: true,
-    daysOverdue: 6,
-    lastUpdated: '2 hours ago',
-    createdDate: 'Mar 14, 2026',
+    nextReviewDate: 'Nov 18, 2026',
+    isReviewOverdue: false,
+    lastUpdated: 'Oct 11, 2026',
+    createdDate: 'Aug 12, 2026',
     controlEffectiveness: 'partially_effective',
-    linkedControlsCount: 8,
-    mitigationActionTitle: 'Implement phishing-resistant authentication & rate limiting',
-    mitigationDaysRemaining: 0,
-    tags: ['Ingress', 'DDoS', 'PCI-DSS', 'Escalated'],
+    linkedControlsCount: 3,
+    mitigationActionTitle: 'Implement Phishing-Resistant Authentication',
+    mitigationDaysRemaining: 9,
+    tags: ['Cybersecurity', 'AccessControl', 'Phishing', 'ZeroTrust'],
   },
   {
     id: 'RSK-1104',
@@ -671,12 +671,31 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
   let statusIdx = 0
   let overdueIdx = 0
 
-  // 1. Add remaining 6 Critical risks
+  // Coordinate distributions across 5x5 matrix
+  const critCoords: [number, number][] = [
+    [5, 5], [5, 4], [4, 5], [5, 4], [4, 5], [4, 4],
+  ]
+  const highCoords: [number, number][] = [
+    [5, 3], [3, 5], [4, 3], [3, 4], [5, 2], [2, 5],
+  ]
+  const modCoords: [number, number][] = [
+    [3, 3], [4, 2], [2, 4], [3, 2], [2, 3], [5, 1], [1, 5],
+  ]
+  const lowCoords: [number, number][] = [
+    [2, 2], [4, 1], [1, 4], [3, 1], [1, 3], [2, 1], [1, 2], [1, 1],
+  ]
+
+  // 1. Add remaining 6 Critical risks (Total critical = 12)
   for (let i = 0; i < 6; i++) {
     const t = titlesPool[i % titlesPool.length]
     const owner = RISK_OWNERS[i % RISK_OWNERS.length]
     const isOverdue = overdueQueue[overdueIdx++]
-    const score = 17 + (i % 6) // 17 to 22
+    const [resL, resI] = critCoords[i % critCoords.length]
+    const score = resL * resI
+    const inhL = 5
+    const inhI = 5
+    const inhScore = inhL * inhI
+
     result.push({
       id: `RSK-${nextId++}`,
       title: `${t.title} [Escalation ${i + 1}]`,
@@ -686,17 +705,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
       owner: owner.name,
       ownerRole: owner.role,
       ownerEmail: owner.email,
-      inherentScore: Math.min(25, score + 4),
+      inherentScore: inhScore,
       inherentSeverity: 'critical',
-      inherentLikelihood: 5,
-      inherentImpact: 4,
+      inherentLikelihood: inhL,
+      inherentImpact: inhI,
       residualScore: score,
       residualSeverity: 'critical',
-      residualLikelihood: 4,
-      residualImpact: 4,
+      residualLikelihood: resL,
+      residualImpact: resI,
       trend: i % 2 === 0 ? 'increasing' : 'stable',
       appetiteStatus: 'breached',
-      appetiteThreshold: 'Tolerance Cap: Score ≤ 14',
+      appetiteThreshold: 'Approved Threshold: 12/25',
       status: statusQueue[statusIdx++],
       nextReviewDate: isOverdue ? 'Sep 22, 2026' : 'Nov 14, 2026',
       isReviewOverdue: isOverdue,
@@ -709,12 +728,18 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
     })
   }
 
-  // 2. Add remaining 32 High risks
+  // 2. Add remaining 32 High risks (Total high = 38)
+  // Target 15 of these 32 to be 'breached' so total breached across register = 6 (core) + 6 (crit) + 15 (high) = 27!
   for (let i = 0; i < 32; i++) {
     const t = titlesPool[(i + 3) % titlesPool.length]
     const owner = RISK_OWNERS[(i + 2) % RISK_OWNERS.length]
     const isOverdue = overdueQueue[overdueIdx++]
-    const score = 10 + (i % 7) // 10 to 16
+    const [resL, resI] = highCoords[i % highCoords.length]
+    const score = resL * resI
+    const inhL = Math.min(5, resL + 1)
+    const inhI = Math.min(5, resI + 1)
+    const inhScore = inhL * inhI
+
     result.push({
       id: `RSK-${nextId++}`,
       title: `${t.title} (Portfolio Item ${i + 1})`,
@@ -724,17 +749,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
       owner: owner.name,
       ownerRole: owner.role,
       ownerEmail: owner.email,
-      inherentScore: Math.min(24, score + 4),
-      inherentSeverity: score + 4 >= 17 ? 'critical' : 'high',
-      inherentLikelihood: 4,
-      inherentImpact: 4,
+      inherentScore: inhScore,
+      inherentSeverity: inhScore >= 16 ? 'critical' : 'high',
+      inherentLikelihood: inhL,
+      inherentImpact: inhI,
       residualScore: score,
       residualSeverity: 'high',
-      residualLikelihood: 3,
-      residualImpact: 4,
+      residualLikelihood: resL,
+      residualImpact: resI,
       trend: i % 3 === 0 ? 'increasing' : i % 3 === 1 ? 'stable' : 'decreasing',
-      appetiteStatus: i % 5 === 0 ? 'near_threshold' : 'within',
-      appetiteThreshold: 'Tolerance Cap: Score ≤ 14',
+      appetiteStatus: i < 15 ? 'breached' : i % 3 === 0 ? 'near_threshold' : 'within',
+      appetiteThreshold: 'Approved Threshold: 12/25',
       status: statusQueue[statusIdx++],
       nextReviewDate: isOverdue ? 'Sep 29, 2026' : 'Nov 24, 2026',
       isReviewOverdue: isOverdue,
@@ -747,12 +772,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
     })
   }
 
-  // 3. Add 84 Moderate risks
+  // 3. Add 84 Moderate risks (Total moderate = 84)
   for (let i = 0; i < 84; i++) {
     const t = titlesPool[(i + 5) % titlesPool.length]
     const owner = RISK_OWNERS[(i + 3) % RISK_OWNERS.length]
     const isOverdue = overdueQueue[overdueIdx++]
-    const score = 5 + (i % 5) // 5 to 9
+    const [resL, resI] = modCoords[i % modCoords.length]
+    const score = resL * resI
+    const inhL = Math.min(5, resL + 1)
+    const inhI = Math.min(5, resI + 1)
+    const inhScore = inhL * inhI
+
     result.push({
       id: `RSK-${nextId++}`,
       title: `${t.title} - Operational Track ${i + 1}`,
@@ -762,17 +792,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
       owner: owner.name,
       ownerRole: owner.role,
       ownerEmail: owner.email,
-      inherentScore: score + 4,
-      inherentSeverity: score + 4 >= 10 ? 'high' : 'moderate',
-      inherentLikelihood: 3,
-      inherentImpact: 3,
+      inherentScore: inhScore,
+      inherentSeverity: inhScore >= 16 ? 'critical' : inhScore >= 10 ? 'high' : 'moderate',
+      inherentLikelihood: inhL,
+      inherentImpact: inhI,
       residualScore: score,
       residualSeverity: 'moderate',
-      residualLikelihood: 2,
-      residualImpact: 3,
+      residualLikelihood: resL,
+      residualImpact: resI,
       trend: i % 4 === 0 ? 'increasing' : i % 4 === 1 ? 'decreasing' : 'stable',
       appetiteStatus: 'within',
-      appetiteThreshold: 'Tolerance Cap: Score ≤ 12',
+      appetiteThreshold: 'Approved Threshold: 12/25',
       status: statusQueue[statusIdx++],
       nextReviewDate: isOverdue ? 'Sep 25, 2026' : 'Dec 05, 2026',
       isReviewOverdue: isOverdue,
@@ -785,12 +815,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
     })
   }
 
-  // 4. Add 114 Low risks
+  // 4. Add 114 Low risks (Total low = 114)
   for (let i = 0; i < 114; i++) {
     const t = titlesPool[(i + 7) % titlesPool.length]
     const owner = RISK_OWNERS[(i + 4) % RISK_OWNERS.length]
     const isOverdue = overdueQueue[overdueIdx++]
-    const score = 1 + (i % 4) // 1 to 4
+    const [resL, resI] = lowCoords[i % lowCoords.length]
+    const score = resL * resI
+    const inhL = Math.min(4, resL + 1)
+    const inhI = Math.min(4, resI + 1)
+    const inhScore = inhL * inhI
+
     result.push({
       id: `RSK-${nextId++}`,
       title: `${t.title} [Low Review ${i + 1}]`,
@@ -800,17 +835,17 @@ function generateEnterpriseRegister(): RiskRegisterItem[] {
       owner: owner.name,
       ownerRole: owner.role,
       ownerEmail: owner.email,
-      inherentScore: score + 3,
-      inherentSeverity: score + 3 >= 5 ? 'moderate' : 'low',
-      inherentLikelihood: 2,
-      inherentImpact: 2,
+      inherentScore: inhScore,
+      inherentSeverity: inhScore >= 10 ? 'high' : inhScore >= 5 ? 'moderate' : 'low',
+      inherentLikelihood: inhL,
+      inherentImpact: inhI,
       residualScore: score,
       residualSeverity: 'low',
-      residualLikelihood: 1,
-      residualImpact: score > 2 ? 2 : 1,
+      residualLikelihood: resL,
+      residualImpact: resI,
       trend: 'stable',
       appetiteStatus: 'within',
-      appetiteThreshold: 'Tolerance Cap: Score ≤ 8',
+      appetiteThreshold: 'Approved Threshold: 12/25',
       status: statusQueue[statusIdx++],
       nextReviewDate: isOverdue ? 'Sep 18, 2026' : 'Dec 20, 2026',
       isReviewOverdue: isOverdue,

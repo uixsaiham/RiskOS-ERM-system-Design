@@ -126,14 +126,13 @@ export const navSections: NavSectionConfig[] = [
     items: [
       {
         id: 'controls',
-        label: 'Control library',
+        label: 'Controls',
         icon: Shield,
         description: 'Design, operating effectiveness, and owners',
         children: [
-          { id: 'controls-all', label: 'All controls' },
-          { id: 'controls-testing', label: 'Testing schedule' },
-          { id: 'controls-deficiencies', label: 'Deficiencies', badge: 12 },
-          { id: 'controls-mapping', label: 'Risk ↔ control map' },
+          { id: 'controls-library', label: 'Control Library' },
+          { id: 'controls-assessments', label: 'Control Assessments' },
+          { id: 'controls-testing', label: 'Control Testing' },
         ],
       },
       {
@@ -316,6 +315,29 @@ export function getBreadcrumbs(id: string): { id: string; label: string }[] {
     return [
       { id: 'dashboard', label: 'Dashboard' },
       { id: 'dashboard-executive', label: 'Executive Overview' },
+    ]
+  }
+
+  if (id.startsWith('risk-')) {
+    const riskCode = id.replace('risk-', '')
+    return [
+      { id: 'risk', label: 'Risk Management' },
+      { id: 'risks', label: 'Risk Register' },
+      { id, label: riskCode },
+    ]
+  }
+
+  if (id === 'controls' || id === 'controls-library' || id === 'controls-all') {
+    return [
+      { id: 'control', label: 'Controls' },
+      { id: 'controls-library', label: 'Control Library' },
+    ]
+  }
+
+  if (id === 'risks-heat-map' || id === 'matrix' || id === 'heatmap') {
+    return [
+      { id: 'risk', label: 'Risk Management' },
+      { id: 'risks-heat-map', label: 'Risk Matrix' },
     ]
   }
 

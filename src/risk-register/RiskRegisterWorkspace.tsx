@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
   Pagination,
   Button,
@@ -68,9 +68,10 @@ export function RiskRegisterWorkspace({
 
   // Resolve initial view configuration from routeId if applicable
   const initialViewConfig = useMemo(() => {
-    if (routeId === 'risks-emerging') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'emerging')
-    if (routeId === 'risks-by-owner') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'my-risks')
-    if (routeId === 'risks-heat-map') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'high-exposure')
+    if (routeId === 'risks-emerging') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'emerging-risks' || v.id === 'emerging')
+    if (routeId === 'risks-by-owner' || routeId === 'risks-owner') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'my-risks')
+    if (routeId === 'risks-by-category' || routeId === 'risks-category') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'all')
+    if (routeId === 'risks-heat-map' || routeId === 'risks-heatmap') return DEFAULT_SAVED_VIEWS.find((v) => v.id === 'high-exposure')
     return undefined
   }, [routeId])
 
@@ -85,7 +86,7 @@ export function RiskRegisterWorkspace({
     () => initialViewConfig?.filters.status?.[0] ?? null,
   )
   const [selectedCategory, setSelectedCategory] = useState<RiskCategoryName | null>(
-    () => initialFilter?.category ?? initialViewConfig?.filters.category?.[0] ?? null,
+    () => initialFilter?.category ?? (routeId === 'risks-by-category' || routeId === 'risks-category' ? 'Cybersecurity' : initialViewConfig?.filters.category?.[0] ?? null),
   )
   const [selectedDepartment, setSelectedDepartment] = useState<DepartmentName | null>(
     () => initialViewConfig?.filters.department?.[0] ?? null,
@@ -101,6 +102,31 @@ export function RiskRegisterWorkspace({
   // Saved views state
   const [activeViewId, setActiveViewId] = useState<string>(() => initialViewConfig?.id ?? 'all')
   const [customViews, setCustomViews] = useState<SavedViewConfig[]>([])
+
+  // Dynamic reaction when routeId changes while remaining on register workspace
+  useEffect(() => {
+    if (routeId === 'risks-emerging') {
+      const v = DEFAULT_SAVED_VIEWS.find((x) => x.id === 'emerging-risks' || x.id === 'emerging')
+      if (v) setActiveViewId(v.id)
+      setSelectedCategory(null)
+      setSelectedSeverity(null)
+    } else if (routeId === 'risks-by-owner' || routeId === 'risks-owner') {
+      const v = DEFAULT_SAVED_VIEWS.find((x) => x.id === 'my-risks')
+      if (v) setActiveViewId(v.id)
+    } else if (routeId === 'risks-by-category' || routeId === 'risks-category') {
+      setSelectedCategory('Cybersecurity')
+      setActiveViewId('all')
+    } else if (routeId === 'risks-all') {
+      setActiveViewId('all')
+      setSelectedCategory(null)
+      setSelectedSeverity(null)
+      setSelectedStatus(null)
+      setSelectedDepartment(null)
+      setSelectedAppetite(null)
+      setIsOverdueOnly(false)
+      setSearchQuery('')
+    }
+  }, [routeId])
 
   // Layout & Density states
   const [tableDensity, setTableDensity] = useState<'comfortable' | 'compact'>('compact')
@@ -613,6 +639,7 @@ export function RiskRegisterWorkspace({
               sortDirection={sortDirection}
               onSort={handleSort}
               onInspectRisk={handleInspectRisk}
+              onOpenFullRisk={(r) => onNavigate?.(`risk-${r.id}`)}
               density={tableDensity}
               visibility={columnVisibility}
               userRole={userRole}

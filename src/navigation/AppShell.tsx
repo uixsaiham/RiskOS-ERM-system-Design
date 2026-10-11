@@ -12,10 +12,8 @@ import {
 } from 'lucide-react'
 import {
   Avatar,
-  Badge,
   Breadcrumb,
   Button,
-  EmptyState,
   GlobalSearch,
   NavItemButton,
   NavSection,
@@ -24,11 +22,24 @@ import {
 import { cn } from '@/lib/utils'
 import { ExecutiveDashboard } from '@/dashboard'
 import { RiskRegisterWorkspace } from '@/risk-register'
+import { RiskDetailsWorkspace } from '@/risk-details'
+import { RiskAssessmentWorkspace } from '@/risk-assessment'
+import { RiskMatrixWorkspace } from '@/risk-matrix'
+import { ControlLibraryWorkspace } from '@/controls'
+import { OperationalDashboard } from '@/modules/operational-dashboard/OperationalDashboard'
+import { MyWorkWorkspace } from '@/modules/my-work/MyWorkWorkspace'
+import { AssessmentsWorkspace } from '@/modules/assessments/AssessmentsWorkspace'
+import { ScenariosKriWorkspace } from '@/modules/scenarios-kris/ScenariosKriWorkspace'
+import { ControlOpsWorkspace } from '@/modules/controls-ops/ControlOpsWorkspace'
+import { FrameworksPoliciesWorkspace } from '@/modules/frameworks-policies/FrameworksPoliciesWorkspace'
+import { ActionsIncidentsWorkspace } from '@/modules/actions-incidents/ActionsIncidentsWorkspace'
+import { AuditsWorkspace } from '@/modules/audits/AuditsWorkspace'
+import { ReportsAnalyticsWorkspace } from '@/modules/reports-analytics/ReportsAnalyticsWorkspace'
+import { OrgAdminWorkspace } from '@/modules/organization-admin/OrgAdminWorkspace'
 import {
   currentUser,
   getBreadcrumbs,
   getExpandedParentId,
-  getNavNode,
   headerMeta,
   isNavItemActive,
   navSections,
@@ -66,9 +77,11 @@ function RiskOsLogo({ collapsed }: { collapsed?: boolean }) {
 function UserMenu({
   collapsed,
   onCollapseToggle,
+  onNavigate,
 }: {
   collapsed?: boolean
   onCollapseToggle?: () => void
+  onNavigate?: (id: string) => void
 }) {
   const [open, setOpen] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
@@ -150,8 +163,13 @@ function UserMenu({
                 key={item.id}
                 type="button"
                 role="menuitem"
-                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-[12px] text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
-                onClick={() => setOpen(false)}
+                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-[12px] text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
+                onClick={() => {
+                  setOpen(false)
+                  if (item.id === 'profile') onNavigate?.('people')
+                  else if (item.id === 'settings') onNavigate?.('settings-general')
+                  else if (item.id === 'sign-out') onNavigate?.('dashboard')
+                }}
               >
                 <item.icon className="size-3.5 opacity-70" aria-hidden />
                 {item.label}
@@ -181,62 +199,6 @@ function UserMenu({
   )
 }
 
-function PagePlaceholder({ activeId }: { activeId: string }) {
-  const node = getNavNode(activeId)
-  const Icon = node?.icon
-
-  return (
-    <div className="mx-auto max-w-[var(--layout-content-max,1440px)] space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            {Icon && (
-              <span className="flex size-9 items-center justify-center rounded-md bg-[var(--color-primary-subtle)] text-[var(--color-primary)]">
-                <Icon className="size-5" aria-hidden />
-              </span>
-            )}
-            <h1 className="font-h1 text-[var(--color-text-primary)]">
-              {node?.label ?? 'Page'}
-            </h1>
-          </div>
-          {node?.description && (
-            <p className="max-w-2xl font-body-md text-[var(--color-text-secondary)]">
-              {node.description}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="secondary" size="sm">
-            Export
-          </Button>
-          <Button variant="primary" size="sm">
-            New
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        {['Open items', 'Attention required', 'Last updated'].map((label) => (
-          <div
-            key={label}
-            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-xs)]"
-          >
-            <p className="font-caption text-[var(--color-text-muted)]">{label}</p>
-            <p className="mt-1 font-h3 tabular-nums text-[var(--color-text-primary)]">—</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="rounded-lg border border-dashed border-[var(--color-border)] bg-[var(--color-surface)]">
-        <EmptyState
-          icon={Icon}
-          title={`${node?.label ?? 'Module'} workspace`}
-          description="Step 02 delivers IA and shell chrome. Domain screens (registers, assessments, board packs) land in later steps on this route map."
-        />
-      </div>
-    </div>
-  )
-}
 
 export function AppShell({
   initialRoute = 'dashboard',
@@ -250,12 +212,21 @@ export function AppShell({
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false)
   const [activeId, setActiveId] = React.useState(initialRoute)
   const [expanded, setExpanded] = React.useState<Record<string, boolean>>(() => {
-    const parent = getExpandedParentId(initialRoute)
     const seed: Record<string, boolean> = {
       dashboard: true,
-      risks: true,
       'my-work': true,
+      risks: true,
+      assessments: true,
+      scenarios: true,
+      controls: true,
+      frameworks: true,
+      actions: true,
+      audits: true,
+      reports: true,
+      organization: true,
+      settings: true,
     }
+    const parent = getExpandedParentId(initialRoute)
     if (parent) seed[parent] = true
     return seed
   })
@@ -292,7 +263,7 @@ export function AppShell({
       collapsed={isCollapsed}
       onCollapsedChange={setCollapsed}
       logo={<RiskOsLogo collapsed={isCollapsed} />}
-      footer={<UserMenu collapsed={isCollapsed} onCollapseToggle={() => setCollapsed(!isCollapsed)} />}
+      footer={<UserMenu collapsed={isCollapsed} onCollapseToggle={() => setCollapsed(!isCollapsed)} onNavigate={navigate} />}
       className="h-full"
     >
       {navSections.map((section) => (
@@ -375,51 +346,97 @@ export function AppShell({
           </div>
 
           <div className="mx-auto hidden w-full max-w-md flex-1 lg:block">
-            <GlobalSearch />
+            <GlobalSearch onSelect={navigate} />
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            <Badge variant="neutral" className="hidden sm:inline-flex">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
               {headerMeta.environment}
-            </Badge>
+            </span>
             {onOpenShowcase && (
-              <Button variant="ghost" size="sm" onClick={onOpenShowcase} className="hidden lg:inline-flex">
+              <button
+                type="button"
+                onClick={onOpenShowcase}
+                className="hidden lg:inline-flex text-xs font-medium text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              >
                 Design system
-              </Button>
+              </button>
             )}
-            <Button variant="ghost" size="sm" aria-label="Notifications" className="relative">
-              <Bell className="size-5" />
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="relative p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <Bell className="size-4.5" />
               {headerMeta.notifications > 0 && (
-                <span className="absolute right-1 top-1 flex size-4 items-center justify-center rounded-full bg-[var(--color-error)] text-[10px] font-semibold text-white">
+                <span className="absolute right-1.5 top-1.5 flex size-3.5 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white">
                   {headerMeta.notifications}
                 </span>
               )}
-            </Button>
+            </button>
             <div className="hidden sm:block md:hidden">
               <Avatar name={currentUser.name} size="sm" />
             </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 max-w-[1600px] w-full mx-auto">
           <div className="mb-4 sm:hidden">
             <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
           </div>
           {activeId === 'dashboard' || activeId === 'dashboard-executive' ? (
             <ExecutiveDashboard onNavigate={navigate} />
+          ) : activeId === 'dashboard-operations' || activeId === 'dashboard-operational' ? (
+            <OperationalDashboard onNavigate={navigate} />
+          ) : activeId === 'my-work' || activeId.startsWith('my-work-') ? (
+            <MyWorkWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId === 'risks-heat-map' || activeId === 'risks-heatmap' || activeId === 'matrix' || activeId === 'heatmap' ? (
+            <RiskMatrixWorkspace
+              key={activeId}
+              onNavigate={navigate}
+            />
+          ) : activeId.startsWith('assess-') || (activeId.startsWith('assessment-') && activeId !== 'assessments') ? (
+            <RiskAssessmentWorkspace
+              key={activeId}
+              riskId={activeId.startsWith('assess-') ? activeId.replace('assess-', '') : activeId.replace('assessment-', '')}
+              onNavigate={navigate}
+            />
+          ) : activeId === 'assessments' || activeId.startsWith('assessments-') ? (
+            <AssessmentsWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId === 'scenarios' || activeId.startsWith('scenarios-') ? (
+            <ScenariosKriWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId === 'controls-assessments' || activeId === 'controls-testing' || activeId === 'controls-deficiencies' ? (
+            <ControlOpsWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId === 'controls' || activeId === 'controls-library' || activeId === 'controls-all' ? (
+            <ControlLibraryWorkspace
+              key={activeId}
+              onNavigate={navigate}
+            />
+          ) : activeId.startsWith('framework') || activeId === 'policies' ? (
+            <FrameworksPoliciesWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId.startsWith('action') || activeId === 'incidents' || activeId === 'issues' ? (
+            <ActionsIncidentsWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId.startsWith('audit') ? (
+            <AuditsWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId.startsWith('report') || activeId === 'analytics' || activeId === 'workflow' ? (
+            <ReportsAnalyticsWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId.startsWith('org') || activeId === 'people' || activeId === 'integrations' || activeId.startsWith('setting') || activeId === 'profile' ? (
+            <OrgAdminWorkspace routeId={activeId} onNavigate={navigate} />
+          ) : activeId.startsWith('risk-') && activeId !== 'risks-all' && !activeId.startsWith('risks-') ? (
+            <RiskDetailsWorkspace
+              key={activeId}
+              riskId={activeId.replace('risk-', '')}
+              onNavigate={navigate}
+            />
           ) : activeId.startsWith('risk') ? (
             <RiskRegisterWorkspace
               key={activeId}
               onNavigate={navigate}
               routeId={activeId}
-              initialFilter={
-                activeId.startsWith('risk-')
-                  ? { search: activeId.replace('risk-', '') }
-                  : undefined
-              }
             />
           ) : (
-            <PagePlaceholder activeId={activeId} />
+            <ExecutiveDashboard onNavigate={navigate} />
           )}
         </main>
       </div>

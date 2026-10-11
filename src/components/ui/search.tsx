@@ -27,12 +27,14 @@ export interface SearchCommandProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   placeholder?: string
+  onSelect?: (routeId: string) => void
 }
 
 export function SearchCommand({
   open,
   onOpenChange,
   placeholder = 'Search risks, controls, actions…',
+  onSelect,
 }: SearchCommandProps) {
   const [query, setQuery] = React.useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -168,8 +170,13 @@ export function SearchCommand({
                       <button
                         key={item.id}
                         type="button"
-                        className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left hover:bg-[var(--color-surface-secondary)]"
-                        onClick={handleClose}
+                        className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left hover:bg-[var(--color-surface-secondary)] cursor-pointer"
+                        onClick={() => {
+                          handleClose()
+                          if (item.category === 'Risks') onSelect?.('risk-RSK-1042')
+                          else if (item.category === 'Controls') onSelect?.('controls')
+                          else if (item.category === 'Users') onSelect?.('people')
+                        }}
                       >
                         <Icon className="size-4 text-[var(--color-text-muted)]" />
                         <div className="min-w-0 flex-1">
@@ -204,9 +211,11 @@ export function SearchCommand({
 export function GlobalSearch({
   className,
   placeholder = 'Search risks, controls, actions…',
+  onSelect,
 }: {
   className?: string
   placeholder?: string
+  onSelect?: (routeId: string) => void
 }) {
   const [open, setOpen] = React.useState(false)
 
@@ -227,22 +236,22 @@ export function GlobalSearch({
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          'inline-flex h-9 w-full max-w-md items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-left shadow-[var(--shadow-xs)] transition-colors',
-          'hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)]',
-          'focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)]',
+          'inline-flex h-8.5 w-full max-w-md items-center gap-2 rounded-lg border border-slate-200/90 bg-slate-50/80 px-3 text-left shadow-2xs transition-all',
+          'hover:border-slate-300 hover:bg-white cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20',
           className,
         )}
       >
-        <SearchIcon className="size-4 text-[var(--color-text-muted)]" aria-hidden />
-        <span className="flex-1 truncate font-body-md text-[var(--color-text-muted)]">
+        <SearchIcon className="size-3.5 text-slate-400" aria-hidden />
+        <span className="flex-1 truncate text-xs text-slate-400 font-normal">
           {placeholder}
         </span>
-        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-[var(--color-border)] bg-[var(--color-surface-secondary)] px-1.5 py-0.5 font-caption text-[var(--color-text-muted)]">
+        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-mono text-slate-400 font-medium shadow-2xs">
           ⌘K
         </kbd>
       </button>
 
-      <SearchCommand open={open} onOpenChange={setOpen} placeholder={placeholder} />
+      <SearchCommand open={open} onOpenChange={setOpen} placeholder={placeholder} onSelect={onSelect} />
     </>
   )
 }

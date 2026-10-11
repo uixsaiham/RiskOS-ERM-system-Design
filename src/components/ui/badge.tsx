@@ -2,27 +2,28 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-caption font-medium whitespace-nowrap border',
+  'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium whitespace-nowrap border',
   {
     variants: {
       variant: {
         neutral:
-          'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border)]',
+          'bg-slate-100 text-slate-700 border-slate-200/80',
         primary:
-          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] border-[var(--color-primary-muted)]',
+          'bg-blue-50 text-blue-700 border-blue-200/80',
         success:
-          'bg-[var(--color-success-subtle)] text-[var(--color-success)] border-[var(--color-success-border)]',
+          'bg-emerald-50 text-emerald-700 border-emerald-200/80',
         warning:
-          'bg-[var(--color-warning-subtle)] text-[var(--color-warning)] border-[var(--color-warning-border)]',
+          'bg-amber-50 text-amber-700 border-amber-200/80',
         error:
-          'bg-[var(--color-error-subtle)] text-[var(--color-error)] border-[var(--color-error-border)]',
-        info: 'bg-[var(--color-info-subtle)] text-[var(--color-info)] border-[var(--color-info-border)]',
+          'bg-rose-50 text-rose-700 border-rose-200/80',
+        info:
+          'bg-sky-50 text-sky-700 border-sky-200/80',
         outline:
-          'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-strong)]',
+          'bg-transparent text-slate-600 border-slate-200',
       },
       size: {
         sm: 'px-1.5 py-0 text-[11px]',
-        md: 'px-2 py-0.5',
+        md: 'px-2 py-0.5 text-xs',
       },
     },
     defaultVariants: {

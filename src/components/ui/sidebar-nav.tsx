@@ -46,17 +46,15 @@ export function SidebarNavItem({
     <button
       type="button"
       onClick={() => {
-        onSelect?.(item.id)
         if (hasChildren && !collapsed) {
-          if (!expanded) {
-            onToggle?.()
-          } else if (isExactParentActive) {
+          if (!expanded || isExactParentActive) {
             onToggle?.()
           }
         }
+        onSelect?.(item.id)
       }}
       className={cn(
-        'group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 font-body-sm font-medium transition-all duration-150 select-none',
+        'group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 font-body-sm font-medium transition-all duration-150 select-none cursor-pointer',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40',
         collapsed ? 'h-10 w-10 justify-center p-0 mx-auto' : 'h-9 py-1.5',
         isExactParentActive
@@ -109,13 +107,30 @@ export function SidebarNavItem({
           )}
 
           {hasChildren && (
-            <ChevronDown
-              className={cn(
-                'size-3.5 shrink-0 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
-                expanded && 'rotate-180 text-slate-600',
-              )}
-              aria-hidden
-            />
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggle?.()
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.stopPropagation()
+                  onToggle?.()
+                }
+              }}
+              className="p-1 -mr-1 rounded hover:bg-slate-200/70 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              title={expanded ? 'Collapse' : 'Expand'}
+            >
+              <ChevronDown
+                className={cn(
+                  'size-3.5 shrink-0 transition-transform duration-200',
+                  expanded && 'rotate-180 text-slate-600',
+                )}
+                aria-hidden
+              />
+            </span>
           )}
         </>
       )}

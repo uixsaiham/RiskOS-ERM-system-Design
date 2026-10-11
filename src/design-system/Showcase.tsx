@@ -369,7 +369,7 @@ export function DesignSystemShowcase() {
         </nav>
         <div className="border-t border-[var(--color-border)] p-3">
           <p className="font-caption text-[var(--color-text-muted)]">
-            Done: Step 03 dashboard · Next: Step 04 register
+            Done: Step 04 register · Live: Step 05 risk details workspace
           </p>
         </div>
       </aside>
@@ -1673,13 +1673,17 @@ export function DesignSystemShowcase() {
               <li className="font-medium text-[var(--color-text-primary)]">
                 Step 03 — Executive risk dashboard ✅
               </li>
-              <li>Step 04 — Risk register</li>
-              <li>Step 05 — Risk details</li>
+              <li className="font-medium text-[var(--color-text-primary)]">
+                Step 04 — Risk register ✅
+              </li>
+              <li className="font-medium text-[var(--color-text-primary)]">
+                Step 05 — Risk details workspace ✅
+              </li>
               <li>Step 06 — Risk assessment</li>
               <li>Step 07 — Risk matrix / heatmap</li>
             </ol>
             <p className="mt-3 font-caption text-[var(--color-text-muted)]">
-              Executive risk dashboard is live in shell. Next prompt: Step 04 — Risk register.
+              Risk details workspace is live in shell (e.g. RSK-1042). Next step: Step 06 — Risk assessment.
             </p>
           </footer>
         </main>

@@ -1,6 +1,6 @@
-import { KpiCard, Badge } from '@/components/ui'
 import { REGISTER_SUMMARY_METRICS } from '../risk-register-data'
 import type { RiskSeverity } from '@/tokens'
+import { Shield, AlertTriangle, ShieldAlert, ShieldCheck, Clock } from 'lucide-react'
 
 interface ExecutiveSummaryStripProps {
   activeSeverityFilter: RiskSeverity | null
@@ -29,159 +29,168 @@ export function ExecutiveSummaryStrip({
   const isTotalActive = !activeSeverityFilter && !activeOverdueFilter
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
-      {/* Total Risks */}
-      <div
+    <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+      {/* 1. Total Risks */}
+      <button
+        type="button"
         onClick={onClearQuickFilters}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           isTotalActive
-            ? 'ring-2 ring-[var(--color-primary)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-blue-500/80 ring-1 ring-blue-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="Total Risks"
-          value={String(counts.total)}
-          trend={{ value: '+12', direction: 'up', positive: false }}
-          supporting="this quarter"
-          status={
-            <Badge variant={isTotalActive ? 'primary' : 'neutral'} size="sm" className="mt-1">
-              {isTotalActive ? 'Active View' : 'All Inventory'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            Total risks
+          </span>
+          <div className="size-6 rounded-md bg-slate-100 text-slate-600 flex items-center justify-center">
+            <Shield className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.total}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Active portfolio</span>
+          <span className="text-emerald-600 font-medium">+12 q/q</span>
+        </div>
+      </button>
 
-      {/* Critical */}
-      <div
+      {/* 2. Critical Risks */}
+      <button
+        type="button"
         onClick={() => onSelectSeverity(activeSeverityFilter === 'critical' ? null : 'critical')}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           activeSeverityFilter === 'critical'
-            ? 'ring-2 ring-[var(--color-risk-critical)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-rose-500/80 ring-1 ring-rose-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="Critical"
-          value={String(counts.critical)}
-          trend={{ value: '+3', direction: 'up', positive: false }}
-          supporting="new this month"
-          status={
-            <Badge
-              variant={activeSeverityFilter === 'critical' ? 'error' : 'neutral'}
-              size="sm"
-              className="mt-1"
-            >
-              {activeSeverityFilter === 'critical' ? 'Filtered' : 'Score 17–25'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            Critical
+          </span>
+          <div className="size-6 rounded-md bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+            <AlertTriangle className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.critical}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Score 17–25</span>
+          <span className="text-rose-600 font-medium">+3 new</span>
+        </div>
+      </button>
 
-      {/* High */}
-      <div
+      {/* 3. High Risks */}
+      <button
+        type="button"
         onClick={() => onSelectSeverity(activeSeverityFilter === 'high' ? null : 'high')}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           activeSeverityFilter === 'high'
-            ? 'ring-2 ring-[var(--color-risk-high)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-orange-500/80 ring-1 ring-orange-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="High"
-          value={String(counts.high)}
-          trend={{ value: '−5', direction: 'down', positive: true }}
-          supporting="vs last quarter"
-          status={
-            <Badge
-              variant={activeSeverityFilter === 'high' ? 'warning' : 'neutral'}
-              size="sm"
-              className="mt-1"
-            >
-              {activeSeverityFilter === 'high' ? 'Filtered' : 'Score 10–16'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            High
+          </span>
+          <div className="size-6 rounded-md bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-100">
+            <ShieldAlert className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.high}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Score 10–16</span>
+          <span className="text-emerald-600 font-medium">−5 q/q</span>
+        </div>
+      </button>
 
-      {/* Moderate */}
-      <div
+      {/* 4. Moderate Risks */}
+      <button
+        type="button"
         onClick={() => onSelectSeverity(activeSeverityFilter === 'moderate' ? null : 'moderate')}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           activeSeverityFilter === 'moderate'
-            ? 'ring-2 ring-[var(--color-risk-moderate)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-amber-500/80 ring-1 ring-amber-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="Moderate"
-          value={String(counts.moderate)}
-          trend={{ value: '34%', direction: 'flat', positive: true }}
-          supporting="of portfolio"
-          status={
-            <Badge
-              variant={activeSeverityFilter === 'moderate' ? 'info' : 'neutral'}
-              size="sm"
-              className="mt-1"
-            >
-              {activeSeverityFilter === 'moderate' ? 'Filtered' : 'Score 5–9'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            Moderate
+          </span>
+          <div className="size-6 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+            <Shield className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.moderate}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Score 5–9</span>
+          <span className="text-slate-500">Stable</span>
+        </div>
+      </button>
 
-      {/* Low */}
-      <div
+      {/* 5. Low Risks */}
+      <button
+        type="button"
         onClick={() => onSelectSeverity(activeSeverityFilter === 'low' ? null : 'low')}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           activeSeverityFilter === 'low'
-            ? 'ring-2 ring-[var(--color-risk-low)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-emerald-500/80 ring-1 ring-emerald-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="Low"
-          value={String(counts.low)}
-          trend={{ value: '46%', direction: 'flat', positive: true }}
-          supporting="controlled"
-          status={
-            <Badge
-              variant={activeSeverityFilter === 'low' ? 'success' : 'neutral'}
-              size="sm"
-              className="mt-1"
-            >
-              {activeSeverityFilter === 'low' ? 'Filtered' : 'Score 1–4'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            Low
+          </span>
+          <div className="size-6 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+            <ShieldCheck className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.low}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Score 1–4</span>
+          <span className="text-slate-500">Tolerable</span>
+        </div>
+      </button>
 
-      {/* Overdue Reviews */}
-      <div
+      {/* 6. Overdue Reviews */}
+      <button
+        type="button"
         onClick={onToggleOverdue}
-        className={`cursor-pointer transition-all rounded-lg ${
+        className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer bg-white group ${
           activeOverdueFilter
-            ? 'ring-2 ring-[var(--color-error)] ring-offset-1 shadow-xs'
-            : 'hover:-translate-y-0.5'
+            ? 'border-rose-500/80 ring-1 ring-rose-500/20 shadow-xs'
+            : 'border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-sm'
         }`}
       >
-        <KpiCard
-          title="Overdue Reviews"
-          value={String(counts.overdueReviews)}
-          trend={{ value: '6 critical', direction: 'up', positive: false }}
-          supporting="past SLA"
-          status={
-            <Badge
-              variant={activeOverdueFilter ? 'error' : 'neutral'}
-              size="sm"
-              className="mt-1"
-            >
-              {activeOverdueFilter ? 'Filtered' : 'Action Required'}
-            </Badge>
-          }
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">
+            Overdue reviews
+          </span>
+          <div className="size-6 rounded-md bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+            <Clock className="size-3" />
+          </div>
+        </div>
+        <div className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
+          {counts.overdueReviews}
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Action required</span>
+          <span className="text-rose-600 font-medium">Urgent</span>
+        </div>
+      </button>
     </div>
   )
 }
-

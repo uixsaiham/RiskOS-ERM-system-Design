@@ -4,26 +4,26 @@ import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-button transition-colors duration-150 focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer',
   {
     variants: {
       variant: {
         primary:
-          'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] shadow-[var(--shadow-xs)]',
+          'bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950 shadow-xs',
         secondary:
-          'bg-[var(--color-surface)] text-[var(--color-text-primary)] border border-[var(--color-border-strong)] hover:bg-[var(--color-surface-secondary)] active:bg-[var(--color-surface-tertiary)] shadow-[var(--shadow-xs)]',
+          'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 shadow-2xs',
         tertiary:
-          'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] hover:bg-[var(--color-primary-muted)] active:bg-[var(--color-primary-muted)]',
+          'bg-blue-50 text-blue-700 hover:bg-blue-100/70 border border-blue-200/60',
         destructive:
-          'bg-[var(--color-error)] text-[var(--color-error-foreground)] hover:bg-[var(--color-error-hover)] active:bg-[var(--color-error-hover)] shadow-[var(--shadow-xs)]',
+          'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 shadow-xs',
         ghost:
-          'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-secondary)] hover:text-[var(--color-text-primary)] active:bg-[var(--color-surface-tertiary)]',
-        link: 'bg-transparent text-[var(--color-text-link)] underline-offset-4 hover:underline p-0 h-auto',
+          'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200',
+        link: 'bg-transparent text-blue-600 underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
-        sm: 'h-8 px-3 text-[13px] [&_svg]:size-3.5',
-        md: 'h-9 px-3.5 [&_svg]:size-4',
-        lg: 'h-10 px-4 [&_svg]:size-4',
+        sm: 'h-8 px-3 text-xs [&_svg]:size-3.5',
+        md: 'h-9 px-3.5 text-xs [&_svg]:size-4',
+        lg: 'h-10 px-4 text-sm [&_svg]:size-4',
         icon: 'h-9 w-9 [&_svg]:size-4',
         'icon-sm': 'h-8 w-8 [&_svg]:size-3.5',
         'icon-lg': 'h-10 w-10 [&_svg]:size-5',

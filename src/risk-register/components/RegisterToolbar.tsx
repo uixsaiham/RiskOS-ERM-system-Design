@@ -67,24 +67,24 @@ export function RegisterToolbar({
   onViewModeChange,
 }: RegisterToolbarProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-2xs">
+    <div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-xs">
       {/* Top row: Search + Primary filters */}
       <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between">
         {/* Search input */}
         <div className="relative flex-1 min-w-[260px] max-w-md">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-[var(--color-text-muted)] pointer-events-none" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-slate-400 pointer-events-none" />
           <Input
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search risks by ID, name, owner, category..."
-            className="pl-8.5 pr-8 h-9 text-xs"
+            className="pl-8.5 pr-8 h-8.5 text-xs rounded-lg border-slate-200/90"
             aria-label="Search risks by ID, name, owner, category"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
               aria-label="Clear search query"
             >
               <X className="size-3.5" />
@@ -101,7 +101,7 @@ export function RegisterToolbar({
               onChange={(e) =>
                 onSeverityChange(e.target.value === 'all' ? null : (e.target.value as RiskSeverity))
               }
-              className="h-8.5 text-xs"
+              className="h-8.5 text-xs rounded-lg border-slate-200/90"
               aria-label="Filter by Severity"
             >
               <option value="all">Severity: All</option>
@@ -121,7 +121,7 @@ export function RegisterToolbar({
                   e.target.value === 'all' ? null : (e.target.value as RegisterRiskStatus),
                 )
               }
-              className="h-8.5 text-xs"
+              className="h-8.5 text-xs rounded-lg border-slate-200/90"
               aria-label="Filter by Status"
             >
               <option value="all">Status: All</option>
@@ -142,7 +142,7 @@ export function RegisterToolbar({
                   e.target.value === 'all' ? null : (e.target.value as DepartmentName),
                 )
               }
-              className="h-8.5 text-xs"
+              className="h-8.5 text-xs rounded-lg border-slate-200/90"
               aria-label="Filter by Department"
             >
               <option value="all">Dept: All</option>
@@ -163,7 +163,7 @@ export function RegisterToolbar({
                   e.target.value === 'all' ? null : (e.target.value as RiskCategoryName),
                 )
               }
-              className="h-8.5 text-xs"
+              className="h-8.5 text-xs rounded-lg border-slate-200/90"
               aria-label="Filter by Category"
             >
               <option value="all">Category: All</option>
@@ -184,7 +184,7 @@ export function RegisterToolbar({
                   e.target.value === 'all' ? null : (e.target.value as RiskAppetiteStatus),
                 )
               }
-              className="h-8.5 text-xs"
+              className="h-8.5 text-xs rounded-lg border-slate-200/90"
               aria-label="Filter by Appetite"
             >
               <option value="all">Appetite: All</option>
@@ -198,14 +198,14 @@ export function RegisterToolbar({
           <button
             type="button"
             onClick={onToggleOverdue}
-            className={`h-8.5 px-2.5 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+            className={`h-8.5 px-3 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
               isOverdueOnly
-                ? 'bg-[var(--color-error)] text-white border-[var(--color-error)] shadow-2xs'
-                : 'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--color-text-primary)]'
+                ? 'bg-rose-50 text-rose-700 border-rose-200 shadow-xs'
+                : 'bg-white text-slate-600 border-slate-200/90 hover:bg-slate-50'
             }`}
             aria-pressed={isOverdueOnly}
           >
-            Overdue Only
+            Overdue only
           </button>
         </div>
       </div>

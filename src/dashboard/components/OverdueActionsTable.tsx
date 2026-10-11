@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { StatusBadge } from '@/components/ui/status'
 import { OVERDUE_ACTIONS, type OverdueAction } from '../dashboard-data'
 import { ArrowRight, AlertTriangle, Calendar } from 'lucide-react'
@@ -20,10 +19,10 @@ export function OverdueActionsTable({
         <div>
           <div className="flex items-center gap-2">
             <CardTitle>Overdue Mitigation Actions</CardTitle>
-            <Badge variant="error" size="sm" className="gap-1 font-semibold">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200/70">
               <AlertTriangle className="size-3" />
               17 Overdue (6 Critical)
-            </Badge>
+            </span>
           </div>
           <CardDescription className="mt-1">
             Mitigation milestones that have breached agreed completion commitments
@@ -34,7 +33,7 @@ export function OverdueActionsTable({
           variant="ghost"
           size="sm"
           onClick={onNavigateActions}
-          className="gap-1.5 text-xs text-[var(--color-primary)] hover:underline shrink-0"
+          className="gap-1.5 text-xs text-blue-600 hover:text-blue-700 hover:underline shrink-0 font-medium"
         >
           <span>View All Actions</span>
           <ArrowRight className="size-3.5" />
@@ -42,9 +41,9 @@ export function OverdueActionsTable({
       </CardHeader>
 
       <CardContent className="space-y-2 pt-1">
-        <div className="overflow-x-auto rounded-lg border border-[var(--color-border)]">
-          <table className="w-full text-left font-body-sm">
-            <thead className="border-b border-[var(--color-border)] bg-[var(--color-surface-secondary)] text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+        <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-slate-200/70 bg-slate-50/75 text-[11px] font-semibold text-slate-500">
               <tr>
                 <th scope="col" className="px-3.5 py-2.5">
                   Action
@@ -66,26 +65,26 @@ export function OverdueActionsTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-slate-100 bg-white">
               {OVERDUE_ACTIONS.map((action) => (
                 <tr
                   key={action.id}
                   onClick={() => onSelectAction?.(action)}
-                  className="cursor-pointer hover:bg-[var(--color-surface-secondary)] transition-colors"
+                  className="cursor-pointer hover:bg-slate-50/70 transition-colors"
                 >
-                  <td className="px-3.5 py-2.5 font-medium text-[var(--color-text-primary)]">
+                  <td className="px-3.5 py-2.5 font-medium text-slate-900">
                     <div className="flex items-start gap-2">
-                      <span className="font-mono text-xs text-[var(--color-primary)] font-semibold shrink-0 mt-0.5">
+                      <span className="font-mono text-xs text-blue-600 font-semibold shrink-0 mt-0.5">
                         {action.id}
                       </span>
-                      <span className="font-medium hover:underline text-sm leading-tight">
+                      <span className="font-medium hover:underline text-xs leading-snug">
                         {action.actionTitle}
                       </span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 text-[var(--color-text-secondary)]">
+                  <td className="px-3 py-2.5 text-slate-600">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-xs text-[var(--color-text-muted)]">
+                      <span className="font-mono text-xs text-slate-400">
                         {action.riskId}
                       </span>
                       <span className="text-xs truncate max-w-[140px]" title={action.riskName}>
@@ -93,16 +92,16 @@ export function OverdueActionsTable({
                       </span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 text-[var(--color-text-primary)] text-xs font-medium">
+                  <td className="px-3 py-2.5 text-slate-800 text-xs font-medium">
                     {action.owner}
                   </td>
-                  <td className="px-3 py-2.5 text-[var(--color-text-secondary)] text-xs">
+                  <td className="px-3 py-2.5 text-slate-500 text-xs">
                     <div className="flex items-center gap-1">
-                      <Calendar className="size-3 text-[var(--color-text-muted)]" />
+                      <Calendar className="size-3 text-slate-400" />
                       <span>{action.dueDate}</span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 text-right font-mono font-bold text-xs text-[var(--color-risk-critical-foreground)]">
+                  <td className="px-3 py-2.5 text-right font-mono font-semibold text-xs text-rose-600">
                     {action.daysOverdue} days overdue
                   </td>
                   <td className="px-3.5 py-2.5 text-center">
@@ -114,12 +113,12 @@ export function OverdueActionsTable({
           </table>
         </div>
 
-        <div className="flex items-center justify-between pt-1 text-xs text-[var(--color-text-muted)]">
+        <div className="flex items-center justify-between pt-1 text-xs text-slate-500">
           <span>Showing top 5 critical escalations out of 17 overdue tasks</span>
           <button
             type="button"
             onClick={onNavigateActions}
-            className="font-caption font-semibold text-[var(--color-primary)] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 cursor-pointer"
           >
             <span>View All Actions</span>
             <ArrowRight className="size-3" />
