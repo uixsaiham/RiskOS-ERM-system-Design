@@ -1,32 +1,22 @@
-# React + TypeScript + Vite
+# RiskOS-ERM-system-Design
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Modern Enterprise Risk Management (ERM) SaaS Platform built with React, TypeScript, Tailwind CSS, and Vite.
 
-Currently, two official plugins are available:
+## Overview
+RiskOS is an enterprise-grade platform designed for risk managers, compliance officers, and operational leaders to identify, evaluate, mitigate, and monitor enterprise risk exposure in real time.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Core Modules & Features
+- **Executive & Operational Dashboards**: Portfolio heatmaps, active incident telemetry, KRI breaches, and MTTR metrics.
+- **Risk Register & 5×5 Matrix**: Interactive likelihood × impact scoring, inherent vs. residual toggles, and cell drill-downs.
+- **Risk Assessment Workspace**: 5-step structured assessment stepper with control effectiveness evaluation and reviewer approval flow.
+- **Control Library & Testing Operations**: Preventive/detective controls, automated test scheduling, and deficiency remediation.
+- **Frameworks & Policies**: Pre-mapped ISO 27001, SOC 2, NIST CSF, and custom Enterprise Internal Controls Baseline (EICB v3).
+- **Incident Response & Audit Management**: P1–P3 incident containment, internal audit plans, and evidence upload workflows.
+- **Scenarios & Stress Testing**: Tail-risk stress simulation runners with financial loss & RTO/RPO recovery modeling.
+- **Organization & Appetite Governance**: Multi-entity hierarchy, 5-level risk taxonomy, and dynamic appetite threshold calibrator.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Tech Stack
+- **Framework**: React 19 + TypeScript
+- **Styling**: Tailwind CSS with custom enterprise design tokens
+- **Icons**: Lucide React
+- **Build Tool**: Vite
