@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import path from 'path'
 
 export default defineConfig({
+  base: '/RiskOS-ERM-system-Design/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
