@@ -286,3 +286,4 @@ try {
   console.error('Error rendering PDF:', err)
   process.exit(1)
 }
+
