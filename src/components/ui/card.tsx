@@ -126,33 +126,36 @@ export function KpiCard({
         : 'text-rose-600'
 
   return (
-    <Card className={cn('p-4.5 hover:border-slate-300 transition-all', className)}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <div className="text-xs font-medium text-slate-500">{title}</div>
-          <div className="mt-2 font-mono text-2xl font-bold tracking-tight text-slate-900 tabular-nums">
-            {value}
-          </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            {trend && (
-              <span className={cn('inline-flex items-center gap-0.5 text-xs font-medium', trendColor)}>
-                <TrendIcon className="size-3.5" aria-hidden />
-                {trend.value}
-              </span>
-            )}
-            {supporting && (
-              <span className="text-xs text-slate-400">{supporting}</span>
-            )}
-            {status}
-          </div>
+    <Card className={cn('p-4 hover:border-slate-300 transition-all h-full flex flex-col justify-between', className)}>
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <div className="text-xs font-medium text-slate-500 truncate">{title}</div>
+          {Icon && (
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+              <Icon className="size-3.5" aria-hidden />
+            </div>
+          )}
         </div>
-        {Icon && (
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-            <Icon className="size-4.5" aria-hidden />
-          </div>
+        <div className="mt-2 font-mono text-2xl font-bold tracking-tight text-slate-900 tabular-nums">
+          {value}
+        </div>
+      </div>
+
+      <div className="mt-3 pt-2.5 border-t border-slate-100 flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-1.5">
+          {trend ? (
+            <span className={cn('inline-flex items-center gap-0.5 text-xs font-semibold', trendColor)}>
+              <TrendIcon className="size-3.5 shrink-0" aria-hidden />
+              <span>{trend.value}</span>
+            </span>
+          ) : <span />}
+          {status}
+        </div>
+        {supporting && (
+          <div className="text-[11px] text-slate-400 truncate">{supporting}</div>
         )}
       </div>
-      {action && <div className="mt-3.5">{action}</div>}
+      {action && <div className="mt-2.5">{action}</div>}
     </Card>
   )
 }
