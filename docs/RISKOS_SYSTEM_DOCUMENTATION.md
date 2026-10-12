@@ -461,5 +461,148 @@ dist/assets/index-ChjoYpY8.js   1,187.57 kB
 
 ---
 
-*Document Version: 1.0.0 · Author: RiskOS Architecture & Design Systems Team · Status: Production Ready*
+## 10. Enterprise User Guidelines & Operational Playbooks
+
+This section serves as the official operational manual for all RiskOS users across the Three Lines of Defense.
+
+### 10.1 System Access, Shell Navigation & Keyboard Shortcuts
+
+* **Global Search (`⌘K` / `Ctrl+K`)**:
+  * Tap `⌘K` from anywhere in RiskOS to trigger the search command palette.
+  * Search by **Risk ID** (`RSK-1042`), **Risk Title** (`Cybersecurity`), **Control ID** (`CTL-002`), or **Owner** (`Sarah Chen`). Press `Enter` to navigate directly to that record.
+* **Sidebar Sub-menu Toggle**:
+  * Click any parent navigation row or chevron (e.g., `Risk register`, `Controls`, `Organization`) to expand or collapse child routes.
+  * Use `⌘[` to collapse the sidebar into icon-only mode when working on data-dense tables or matrix views.
+* **Breadcrumb Navigation**:
+  * The top breadcrumb trail (`Overview / Risk Management / RSK-1042 / Assessment`) updates dynamically and provides one-click navigation back to parent registers.
+
+---
+
+### 10.2 Playbook 1: How to Conduct a Risk Assessment (Line 1 / Risk Owners)
+
+Use this playbook when conducting periodic risk reviews, assessing emerging threats, or evaluating changes in organizational posture.
+
+```
+Step 1: Details       Step 2: Inherent      Step 3: Controls      Step 4: Residual      Step 5: Submit
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│ Scope & Type │ ──> │ Likelihood & │ ──> │ Existing CTL │ ──> │ Net Exposure │ ──> │ Reviewer &   │
+│ Methodology  │     │ Impact (1–5) │     │ Effectiveness│     │ vs Appetite  │     │ Evidence     │
+└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+```
+
+1. **Accessing the Assessment**:
+   * Navigate to **Risk register** (`risks-all`) or **My work** (`my-work-reviews`).
+   * Select the target risk (e.g., [`RSK-1042 · Cybersecurity Breach`](file:///Users/saiham.info21gmail.com/Documents/Dev%20Projects/RiskOS/src/risk-details/RiskDetailsWorkspace.tsx)) and click **"Re-Assess Risk"** or **"Start Assessment"**.
+2. **Step 1: Assessment Details**:
+   * Select **Assessment Type**: *Periodic Review*, *Initial Assessment*, or *Event-Triggered Review*.
+   * Define assessment scope (e.g., *Core Enterprise Production Infrastructure*) and evaluation period.
+3. **Step 2: Scoring Inherent Risk (Before Controls)**:
+   * Evaluate **Inherent Likelihood (1–5)** based on external threat landscape and past occurrence frequency.
+   * Evaluate **Inherent Impact (1–5)** using the Reference Criteria Matrix below (evaluating worst-case financial, regulatory, and operational exposure if no controls existed).
+   * Review the computed **Inherent Score** ($L \times I$).
+4. **Step 3: Evaluating Control Effectiveness**:
+   * Review all linked controls (e.g., `CTL-001 Mandatory MFA`, `CTL-002 EDR`).
+   * For each control, select its verified operational effectiveness:
+     * **Effective**: Control operates consistently as designed; verified by testing (-60% to -80% exposure reduction).
+     * **Partially Effective**: Control is implemented but exhibits periodic operational exceptions (-30% to -50% reduction).
+     * **Ineffective / Gap**: Control is planned, failed recent testing, or absent (0% reduction).
+5. **Step 4: Residual Risk & Risk Appetite Validation**:
+   * Review the computed **Residual Risk Score** after control mitigation.
+   * Verify the **Risk Appetite Status**:
+     * **Within Appetite** (Green): Residual score is below the board-approved category threshold. No urgent escalation required.
+     * **Above Appetite** (Red): Residual score exceeds organizational tolerance. An **Action Plan** is mandatory before submission.
+6. **Step 5: Review, Evidence & Submission**:
+   * Document assessment rationale and attach supporting evidence (audit reports, penetration test summaries).
+   * Click **"Submit for Review"**. Confirm reviewer dispatch in the modal dialog. The assessment locks into read-only state pending Line 2 sign-off.
+
+---
+
+### 10.3 Playbook 2: Managing & Testing Internal Controls (Line 2 / Compliance)
+
+1. **Cataloging Controls in the Control Library**:
+   * Navigate to **Controls** ➔ **Control Library** (`controls-library`).
+   * Click **"+ Create Control"**. Define Control ID (`CTL-00X`), Name, Control Type (*Preventive*, *Detective*, *Corrective*), Category (*Technical*, *Administrative*), and testing frequency (*Continuous*, *Monthly*, *Quarterly*).
+   * Link the control to one or more organizational risks in the multi-select risk picker.
+2. **Executing Control Effectiveness Tests**:
+   * Navigate to **Controls** ➔ **Control Testing** (`controls-testing`).
+   * Select a scheduled test cycle (e.g., `TEST-2026-Q3-01`).
+   * Review testing procedure and sample size (e.g., 25 privileged access change tickets).
+   * Record the test outcome by clicking **"Pass Test"** (sets effectiveness to *Effective*) or **"Fail Test"** (automatically creates a control deficiency).
+3. **Remediating Control Deficiencies**:
+   * Under **Deficiencies & Gaps**, review open deficiencies.
+   * Assign an owner and target closure date. Once verified, click **"Verify & Close"** to restore control rating.
+4. **Signing Compliance Attestations**:
+   * Navigate to **My work** ➔ **Attestations** (`my-work-attestations`).
+   * Review the certification scope (e.g., *SOX Section 404 ITGCs*).
+   * Click **"Sign Attestation"** to apply a legally binding digital timestamp and certification hash.
+
+---
+
+### 10.4 Playbook 3: Incident Response & Operational Resilience (Ops / Line 1 & 2)
+
+1. **Reporting an Operational Incident**:
+   * Navigate to **Overview** ➔ **Operational Risk** (`dashboard-operations`) or **Incidents** (`incidents`).
+   * Click **"+ Report Incident"**.
+   * Enter Incident Title, select Severity (*P1 Critical*, *P2 High*, *P3 Moderate*), Department, and Incident Commander Lead.
+   * **Crucial Step**: Link the incident to its underlying **Residual Risk ID** (e.g., `RSK-1042`). This automatically updates risk exposure telemetry for executive visibility.
+2. **Monitoring KRIs & Acknowledging Breaches**:
+   * Check the **Key Risk Indicators** grid. Breached KRIs (red status) indicate operational thresholds exceeded (e.g., *Batch failure rate > 0.25%*).
+   * Click **"Acknowledge Breach"** to initiate a 14-day containment SLA.
+3. **Executing Business Continuity / Chaos Drills**:
+   * Under **Business Service Resilience (RTO / RPO)**, click **"Launch Failover Drill"**.
+   * Select the target service (e.g., *Core Clearing Engine*). Click **"Execute Automated Drill"** to run a simulated primary zone failure. RiskOS records tested RTO and updates compliance badges under ISO 22301 and DORA standards.
+
+---
+
+### 10.5 Playbook 4: Internal Audit Engagements & Evidence Requests (Line 3 / Auditors)
+
+1. **Managing the Audit Plan**:
+   * Navigate to **Audits & reviews** ➔ **Audit plan** (`audits-plan`).
+   * Review quarterly fieldwork schedules and click **"+ New Audit Engagement"** to launch review cycles.
+2. **Requesting Evidence from Control Owners**:
+   * Open the **Evidence requests** tab (`audits-evidence`). Click **"+ Request Evidence"**.
+   * Specify title, target control, assignee, and submission deadline.
+   * The assignee automatically receives an actionable task in their **My Work** dashboard.
+3. **Reviewing and Verifying Evidence Packages**:
+   * When an evidence package is submitted, click **"Upload Evidence Document"** to inspect uploaded artifacts.
+   * Click **"Accept Artifact"** to approve evidence, or log an audit finding under **Issues & findings** (`issues`).
+
+---
+
+### 10.6 Playbook 5: Executive Governance & Board Reporting (CRO & Executive Board)
+
+1. **Interpreting Macro Risk Posture**:
+   * Navigate to **Overview** ➔ **Executive Overview** (`dashboard-executive`).
+   * Review the **Overall Risk Posture Bar** (Inventory distribution across Critical, High, Moderate, Low).
+   * Check the **Risk Exposure Trend** chart: track whether net residual exposure ($M) is decreasing over time.
+2. **Drilling into the 5×5 Matrix Heatmap**:
+   * Navigate to **Risk register** ➔ **Heat map** (`risks-heat-map`).
+   * Toggle between **Inherent Risk** and **Residual Risk** to visually observe how controls shift the organization's risk profile from the top-right critical quadrant toward the safe zone.
+   * Click any coordinate cell (e.g., coordinate `[Likelihood: 4, Impact: 4]`) to inspect every risk situated in that severity coordinate.
+3. **Generating Board Risk Packs**:
+   * Click **"Export Report"** or **"Generate Board Pack"**.
+   * Customize reporting sections (Executive Summary, Top Risks, Control Gaps, KRI Dashboard).
+   * Download the finalized executive presentation for Board of Directors audit committee meetings.
+4. **Calibrating Organizational Risk Appetite**:
+   * Navigate to **Org structure** ➔ **Risk appetite** (`org-appetite`).
+   * Click **"Calibrate Threshold"**. Use the interactive threshold slider (4–20/25) to adjust tolerance. RiskOS immediately recalculates which risk categories are *Within Appetite*, *At Appetite*, or *Above Appetite*.
+
+---
+
+### 10.7 Risk Scoring Reference Criteria Matrix
+
+Use these standardized enterprise criteria during Step 2 of the assessment to eliminate subjective scoring bias:
+
+| Rating Band | Likelihood Criteria (Probability) | Financial Impact | Operational Disruption | Regulatory & Compliance Impact |
+| :--- | :--- | :--- | :--- | :--- |
+| **5 — Catastrophic / Almost Certain** | > 80% probability; expected to occur multiple times per year | > \$10,000,000 loss | Complete core business shutdown > 24 hours | Criminal sanctions, charter revocation, material public scandal |
+| **4 — Major / Likely** | 50% – 80% probability; expected once per year | \$2,500,000 – \$10,000,000 loss | Critical customer-facing services degraded > 8 hours | Formal regulatory investigation, enforcement decree, major fines |
+| **3 — Moderate / Possible** | 20% – 50% probability; expected once every 1–3 years | \$500,000 – \$2,500,000 loss | Non-critical service outage; failover recovered within SLA | Regulatory inquiry, standard remediation requirement |
+| **2 — Minor / Unlikely** | 5% – 20% probability; expected once every 3–5 years | \$100,000 – \$500,000 loss | Minor localized disruption; resolved without customer impact | Internal audit finding; informal supervisory notice |
+| **1 — Insignificant / Rare** | < 5% probability; exceptional circumstances only | < \$100,000 loss | Negligible disruption; routine operational containment | Minor procedural deviation; self-reported with zero penalty |
+
+---
+
+*Document Version: 1.1.0 · Author: RiskOS Architecture & Design Systems Team · Status: Production Ready*
+
 
