@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {
-  Bell,
   ChevronsUpDown,
   LogOut,
   Menu,
@@ -20,6 +19,12 @@ import {
   Sidebar,
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
+import {
+  HeaderNotifications,
+  HeaderEnvironmentPopover,
+  HeaderUserMenu,
+  HeaderDesignSystemButton,
+} from './HeaderActions'
 import { ExecutiveDashboard } from '@/dashboard'
 import { RiskRegisterWorkspace } from '@/risk-register'
 import { RiskDetailsWorkspace } from '@/risk-details'
@@ -252,11 +257,24 @@ export function AppShell({
   }, [])
 
   const crumbs = React.useMemo(() => {
-    return getBreadcrumbs(activeId).map((c) => ({
+    const list = getBreadcrumbs(activeId)
+    return list.map((c, i) => ({
       label: c.label,
-      onClick: c.id !== activeId ? () => navigate(c.id) : undefined,
+      onClick: i < list.length - 1 ? () => navigate(c.id) : undefined,
     }))
   }, [activeId, navigate])
+
+  React.useEffect(() => {
+    if (!onOpenShowcase) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault()
+        onOpenShowcase()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onOpenShowcase])
 
   const renderSidebar = (isCollapsed: boolean) => (
     <Sidebar
@@ -316,128 +334,115 @@ export function AppShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-3 sm:px-5">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden"
-            aria-label="Open navigation"
-            onClick={() => setMobileNavOpen(true)}
-          >
-            <Menu className="size-5" />
-          </Button>
+        <header className="flex h-15 shrink-0 items-center justify-between border-b border-slate-200/90 bg-white px-3 sm:px-5">
+          {/* Left section: mobile toggle, desktop collapse toggle, divider, breadcrumb */}
+          <div className="flex flex-1 items-center gap-2.5 min-w-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden size-8.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center p-0 cursor-pointer"
+              aria-label="Open navigation"
+              onClick={() => setMobileNavOpen(true)}
+            >
+              <Menu className="size-5" />
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hidden md:inline-flex"
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            onClick={() => setCollapsed((v) => !v)}
-          >
-            {collapsed ? (
-              <PanelLeftOpen className="size-5" />
-            ) : (
-              <PanelLeftClose className="size-5" />
-            )}
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden md:inline-flex size-8.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 items-center justify-center p-0 cursor-pointer"
+              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              onClick={() => setCollapsed((v) => !v)}
+            >
+              {collapsed ? (
+                <PanelLeftOpen className="size-4.5" />
+              ) : (
+                <PanelLeftClose className="size-4.5" />
+              )}
+            </Button>
 
-          <div className="hidden min-w-0 sm:block">
-            <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
+            <div className="hidden sm:block h-4 w-px bg-slate-200 shrink-0" aria-hidden />
+
+            <div className="hidden min-w-0 sm:block">
+              <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
+            </div>
           </div>
 
-          <div className="mx-auto hidden w-full max-w-md flex-1 lg:block">
+          {/* Center section: Global Search (geometrically centered) */}
+          <div className="hidden lg:flex items-center justify-center shrink-0 w-full max-w-md mx-4">
             <GlobalSearch onSelect={navigate} />
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
-              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              {headerMeta.environment}
-            </span>
+          {/* Right section: Environment Health, Design System, Notifications, User Menu */}
+          <div className="flex flex-1 items-center justify-end gap-2 shrink-0">
+            <HeaderEnvironmentPopover />
             {onOpenShowcase && (
-              <button
-                type="button"
-                onClick={onOpenShowcase}
-                className="hidden lg:inline-flex text-xs font-medium text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-              >
-                Design system
-              </button>
+              <HeaderDesignSystemButton onClick={onOpenShowcase} />
             )}
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="relative p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
-            >
-              <Bell className="size-4.5" />
-              {headerMeta.notifications > 0 && (
-                <span className="absolute right-1.5 top-1.5 flex size-3.5 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white">
-                  {headerMeta.notifications}
-                </span>
-              )}
-            </button>
-            <div className="hidden sm:block md:hidden">
-              <Avatar name={currentUser.name} size="sm" />
-            </div>
+            <HeaderNotifications onNavigate={navigate} />
+            <HeaderUserMenu currentUser={currentUser} onNavigate={navigate} />
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 max-w-[1600px] w-full mx-auto">
-          <div className="mb-4 sm:hidden">
-            <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-[1600px] w-full mx-auto p-4 sm:p-5 lg:p-6">
+            <div className="mb-4 sm:hidden">
+              <Breadcrumb items={crumbs} onHomeClick={() => navigate('dashboard')} />
+            </div>
+            {activeId === 'dashboard' || activeId === 'dashboard-executive' ? (
+              <ExecutiveDashboard onNavigate={navigate} />
+            ) : activeId === 'dashboard-operations' || activeId === 'dashboard-operational' ? (
+              <OperationalDashboard onNavigate={navigate} />
+            ) : activeId === 'my-work' || activeId.startsWith('my-work-') ? (
+              <MyWorkWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId === 'risks-heat-map' || activeId === 'risks-heatmap' || activeId === 'matrix' || activeId === 'heatmap' ? (
+              <RiskMatrixWorkspace
+                key={activeId}
+                onNavigate={navigate}
+              />
+            ) : activeId.startsWith('assess-') || (activeId.startsWith('assessment-') && activeId !== 'assessments') ? (
+              <RiskAssessmentWorkspace
+                key={activeId}
+                riskId={activeId.startsWith('assess-') ? activeId.replace('assess-', '') : activeId.replace('assessment-', '')}
+                onNavigate={navigate}
+              />
+            ) : activeId === 'assessments' || activeId.startsWith('assessments-') ? (
+              <AssessmentsWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId === 'scenarios' || activeId.startsWith('scenarios-') ? (
+              <ScenariosKriWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId === 'controls-assessments' || activeId === 'controls-testing' || activeId === 'controls-deficiencies' ? (
+              <ControlOpsWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId === 'controls' || activeId === 'controls-library' || activeId === 'controls-all' ? (
+              <ControlLibraryWorkspace
+                key={activeId}
+                onNavigate={navigate}
+              />
+            ) : activeId.startsWith('framework') || activeId === 'policies' ? (
+              <FrameworksPoliciesWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId.startsWith('action') || activeId === 'incidents' || activeId === 'issues' ? (
+              <ActionsIncidentsWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId.startsWith('audit') ? (
+              <AuditsWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId.startsWith('report') || activeId === 'analytics' || activeId === 'workflow' ? (
+              <ReportsAnalyticsWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId.startsWith('org') || activeId === 'people' || activeId === 'integrations' || activeId.startsWith('setting') || activeId === 'profile' ? (
+              <OrgAdminWorkspace routeId={activeId} onNavigate={navigate} />
+            ) : activeId.startsWith('risk-') && activeId !== 'risks-all' && !activeId.startsWith('risks-') ? (
+              <RiskDetailsWorkspace
+                key={activeId}
+                riskId={activeId.replace('risk-', '')}
+                onNavigate={navigate}
+              />
+            ) : activeId.startsWith('risk') ? (
+              <RiskRegisterWorkspace
+                key={activeId}
+                onNavigate={navigate}
+                routeId={activeId}
+              />
+            ) : (
+              <ExecutiveDashboard onNavigate={navigate} />
+            )}
           </div>
-          {activeId === 'dashboard' || activeId === 'dashboard-executive' ? (
-            <ExecutiveDashboard onNavigate={navigate} />
-          ) : activeId === 'dashboard-operations' || activeId === 'dashboard-operational' ? (
-            <OperationalDashboard onNavigate={navigate} />
-          ) : activeId === 'my-work' || activeId.startsWith('my-work-') ? (
-            <MyWorkWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId === 'risks-heat-map' || activeId === 'risks-heatmap' || activeId === 'matrix' || activeId === 'heatmap' ? (
-            <RiskMatrixWorkspace
-              key={activeId}
-              onNavigate={navigate}
-            />
-          ) : activeId.startsWith('assess-') || (activeId.startsWith('assessment-') && activeId !== 'assessments') ? (
-            <RiskAssessmentWorkspace
-              key={activeId}
-              riskId={activeId.startsWith('assess-') ? activeId.replace('assess-', '') : activeId.replace('assessment-', '')}
-              onNavigate={navigate}
-            />
-          ) : activeId === 'assessments' || activeId.startsWith('assessments-') ? (
-            <AssessmentsWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId === 'scenarios' || activeId.startsWith('scenarios-') ? (
-            <ScenariosKriWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId === 'controls-assessments' || activeId === 'controls-testing' || activeId === 'controls-deficiencies' ? (
-            <ControlOpsWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId === 'controls' || activeId === 'controls-library' || activeId === 'controls-all' ? (
-            <ControlLibraryWorkspace
-              key={activeId}
-              onNavigate={navigate}
-            />
-          ) : activeId.startsWith('framework') || activeId === 'policies' ? (
-            <FrameworksPoliciesWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId.startsWith('action') || activeId === 'incidents' || activeId === 'issues' ? (
-            <ActionsIncidentsWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId.startsWith('audit') ? (
-            <AuditsWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId.startsWith('report') || activeId === 'analytics' || activeId === 'workflow' ? (
-            <ReportsAnalyticsWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId.startsWith('org') || activeId === 'people' || activeId === 'integrations' || activeId.startsWith('setting') || activeId === 'profile' ? (
-            <OrgAdminWorkspace routeId={activeId} onNavigate={navigate} />
-          ) : activeId.startsWith('risk-') && activeId !== 'risks-all' && !activeId.startsWith('risks-') ? (
-            <RiskDetailsWorkspace
-              key={activeId}
-              riskId={activeId.replace('risk-', '')}
-              onNavigate={navigate}
-            />
-          ) : activeId.startsWith('risk') ? (
-            <RiskRegisterWorkspace
-              key={activeId}
-              onNavigate={navigate}
-              routeId={activeId}
-            />
-          ) : (
-            <ExecutiveDashboard onNavigate={navigate} />
-          )}
         </main>
       </div>
     </div>
